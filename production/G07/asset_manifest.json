@@ -1,0 +1,67 @@
+{
+  "version": "G07-pilot-01",
+  "style": "Acuarela Narrativa B+",
+  "assets": [
+    {
+      "id": "G07-S01-L01",
+      "name": "Cielo y horizonte",
+      "size": [
+        2600,
+        900
+      ],
+      "alpha": false,
+      "status": "pending",
+      "depends_on": []
+    },
+    {
+      "id": "G07-S01-L02",
+      "name": "Talavera y río",
+      "size": [
+        2600,
+        900
+      ],
+      "alpha": true,
+      "status": "pending",
+      "depends_on": [
+        "G07-S01-L01"
+      ]
+    },
+    {
+      "id": "G07-S01-L03",
+      "name": "Camino y molino",
+      "size": [
+        2600,
+        900
+      ],
+      "alpha": true,
+      "status": "blocked_geometry",
+      "depends_on": [
+        "G07-S01-L02"
+      ]
+    },
+    {
+      "id": "G07-CHR-TRAV-01",
+      "name": "Viajero canónico",
+      "size": [
+        140,
+        320
+      ],
+      "alpha": true,
+      "status": "pending",
+      "depends_on": []
+    },
+    {
+      "id": "G07-S01-FG01",
+      "name": "Carrizos",
+      "size": [
+        700,
+        350
+      ],
+      "alpha": true,
+      "status": "pending",
+      "depends_on": [
+        "G07-S01-L03"
+      ]
+    }
+  ]
+}
