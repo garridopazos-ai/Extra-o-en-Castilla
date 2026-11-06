@@ -1,6 +1,6 @@
 # 1248 · Un extraño en Castilla — ESTADO DEL DESARROLLO (libreta de relevo)
 
-Última actualización: 2026-11-06 · Última candidata: `builds/1248_LUNA_G10_ALFONSO_RC01.html`
+Última actualización: 2026-11-06 · Última candidata: `builds/1248_LUNA_G10_ALFONSO_RC02.html`
 
 ## Cómo trabajar (para cada ejecución, también las automáticas)
 1. `git pull`, leer este archivo entero y abrir la última candidata de `builds/`.
@@ -23,6 +23,11 @@
   - Durán con clips reales (habla/escucha/marcha), estados según turno de diálogo, vuelve a reposo al terminar o saltar frase. Hoja generada con `production/G10/tools/build_duran.py`.
   - Rueda: pértiga/lazo → rueda libre → agua vuelve al caz → camino abierto → Alfonso.
 - Verificado en navegador (artefactos desactivados): 14 zonas de la ribera, recogida de objetos, entrada a la aceña, parada ante el agua, recorrido completo, 0 errores.
+
+- **G10 RC02**: Alfonso con clip real (`1000701584`): reposo (fotograma con respiración) + marcha de perfil con ciclo ligado a la distancia (L=34 f, zancada 118 px, velocidad 100). Al hablar usa el reposo con cabeceo procedural (no hay clips de habla/escucha). Build: `tools/key_alf.py`, `tools/build_alfonso.py`, `tools/patch_g10_rc02_alfonso.py`. Probado en navegador: 0 errores. Ilustración limpia de referencia: `art/concepts/refs_g10/ref_12_alfonso_perfil_ilustracion_limpia.jpg`.
+
+## Material del protagonista disponible (clips en `assets/source_clips/`)
+- 222: se coloca la chaqueta y queda de pie quieto → REPOSO. 223: gesto de habla (fondo verde claro). 224: igual que 223 pero fondo blanco con acuarela (no usar). 225: gestos de señalar/dar. 216: marcha de tres cuartos hacia la derecha. 218: usa el móvil en plano cerrado (zoom, no sirve como sprite a escala).
 
 ## Siguiente paso concreto
 - **Tramo 2 · Puerta del Río / murallas** (Biblia G06, SCN_03_PUERTA_RIO): carreta atascada, postigo, mesa de portazgo. Sustituir el final provisional (`endLab` al subir a la barca) por la transición a esta escena (cruce del Tajo → llegada a la puerta). Candidata prevista: `1248_LUNA_G11_PUERTA_RIO_RC01.html`.
