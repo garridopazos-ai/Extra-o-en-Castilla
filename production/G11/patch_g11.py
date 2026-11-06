@@ -5,9 +5,9 @@ s=open(sys.argv[1],encoding='utf-8').read()
 def sub(old,new,n=1):
     global s
     assert s.count(old)==n,('recuento',s.count(old),old[:80]); s=s.replace(old,new)
-sub("Ribera → Aceña → Embarcadero · RC02","JUEGO COMPLETO · G11 · RC03",s.count("Ribera → Aceña → Embarcadero · RC02"))
-s=s.replace("RIBERA → ACEÑA → EMBARCADERO · RC02","JUEGO COMPLETO · G11 · RC03")
-sub("saveKey: '1248_g10_rc01_save_v1'","saveKey: '1248_g11_rc03_save_v1'")
+sub("Ribera → Aceña → Embarcadero · RC02","JUEGO COMPLETO · G11 · RC04",s.count("Ribera → Aceña → Embarcadero · RC02"))
+s=s.replace("RIBERA → ACEÑA → EMBARCADERO · RC02","JUEGO COMPLETO · G11 · RC04")
+sub("saveKey: '1248_g10_rc01_save_v1'","saveKey: '1248_g11_rc04_save_v1'")
 sub("npc: { duran: '#c9e6ff', alfonso: '#ffd0b8' }","npc: { duran: '#c9e6ff', alfonso: '#ffd0b8', alfonso_b: '#ffd0b8', gil_a: '#d7d7e6', gil_b: '#d7d7e6', yucaf: '#ffe9a8', yucaf_alfar: '#ffe9a8', nuno_puerta: '#e2a8ff', nuno_casa: '#e2a8ff', nuno_aud: '#e2a8ff', sancha: '#ffd9e6', lope: '#ffb890', pregonero: '#ffd24d', benito: '#cfe8c0', mayordomo: '#a8c8ff' }")
 sub("LAB01 · MOTOR · gráficos y textos provisionales","Juego completo · candidato G11 · arte provisional")
 sub("'Reiniciar laboratorio'","'Reiniciar partida'",2)
@@ -26,11 +26,11 @@ ms=list(re.finditer(r'"assets/characters/player/sheet\.png":"data:image/png;base
 for i,m in reversed(list(enumerate(ms))):
     s=s[:m.start()]+('"assets/characters/player/sheet_g11.webp":"data:image/webp;base64,'+webp+'"' if i==0 else '"_player_old":""')+s[m.end():]
 stride=round(meta['stride_src_px']*0.315*300/meta['ch'])
-sheet_js="""  // Protagonista: hoja desde los clips 216 (marcha 3/4 a la derecha, %d fot.), 222 (reposo) y 223 (habla, ida y vuelta). Pies en (120,340).
-  const sheetPlayer = { frameW: %d, frameH: %d, anchor: [%d, %d], cols: %d, baseFacing: 'right', anims: {
-    idle_right: { row: %d, frames: 1, fps: 1, breath: true },
-    walk_right: { row: %d, frames: %d, fps: 24, stride: %d },
-    talk_right: { row: %d, frames: %d, fps: 12 } } };
+sheet_js="""  // Protagonista: hoja desde los clips 216 (marcha, el arte mira a la izquierda, %d fot.), 222 (reposo) y 223 (habla, ida y vuelta). Pies en (120,340).
+  const sheetPlayer = { frameW: %d, frameH: %d, anchor: [%d, %d], cols: %d, baseFacing: 'left', anims: {
+    idle_left: { row: %d, frames: 1, fps: 1, breath: true },
+    walk_left: { row: %d, frames: %d, fps: 24, stride: %d },
+    talk_left: { row: %d, frames: %d, fps: 12 } } };
 
   D.characters = {
 """%(C['walk'],meta['cw'],meta['ch'],meta['cw']//2,meta['gy'],meta['cols'],R['idle'],R['walk'],C['walk'],stride,R['talk'],C['talk'])
@@ -76,9 +76,36 @@ sub("    function itemIcon(id) {","""    // Pista contextual: la primera de E.DA
     function itemIcon(id) {""")
 sub("panel(ctx, 'Pausa', [saved ? 'Último guardado: ' + saved.at.slice(0, 19).replace('T', ' ') : 'Sin partida guardada']);","panel(ctx, 'Pausa', [U.objective() ? 'Objetivo: ' + U.objective() : 'Sin objetivo pendiente']);")
 
+
+# ---------- banda sonora: «Caminos de Castilla» (MP3 96 kbps incrustado, bucle, se funde al entrar y respeta el silencio/pausa del motor)
+mus=base64.b64encode(open(os.path.join(HERE,'..','..','assets','music','caminos_de_castilla_96k.mp3'),'rb').read()).decode()
+sub("  let muted = false, wantedAmbient = null;","  let muted = false, wantedAmbient = null;\n  let musicSrc = null, musicGain = null, musicBuf = null, musicLoading = false;")
+sub("    if (ctx.state === 'suspended') ctx.resume().catch(() => {});\n    if (wantedAmbient && !ambSrc) ambient(wantedAmbient);","""    if (ctx.state === 'suspended') ctx.resume().then(startMusic).catch(() => {}); else startMusic();
+    if (wantedAmbient && !ambSrc) ambient(wantedAmbient);""")
+sub("  function tone(freq, dur, type, vol, slide) {","""  // Banda sonora (window.E1248_MUSIC = MP3 en base64): bucle con entrada suave; el volumen general y el silencio los gobierna `master`.
+  function startMusic() {
+    if (!ctx || ctx.state !== 'running' || musicSrc || musicLoading || !window.E1248_MUSIC) return;
+    const play = () => {
+      musicSrc = ctx.createBufferSource(); musicSrc.buffer = musicBuf; musicSrc.loop = true;
+      musicGain = ctx.createGain(); musicGain.gain.setValueAtTime(0.0001, ctx.currentTime); musicGain.gain.linearRampToValueAtTime(0.34, ctx.currentTime + 4);
+      musicSrc.connect(musicGain); musicGain.connect(master); musicSrc.start();
+    };
+    if (musicBuf) return play();
+    musicLoading = true;
+    try {
+      const bin = atob(window.E1248_MUSIC), u = new Uint8Array(bin.length);
+      for (let i = 0; i < bin.length; i++) u[i] = bin.charCodeAt(i);
+      ctx.decodeAudioData(u.buffer).then(b => { musicBuf = b; musicLoading = false; play(); }, e => { musicLoading = false; E.log.warn('Música no decodificable'); });
+    } catch (e) { musicLoading = false; E.log.warn('Música: ' + e.message); }
+  }
+
+  function tone(freq, dur, type, vol, slide) {""")
+sub("get state() { return ctx ? ctx.state : 'sin-iniciar'; } };","get state() { return ctx ? ctx.state : 'sin-iniciar'; }, get music() { return { playing: !!musicSrc, loading: musicLoading, decoded: !!musicBuf }; } };")
+
 ph=open(os.path.join(HERE,'g11_placeholders.js'),encoding='utf-8').read()
 ct=open(os.path.join(HERE,'g11_content.js'),encoding='utf-8').read()
 marker="<script>/* src/main.js */"
 assert s.count(marker)==1
 s=s.replace(marker,"<script>/* g11 placeholders */\n"+ph+"\n</script>\n<script>/* g11 content */\n"+ct+"\n</script>\n"+marker)
+s=s.replace(marker,"<script>/* música */\nwindow.E1248_MUSIC='"+mus+"';\n</script>\n"+marker,1)
 open(sys.argv[2],'w',encoding='utf-8').write(s); print('ok',len(s))

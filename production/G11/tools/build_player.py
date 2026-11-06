@@ -25,8 +25,7 @@ frames={'idle':[render(rd('222',ri),mi['tx'],mi['b'])]}
 # marcha: ciclo L fotogramas de 216, centrado por el torso (mismo desfase torso-pies que el reposo para que no «salte» al parar)
 mw=[metrics(rd('216',i)) for i in range(WALK_START,WALK_START+L)]; txw=np.median([m['tx'] for m in mw])
 frames['walk']=[render(rd('216',i),txw,metrics(rd('216',i))['b']) for i in range(WALK_START,WALK_START+L)]
-# El clip, tal cual, hace que el pie apoyado se deslice HACIA ADELANTE respecto al cuerpo (efecto moonwalk al avanzar): se invierte el orden del ciclo.
-frames['walk'].reverse()
+# OJO: en los clips del protagonista (216/222/223) el arte MIRA A LA IZQUIERDA (la mochila queda a la derecha). La hoja se declara con baseFacing:'left'.
 # habla: gesto de 223, ida y vuelta (sin saltos de bucle)
 seq=list(range(TALK_A,TALK_B+1,TALK_STEP)); seq=seq+seq[-2:0:-1]
 mt=[metrics(rd('223',i)) for i in seq[:len(seq)//2+1]]; txt=np.median([m['tx'] for m in mt])
