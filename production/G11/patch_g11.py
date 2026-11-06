@@ -5,12 +5,12 @@ s=open(sys.argv[1],encoding='utf-8').read()
 def sub(old,new,n=1):
     global s
     assert s.count(old)==n,('recuento',s.count(old),old[:80]); s=s.replace(old,new)
-sub("Ribera → Aceña → Embarcadero · RC02","JUEGO COMPLETO · G11 · RC08",s.count("Ribera → Aceña → Embarcadero · RC02"))
-s=s.replace("RIBERA → ACEÑA → EMBARCADERO · RC02","JUEGO COMPLETO · G11 · RC08")
-sub("saveKey: '1248_g10_rc01_save_v1'","saveKey: '1248_g11_rc08_save_v1'")
+sub("Ribera → Aceña → Embarcadero · RC02","JUEGO COMPLETO · G11 · RC09",s.count("Ribera → Aceña → Embarcadero · RC02"))
+s=s.replace("RIBERA → ACEÑA → EMBARCADERO · RC02","JUEGO COMPLETO · G11 · RC09")
+sub("saveKey: '1248_g10_rc01_save_v1'","saveKey: '1248_g11_rc09_save_v1'")
 sub("npc: { duran: '#c9e6ff', alfonso: '#ffd0b8' }","npc: { duran: '#c9e6ff', alfonso: '#ffd0b8', alfonso_b: '#ffd0b8', gil_a: '#d7d7e6', gil_b: '#d7d7e6', yucaf: '#ffe9a8', yucaf_alfar: '#ffe9a8', nuno_puerta: '#e2a8ff', nuno_casa: '#e2a8ff', nuno_aud: '#e2a8ff', sancha: '#ffd9e6', lope: '#ffb890', pregonero: '#ffd24d', benito: '#cfe8c0', mayordomo: '#a8c8ff' }")
 sub("LAB01 · MOTOR · gráficos y textos provisionales","Juego completo · candidato G11 · arte provisional")
-sub("'Juego completo · candidato G11 · arte provisional', C.W / 2, 350, { size: 26, color: COL.dim, ui: true }","'Candidato G11 · RC08 · arte provisional', C.W / 2, 350, { size: 26, color: '#fff3d6', stroke: 'rgba(0,0,0,.85)', ui: true }")
+sub("'Juego completo · candidato G11 · arte provisional', C.W / 2, 350, { size: 26, color: COL.dim, ui: true }","'Candidato G11 · RC09 · arte provisional', C.W / 2, 350, { size: 26, color: '#fff3d6', stroke: 'rgba(0,0,0,.85)', ui: true }")
 sub("'Reiniciar laboratorio'","'Reiniciar partida'",2)
 sub("panel(ctx, 'Fin del laboratorio 01', [","panel(ctx, 'FIN · 1248 · Un extraño en Castilla', [")
 sub("""          'La barca de Alfonso se aparta de la orilla.',
@@ -145,10 +145,10 @@ s=s[:ta]+"""      } else if (U.overlay === 'title') {
           button(ctx, { x: 200, y: 801, w: 440, h: 62, label: 'Nueva partida', primary: true, id: 't-new', onTap: () => { E.audio.unlock && E.audio.unlock(); U.titleZoom = { t0: performance.now() }; } });
           button(ctx, { x: 670, y: 801, w: 440, h: 62, label: saved ? 'Continuar' : 'Continuar (sin guardado)', disabled: !saved, id: 't-continue', onTap: () => { if (saved) { U.overlay = null; G.loadGame(); } } });
           button(ctx, { x: 1140, y: 801, w: 280, h: 62, size: 26, label: 'Pantalla completa', id: 't-fs', onTap: () => G.fullscreen() });
-          ctx.save(); ctx.font = '15px sans-serif'; ctx.textAlign = 'right'; ctx.fillStyle = 'rgba(255,240,210,.7)'; ctx.fillText('G11 · RC08', C.W - 48, 828); ctx.fillText('arte provisional', C.W - 48, 850); ctx.restore();
+          ctx.save(); ctx.font = '15px sans-serif'; ctx.textAlign = 'right'; ctx.fillStyle = 'rgba(255,240,210,.7)'; ctx.fillText('G11 · RC09', C.W - 48, 828); ctx.fillText('arte provisional', C.W - 48, 850); ctx.restore();
         } else {
           if (k > 0.55) { ctx.fillStyle = 'rgba(0,0,0,' + Math.min(1, (k - 0.55) / 0.42).toFixed(3) + ')'; ctx.fillRect(0, 0, C.W, C.H); }
-          if (k >= 1) { U.titleZoom = null; U.overlay = null; G.newGame(); U.fade = 1; U.fadeTarget = 0; }
+          if (k >= 1) { U.titleZoom = null; U.overlay = null; G.newGame(); U.fade = 1; }   // ya en negro: el cambio de escena del motor sigue su fundido (no tocar fadeTarget o se queda esperando)
         }
 """+s[tb:]
 sub("      } else if (U.overlay === 'title') {","      } else if (U.overlay === 'map') {\n        E.journey.draw(ctx, G, U, button);\n      } else if (U.overlay === 'title') {")

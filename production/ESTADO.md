@@ -94,3 +94,7 @@
 - Los bocadillos que esperan muestran un «▸» parpadeante. Pausa → «Texto: normal / rápido / lento» (14 / 22 / 10 car/s, se recuerda en el navegador). Menú de pausa compactado para que quepan 9 botones.
 - Los diálogos con caja (conversaciones) ya esperaban al toque; no cambian.
 - El JUGLAR reenviado es el mismo archivo (md5 idéntico); no tenía nada sobre el ritmo de texto.
+
+## G11 RC09 (arreglo: no salía el protagonista)
+- Desde RC06, al empezar con «Nueva partida» (zoom del mapa) la ribera aparecía SIN protagonista y el juego quedaba en transición. Causa: tras G.newGame() el título ponía U.fadeTarget = 0, y el cambio de escena del motor espera a que el fundido llegue a 1 → nunca cargaba al jugador. Ahora solo se pone U.fade = 1 y el motor hace su fundido.
+- Las pruebas automáticas no lo detectaban porque llaman a G.newGame() directamente; tools/dbg_start.py ahora entra por el botón real del título y comprueba que existe el jugador.
