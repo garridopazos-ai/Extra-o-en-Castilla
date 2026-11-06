@@ -33,5 +33,11 @@
 - Marcha de Durán reproducida a ~1,8× la velocidad natural del clip (105 px/s con stride 125).
 - La rueda del fondo de la ribera aparece girando aunque esté parada (viene del arte).
 
+## Material nuevo recibido (6 nov, tarde)
+- `assets/inbox/alfonso_marcha_perfil_1000701584.mp4`: Alfonso caminando de perfil mirando a la derecha, 720×1280, 24 fps, 8 s, fondo verde. Sombrero de paja, chaleco azul, cinturón de cuerda. Sin integrar todavía (Alfonso hoy es una sola pose). Idea: hoja con marcha + reposo (fotograma de pie) con el mismo pipeline que Durán (`production/G10/tools/key.py`, `build_duran.py`).
+- `art/concepts/refs_g10/ref_10_alfonso_de_pie_manos_en_cintura.png`: captura de otro clip de Alfonso (de pie, de frente, manos en la cintura, "Personaje de pie con manos", Omni 1.1 Flash). El clip original NO está subido.
+- `ref_02.jpg` (captura de la aceña con arte nuevo de rueda/tronco/barriles/muela) ya estaba en refs; trae HUD y texto, no vale como fondo limpio.
+
 ## Esperando a César
+- Material pedido (ver lista en la conversación): fondo limpio de la aceña sin HUD y por capas; clips de Alfonso de habla/escucha/reposo; fondo/capas del embarcadero; arte de la Puerta del Río. Nada bloquea: se avanza con arte provisional.
 - (nada por ahora)
