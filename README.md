@@ -16,7 +16,12 @@ Preproducción y LAB01 jugable. Motor Canvas de Claude con corrección de parpad
 - `docs/design/`: historia, guion, puzles y dirección artística.
 - `archive/`: material previo y experimentos no canónicos.
 
+## Estado del desarrollo
+Leer `production/ESTADO.md` (libreta de relevo con el siguiente paso).
+
 ## Versiones
+- `builds/1248_LUNA_G10_ALFONSO_RC01.html`: última candidata (ribera → aceña → embarcadero).
+- `builds/1248_LUNA_G08_RIBERA_RC01.html`: base de partida de G10.
 - `1248_LAB01_MOTOR.html`: laboratorio inicial C01.
 - `1248_LAB01_FIX_PARPADEO.html`: referencia funcional corregida; preservar original.
 - `1248_PROYECTO_C01.zip`: proyecto fuente completo de Claude.

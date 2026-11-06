@@ -3,3 +3,5 @@ node_modules/
 *.log
 .cache/
 .tmp/
+production/G10/shots/
+__pycache__/
