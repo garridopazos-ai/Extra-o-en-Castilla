@@ -69,3 +69,8 @@
 - RC03 estaba mal: el error NO era el orden del ciclo, sino que los clips del protagonista (216/222/223) miran a la IZQUIERDA y la hoja se declaraba `baseFacing:'right'`. Ahora `baseFacing:'left'` (anims `*_left`) y el ciclo vuelve a su orden original. Zancada medida 140, velocidad 180.
 - Música: `assets/music/Caminos_de_Castilla_original.mp3` (original de César) y `caminos_de_castilla_96k.mp3` (incrustada, 96 kbps). Bucle con entrada suave (4 s), volumen 0.34 bajo el volumen general; la silencia el ajuste «Sonido» del menú; arranca con el primer toque. Código en `patch_g11.py` (sección «banda sonora»).
 - Build: `builds/1248_LUNA_G11_COMPLETO_RC04.html`.
+
+## G11 RC05 — ilustraciones del mural (6 nov, 21:35)
+- César confirma que las acuarelas con marco de azulejo son obra de su padre y que tiene autoridad para usarlas. Son tres paneles de un mismo mural (puente con barca y burro; pescador y familia en la orilla; gente en la orilla con Talavera al fondo). Falta un cuarto panel que no llegó.
+- Recortes y versiones 16:9 en `art/ilustraciones_mural/` (`crop_*` completos, `game_*` 1600×900). Uso en RC05: título (puente_barca), menú de pausa (pescador_orilla) y pantalla final (gente_ribera), incrustados por `patch_g11.py`.
+- Ideas siguientes: marco de azulejo para diálogos/zurrón, fondos de escena (el puente con barca = embarcadero), tarjetas de capítulo.
