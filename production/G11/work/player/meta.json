@@ -1,1 +1,1 @@
-{"rows": {"idle": 0, "walk": 1, "talk": 4}, "counts": {"idle": 1, "walk": 36, "talk": 120}, "cw": 240, "ch": 348, "cols": 12, "gy": 340, "L": 36, "stride_src_px": 516.0}
+{"rows": {"idle": 0, "walk": 1, "talk": 4}, "counts": {"idle": 1, "walk": 36, "talk": 64}, "cw": 240, "ch": 348, "cols": 12, "gy": 340, "L": 36, "stride_src_px": 516.0}

@@ -74,3 +74,9 @@
 - César confirma que las acuarelas con marco de azulejo son obra de su padre y que tiene autoridad para usarlas. Son tres paneles de un mismo mural (puente con barca y burro; pescador y familia en la orilla; gente en la orilla con Talavera al fondo). Falta un cuarto panel que no llegó.
 - Recortes y versiones 16:9 en `art/ilustraciones_mural/` (`crop_*` completos, `game_*` 1600×900). Uso en RC05: título (puente_barca), menú de pausa (pescador_orilla) y pantalla final (gente_ribera), incrustados por `patch_g11.py`.
 - Ideas siguientes: marco de azulejo para diálogos/zurrón, fondos de escena (el puente con barca = embarcadero), tarjetas de capítulo.
+
+## G11 RC06 (portada-mapa + aligerado)
+- Portada nueva: mapa ilustrado de Talavera 1248 (art/portada/mapa_talavera.svg/.jpg, generado por production/G11/tools/make_map.py). Tono disparatado-histórico: monstruo del Tajo vegetariano, dragón dormido en Gredos, galeón perdido, ovni con oveja, molino «gigante dentro de 350 años», puente en obras, guiños históricos (Fernando III conquistando Sevilla en 1248; «de la Reina» llega en el s. XIV). Marco de azulejo talaverano.
+- Título: mapa a pantalla completa + barra inferior de botones; anillo pulsante en «¡Tú estás aquí!»; «Nueva partida» hace zoom de 1,6 s al punto de llegada y funde a la ribera (tocar salta). La acuarela del puente ya no se usa en el título (pausa y final siguen con el mural).
+- Tirón de Durán en móvil (no reproducible en headless, 60 fps): se reduce presión de memoria → hoja del protagonista 2880×3480 (antes 2880×4872; habla 64 fotogramas a 8 fps) y música por streaming (<audio> + MediaElementSource) en vez de decodeAudioData (~60 MB menos).
+- Verificado: partida completa pt_g11 sin errores; pt_perf 60 fps sin fotogramas largos; capturas de título/zoom/ribera en viewport de móvil.

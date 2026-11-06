@@ -3,7 +3,7 @@ Uso: python build_player.py <dir con k216 k222 k223> <salida>"""
 import cv2, numpy as np, json, os, sys, glob
 BASE=sys.argv[1].rstrip('/')+'/'; OUT=sys.argv[2].rstrip('/')+'/'; os.makedirs(OUT,exist_ok=True)
 CW,CH,GY_CELL,S = 240,348,340,0.315
-COLS=12; L=36; WALK_START=133; TALK_A,TALK_B,TALK_STEP=1,121,2
+COLS=12; L=36; WALK_START=133; TALK_A,TALK_B,TALK_STEP=1,97,3
 K=lambda c: sorted(glob.glob(BASE+'k%s/*.png'%c)); rd=lambda c,i: cv2.imread(K(c)[i-1],cv2.IMREAD_UNCHANGED)
 def metrics(k):
     a=k[...,3]>128; yy,xx=np.where(a); b=yy.max(); top=yy.min(); h=b-top
