@@ -88,3 +88,9 @@
 - Mapa de viaje rehecho en el lienzo (production/G11/g11_journey.js) sobre el mapa ilustrado: botón bajo «?» y entrada «Mapa de Talavera» en pausa; lugares numerados (actual/visitado/por descubrir), tocar = destino, ruta animada, y en escena una flecha con el nombre de la salida siguiente. Sonido de campana tomado del juglar.
 - Mapa ilustrado corregido: la ribera de llegada, la aceña y el embarcadero pasan a la orilla SUR (Talavera queda enfrente, como en el juego); alcázar junto al río; Judería, Morería, Puertas de Mérida y Toledo, Vista Pública, Casa del Portazgo; ruta de la barca.
 - Verificado: pt_juglar.py (partida completa por la nueva trama, sin errores), mapa y guía en capturas, 60 fps.
+
+## G11 RC08 (ritmo de lectura)
+- César: «los diálogos van demasiado rápido». Causa: las frases de guion (say/notas) se cerraban solas a 1,3 s + 42 caracteres/s. Ahora 14 car/s con mínimos de 2,6 s (bocadillo) y 3,6 s (nota): una frase de 100 caracteres dura ~8 s. Un toque sigue adelantando.
+- Los bocadillos que esperan muestran un «▸» parpadeante. Pausa → «Texto: normal / rápido / lento» (14 / 22 / 10 car/s, se recuerda en el navegador). Menú de pausa compactado para que quepan 9 botones.
+- Los diálogos con caja (conversaciones) ya esperaban al toque; no cambian.
+- El JUGLAR reenviado es el mismo archivo (md5 idéntico); no tenía nada sobre el ritmo de texto.
