@@ -5,9 +5,9 @@ s=open(sys.argv[1],encoding='utf-8').read()
 def sub(old,new,n=1):
     global s
     assert s.count(old)==n,('recuento',s.count(old),old[:80]); s=s.replace(old,new)
-sub("Ribera → Aceña → Embarcadero · RC02","JUEGO COMPLETO · G11 · RC02",s.count("Ribera → Aceña → Embarcadero · RC02"))
-s=s.replace("RIBERA → ACEÑA → EMBARCADERO · RC02","JUEGO COMPLETO · G11 · RC02")
-sub("saveKey: '1248_g10_rc01_save_v1'","saveKey: '1248_g11_rc02_save_v1'")
+sub("Ribera → Aceña → Embarcadero · RC02","JUEGO COMPLETO · G11 · RC03",s.count("Ribera → Aceña → Embarcadero · RC02"))
+s=s.replace("RIBERA → ACEÑA → EMBARCADERO · RC02","JUEGO COMPLETO · G11 · RC03")
+sub("saveKey: '1248_g10_rc01_save_v1'","saveKey: '1248_g11_rc03_save_v1'")
 sub("npc: { duran: '#c9e6ff', alfonso: '#ffd0b8' }","npc: { duran: '#c9e6ff', alfonso: '#ffd0b8', alfonso_b: '#ffd0b8', gil_a: '#d7d7e6', gil_b: '#d7d7e6', yucaf: '#ffe9a8', yucaf_alfar: '#ffe9a8', nuno_puerta: '#e2a8ff', nuno_casa: '#e2a8ff', nuno_aud: '#e2a8ff', sancha: '#ffd9e6', lope: '#ffb890', pregonero: '#ffd24d', benito: '#cfe8c0', mayordomo: '#a8c8ff' }")
 sub("LAB01 · MOTOR · gráficos y textos provisionales","Juego completo · candidato G11 · arte provisional")
 sub("'Reiniciar laboratorio'","'Reiniciar partida'",2)
@@ -37,7 +37,7 @@ sheet_js="""  // Protagonista: hoja desde los clips 216 (marcha 3/4 a la derecha
 sub("  D.characters = {\n",sheet_js)
 a=s.index("    player: {\n      name: 'El extraño'"); b=s.index("    duran: {",a)
 s=s[:a]+"""    player: {
-      name: 'El extraño', height: 300, speed: 210, hit: [-50, -300, 100, 300], orient: 'lr',
+      name: 'El extraño', height: 300, speed: 180, hit: [-50, -300, 100, 300], orient: 'lr',
       sprite: { src: 'assets/characters/player/sheet_g11.webp', sheet: sheetPlayer,
         placeholderOpts: { skin: '#e2b48f', hair: '#2b211c', top: '#4f6d8f', hood: '#3f5873', sleeve: '#4f6d8f', legs: '#2f3f5c', shoes: '#eeeeee' } }
     },

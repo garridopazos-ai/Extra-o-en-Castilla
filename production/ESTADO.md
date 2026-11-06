@@ -60,3 +60,7 @@
 - Protagonista: hoja nueva desde los clips reales 216 (marcha, 36 fot.), 222 (reposo) y 223 (habla, ida y vuelta) con `production/G11/tools/key_player.py` y `build_player.py`; marcha por distancia (stride 190, velocidad 210). La hoja antigua (la de G05/G08, 8 fot. rígidos) ya no se incrusta.
 - Pruebas: `tools/pt_g11.py` (partida completa), `pt_hints.py` (pistas del tramo 1), `pt_ux.py` (clics reales: pista, Talavera, caminar, rueda exterior).
 - Pendiente: reposo con clip propio de escucha; transición habla↔reposo tiene un salto de pose (reposo brazos abajo vs. habla manos en tirantes); stride del jugador estimado (no medido con suelo real).
+
+## G11 RC03 — corrección del «moonwalk» (6 nov, 20:58)
+- Causa: el clip 216 desliza el pie apoyado hacia delante respecto al cuerpo; reproducido tal cual el personaje andaba hacia atrás. Solución: ciclo invertido en `build_player.py`. Medido sobre la hoja: el pie apoyado retrocede de forma lineal 4,5 px de celda/fotograma ⇒ zancada real 140 px de juego (antes estimada a ojo en 190-220). Velocidad del jugador 180.
+- Build: `builds/1248_LUNA_G11_COMPLETO_RC03.html`.

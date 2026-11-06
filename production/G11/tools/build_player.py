@@ -25,6 +25,8 @@ frames={'idle':[render(rd('222',ri),mi['tx'],mi['b'])]}
 # marcha: ciclo L fotogramas de 216, centrado por el torso (mismo desfase torso-pies que el reposo para que no «salte» al parar)
 mw=[metrics(rd('216',i)) for i in range(WALK_START,WALK_START+L)]; txw=np.median([m['tx'] for m in mw])
 frames['walk']=[render(rd('216',i),txw,metrics(rd('216',i))['b']) for i in range(WALK_START,WALK_START+L)]
+# El clip, tal cual, hace que el pie apoyado se deslice HACIA ADELANTE respecto al cuerpo (efecto moonwalk al avanzar): se invierte el orden del ciclo.
+frames['walk'].reverse()
 # habla: gesto de 223, ida y vuelta (sin saltos de bucle)
 seq=list(range(TALK_A,TALK_B+1,TALK_STEP)); seq=seq+seq[-2:0:-1]
 mt=[metrics(rd('223',i)) for i in seq[:len(seq)//2+1]]; txt=np.median([m['tx'] for m in mt])
@@ -42,5 +44,5 @@ for n in order:
 cv2.imwrite(OUT+'sheet.png',sheet); cv2.imwrite(OUT+'sheet.webp',sheet,[cv2.IMWRITE_WEBP_QUALITY,85])
 ext=[(np.where(m.any(0))[0].min()*S,np.where(m.any(0))[0].max()*S) for n in order for _,m in frames[n]]
 print('extensión horizontal en celda (centro %d): %.1f .. %.1f'%(CW//2,min(e[0] for e in ext),max(e[1] for e in ext)))
-json.dump(dict(rows=rows,counts={n:len(v) for n,v in frames.items()},cw=CW,ch=CH,cols=COLS,gy=GY_CELL,L=L,stride_src_px=700.0),open(OUT+'meta.json','w'))
+json.dump(dict(rows=rows,counts={n:len(v) for n,v in frames.items()},cw=CW,ch=CH,cols=COLS,gy=GY_CELL,L=L,stride_src_px=516.0),open(OUT+'meta.json','w'))
 print('hoja',sheet.shape,'webp',os.path.getsize(OUT+'sheet.webp'),rows,{n:len(v) for n,v in frames.items()})
