@@ -46,3 +46,10 @@
 ## Esperando a César
 - Material pedido (ver lista en la conversación): fondo limpio de la aceña sin HUD y por capas; clips de Alfonso de habla/escucha/reposo; fondo/capas del embarcadero; arte de la Puerta del Río. Nada bloquea: se avanza con arte provisional.
 - (nada por ahora)
+
+## G11 · Juego completo con arte provisional (RC01) — HECHO
+- Build: `builds/1248_LUNA_G11_COMPLETO_RC01.html` (se genera con `production/G11/patch_g11.py` desde G10 RC02 + `g11_placeholders.js` + `g11_content.js`).
+- Ruta: embarcadero → travesía (Alfonso) → Puerta del Río (carreta: cuña+palanca → Yuçaf da sello gremio + cántaro; Don Nuño aparece y lanza su bando) → Plaza del Pan (Sancha, Lope: cántaro↔badajo; pregonero) → Iglesia (Fray Benito: badajo → sello parroquia) → Casa del Portazgo (móvil como espejo ante Nuño → sello alguacil) → Vista Pública (mayordomo: 3 sellos + bando de Nuño → Nuño atrapado en su propio bando) → alfar: epílogo y horno final (usar móvil) → fin.
+- Villano cómico: Don Nuño de Mala-Cuenta (tasa por todo, vanidad ante el espejo, se contradice con su propio bando).
+- Test: `production/G11/tools/pt_g11.py <html> <tag>` recorre todo con taps reales, 0 errores. Viga = palanca de reserva por si Alfonso se queda la pértiga.
+- Pendiente: arte real de todo lo nuevo, sprites propios de los NPC nuevos (ahora muñecos procedurales), integrar clips del protagonista (222/223/216), audio/música, pulir textos y humor.
