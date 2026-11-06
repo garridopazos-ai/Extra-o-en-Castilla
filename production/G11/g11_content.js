@@ -231,6 +231,54 @@
     firstEnter: [{ note: 'Plaza Mayor. Vista Pública ante el mayordomo del Rey.' }, { say: 'Si tuviera una palomitas... pero seguro que las tasan.' }]
   };
 
+
+  // ===================================================== RIBERA: que se entienda qué hay que hacer
+  (function () {
+    const R = S.ribera, hs = id => R.hotspots.find(h => h.id === id);
+    const ENTER = { to: 'acena', entry: 'from_ribera' };
+    const t = hs('talavera');
+    t.verbs.look = [{ say: 'Talavera, al otro lado del Tajo. Desde aquí no hay forma de llegar: el río es ancho y hondo.' },
+      { say: 'Necesito cruzar. Y alguien que lo haga a diario tendrá una barca: un barquero.' }, { set: 'sabe_cruzar' }];
+    t.verbs.use = [{ say: 'No voy a cruzar a nado con el móvil en el bolsillo.' }];
+    hs('rio').verbs.look = [{ say: 'El Tajo. Ancho, hondo y sin puente a la vista. Para cruzar hace falta una barca.' }, { set: 'sabe_cruzar' }];
+    const w = hs('rueda_ext'); w.walkTo = [2025, 790]; w.exit = ENTER;
+    w.verbs.look = [{ if: 'rueda_libre', then: [{ say: 'La rueda gira y el agua vuelve al caz.' }], else: [
+      { say: 'La rueda de la aceña está parada y el agua se desborda por el camino. Algo la bloquea.' }, { say: 'Desde aquí no llego: tendré que mirarla desde dentro de la aceña.' }, { set: 'sabe_aceña' }] }];
+    const rueda_msg = [{ say: 'Desde fuera no llego a la rueda. Hay que entrar en la aceña por la puerta.' }];
+    for (const k of ['use:pertiga', 'use:pertiga_lazo', 'use:cuerda', 'use']) w.verbs[k] = rueda_msg;
+    const a = hs('acena_ext'); a.walkTo = [2025, 790]; a.exit = ENTER;
+    a.verbs.look = [{ say: 'La aceña: un molino harinero sobre el caz. La rueda grande está parada; seguro que ahí empieza todo. La puerta está a la derecha.' }, { set: 'sabe_aceña' }];
+    R.firstEnter = [{ note: 'Ribera del Tajo, junto a Talavera. Año 1248.' }, { say: '¿Dónde... dónde está la carretera? ¿Y los coches?' },
+      { say: 'Vale. Respira. Talavera está allí enfrente, al otro lado del río.' },
+      { note: 'OBJETIVO: llegar a Talavera. Toca el botón «?» de arriba a la derecha si no sabes qué hacer.' }];
+  })();
+
+  // ===================================================== PISTAS (botón «?»): se muestra la primera que cumpla la condición
+  const HAS3 = ['has:sello_gremio', 'has:sello_parroquia', 'has:sello_alguacil', 'has:bando'];
+  D.hints = [
+    { if: { all: ['final_listo', { scene: 'alfar' }] }, obj: 'Usar el móvil en el horno', text: 'Ya has vencido a Don Nuño. Acércate al horno de Yuçaf y usa el móvil sobre él.' },
+    { if: 'final_listo', obj: 'Volver al alfar de Yuçaf', text: 'Todo resuelto. Yuçaf te espera en su alfar, en la calle de los Olleros (a la derecha de la plaza).' },
+    { if: { all: ['has:sello_gremio', 'has:sello_parroquia', 'has:sello_alguacil', '!has:bando'] }, obj: 'Recuperar el bando de Nuño', text: 'Tienes los tres sellos pero te falta el bando de Don Nuño: vuelve a la Puerta del Río (al fondo a la izquierda de la plaza), léelo y arráncalo.' },
+    { if: { all: ['nuno_conoce', '!has:bando', '!bando_cogido', { scene: 'puerta_rio' }] }, obj: 'Leer y coger el bando de Nuño', text: 'Lee el bando clavado junto al postigo de la ciudad (¡con atención!) y arráncalo: lo vas a necesitar al final.' },
+    { if: { all: HAS3 }, obj: 'Ir a la Vista Pública', text: 'Tienes los tres sellos y el bando. Ve al arco de la Plaza Mayor (derecha de la plaza) y habla con el mayordomo.' },
+    { if: { all: ['has:sello_gremio', 'has:sello_parroquia', '!has:sello_alguacil'] }, obj: 'Conseguir el sello de Nuño', text: 'Falta el sello de Nuño. Está sobre su mesa en la Casa del Portazgo. Si se distrajera... enséñale el móvil como si fuera un espejo y luego coge el sello.' },
+    { if: { all: ['has:badajo', '!has:sello_parroquia'] }, obj: 'Llevar el badajo a Fray Benito', text: 'Lleva el badajo a Fray Benito, en la iglesia de Santa María (entrada en la plaza). Dáselo con «Entregar».' },
+    { if: { all: ['has:cantaro', '!has:badajo', '!has:sello_parroquia'] }, obj: 'Cambiar el cántaro por el badajo', text: 'El herrero Lope, en la plaza, necesita agua para templar: dale el cántaro y te dará el badajo de la campana.' },
+    { if: { all: ['has:sello_gremio', '!has:sello_parroquia', '!has:badajo'] }, obj: 'Sello de la parroquia', text: 'Falta el sello de la parroquia. La campana de la iglesia no suena: pregunta a Doña Sancha (la panadera) y al herrero Lope por el badajo.' },
+    { if: { all: ['nuno_conoce', '!has:bando', '!bando_cogido'] }, obj: 'Leer y coger el bando de Nuño', text: 'Lee el bando clavado junto al postigo de la ciudad (¡con atención!) y arráncalo: lo vas a necesitar.' },
+    { if: { all: ['cruzado', '!carreta_libre', 'cuna_puesta'] }, obj: 'Sacar la carreta', text: 'La rueda ya está calzada. Ahora haz palanca con algo largo: la viga del suelo, o tu pértiga.' },
+    { if: { all: ['cruzado', '!carreta_libre'] }, obj: 'Sacar la carreta de Yuçaf', text: 'La carreta de Yuçaf bloquea la entrada. Recoge una cuña (montón de ladrillos, a la izquierda) y una viga larga; calza la rueda y haz palanca.' },
+    { if: 'barca_libre', obj: 'Subir a la barca', text: 'Alfonso ya te cruza. Toca su barca para subir.' },
+    { if: { all: ['rueda_libre', '!has:saco', '!saco_entregado', 'duran_dio_saco'] }, obj: 'Entregar el saco a Alfonso', text: 'Alfonso necesita dos cosas: una moneda y que alguien responda por ti. Dale el saco de Durán (Entregar).' },
+    { if: { all: ['rueda_libre', '!barca_libre'] }, obj: 'Convencer a Alfonso', text: 'El camino del embarcadero ya está seco. Habla con Alfonso: pide una moneda de plata y que alguien de aquí responda por ti (el saco de harina de Durán).' },
+    { if: { all: ['!rueda_libre', { scene: 'acena' }, '!sabe_tronco'] }, obj: 'Examinar la rueda y hablar con Durán', text: 'Ya estás dentro de la aceña. Toca la rueda grande de la izquierda para examinarla y habla con Durán, el molinero.' },
+    { if: { all: ['!rueda_libre', 'has:pertiga_lazo', 'sabe_tronco'] }, obj: 'Liberar la rueda de la aceña', text: 'Entra en la aceña (la puerta de piedra, a la derecha de la ribera), abre el zurrón, elige la pértiga y úsala sobre la rueda.' },
+    { if: { all: ['!rueda_libre', 'has:pertiga'] }, obj: 'Liberar la rueda de la aceña', text: 'Entra en la aceña (puerta de piedra, a la derecha de la ribera). Un tronco atasca la rueda: abre el zurrón, elige la pértiga y úsala sobre la rueda.' },
+    { if: { all: ['!rueda_libre', 'sabe_tronco'] }, obj: 'Conseguir algo largo para hacer palanca', text: 'Necesitas algo largo y firme: hay una pértiga entre la hierba de la ribera. Con una cuerda puedes hacer un lazo para pescar cosas del agua.' },
+    { if: { all: ['!rueda_libre', 'sabe_aceña'] }, obj: 'Entrar en la aceña', text: 'Entra por la puerta de la aceña (el edificio de piedra, a la derecha de la ribera) y habla con Durán.' },
+    { if: '!rueda_libre', obj: 'Cruzar el Tajo hasta Talavera', text: 'Talavera está al otro lado del río y no hay puente. Hace falta una barca. El camino del embarcadero está inundado: el agua se escapa de la aceña, a la derecha de la ribera. Empieza por ahí.' }
+  ];
+
   // ===================================================== PERSONAJES NO JUGADORES
   const LOPE_TRADE_ACT = [{ if: 'has:cantaro', then: [{ take: 'cantaro' }, { give: 'badajo' }, { set: ['tiene_badajo', 'lope_trueque'] }, { sfx: 'success' }, { say: 'Tu badajo. Y ahora, a templar. ¡Fuera, que me inspiro!', who: 'lope' }],
     else: [{ say: 'Sin cántaro, no hay trato.', who: 'lope' }] }];

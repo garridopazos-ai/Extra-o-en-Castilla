@@ -1,13 +1,13 @@
-"""G10 RC02 -> G11 COMPLETO RC01. Uso: python patch_g11.py <entrada.html> <salida.html>"""
-import sys, os
+"""G10 RC02 -> G11 COMPLETO RC02. Uso: python patch_g11.py <entrada.html> <salida.html>"""
+import sys, os, re, json, base64
 HERE=os.path.dirname(os.path.abspath(__file__))
 s=open(sys.argv[1],encoding='utf-8').read()
 def sub(old,new,n=1):
     global s
     assert s.count(old)==n,('recuento',s.count(old),old[:80]); s=s.replace(old,new)
-sub("Ribera → Aceña → Embarcadero · RC02","JUEGO COMPLETO · G11 · RC01",s.count("Ribera → Aceña → Embarcadero · RC02"))
-s=s.replace("RIBERA → ACEÑA → EMBARCADERO · RC02","JUEGO COMPLETO · G11 · RC01")
-sub("saveKey: '1248_g10_rc01_save_v1'","saveKey: '1248_g11_rc01_save_v1'")
+sub("Ribera → Aceña → Embarcadero · RC02","JUEGO COMPLETO · G11 · RC02",s.count("Ribera → Aceña → Embarcadero · RC02"))
+s=s.replace("RIBERA → ACEÑA → EMBARCADERO · RC02","JUEGO COMPLETO · G11 · RC02")
+sub("saveKey: '1248_g10_rc01_save_v1'","saveKey: '1248_g11_rc02_save_v1'")
 sub("npc: { duran: '#c9e6ff', alfonso: '#ffd0b8' }","npc: { duran: '#c9e6ff', alfonso: '#ffd0b8', alfonso_b: '#ffd0b8', gil_a: '#d7d7e6', gil_b: '#d7d7e6', yucaf: '#ffe9a8', yucaf_alfar: '#ffe9a8', nuno_puerta: '#e2a8ff', nuno_casa: '#e2a8ff', nuno_aud: '#e2a8ff', sancha: '#ffd9e6', lope: '#ffb890', pregonero: '#ffd24d', benito: '#cfe8c0', mayordomo: '#a8c8ff' }")
 sub("LAB01 · MOTOR · gráficos y textos provisionales","Juego completo · candidato G11 · arte provisional")
 sub("'Reiniciar laboratorio'","'Reiniciar partida'",2)
@@ -18,6 +18,64 @@ sub("""          'La barca de Alfonso se aparta de la orilla.',
           s.flags.nuno_derrotado ? 'Don Nuño de Mala-Cuenta carga cántaros hasta Toledo. A pie.' : 'Don Nuño sigue cobrando.',
           '',""")
 sub("'Durán: ' + (s.relations.duran || 0) + ' · Alfonso: ' + (s.relations.alfonso || 0) + ' · Reputación: ' + s.reputation,","'Durán: ' + (s.relations.duran || 0) + ' · Alfonso: ' + (s.relations.alfonso || 0) + ' · Yuçaf: ' + (s.relations.yucaf || 0) + ' · Reputación: ' + s.reputation,")
+
+# ---------- protagonista: hoja generada desde los clips 216 (marcha), 222 (reposo), 223 (habla)
+PW=os.path.join(HERE,'work','player'); meta=json.load(open(os.path.join(PW,'meta.json'))); R=meta['rows']; C=meta['counts']
+webp=base64.b64encode(open(os.path.join(PW,'sheet.webp'),'rb').read()).decode()
+ms=list(re.finditer(r'"assets/characters/player/sheet\.png":"data:image/png;base64,[A-Za-z0-9+/=]+"',s)); assert len(ms)==2
+for i,m in reversed(list(enumerate(ms))):
+    s=s[:m.start()]+('"assets/characters/player/sheet_g11.webp":"data:image/webp;base64,'+webp+'"' if i==0 else '"_player_old":""')+s[m.end():]
+stride=round(meta['stride_src_px']*0.315*300/meta['ch'])
+sheet_js="""  // Protagonista: hoja desde los clips 216 (marcha 3/4 a la derecha, %d fot.), 222 (reposo) y 223 (habla, ida y vuelta). Pies en (120,340).
+  const sheetPlayer = { frameW: %d, frameH: %d, anchor: [%d, %d], cols: %d, baseFacing: 'right', anims: {
+    idle_right: { row: %d, frames: 1, fps: 1, breath: true },
+    walk_right: { row: %d, frames: %d, fps: 24, stride: %d },
+    talk_right: { row: %d, frames: %d, fps: 12 } } };
+
+  D.characters = {
+"""%(C['walk'],meta['cw'],meta['ch'],meta['cw']//2,meta['gy'],meta['cols'],R['idle'],R['walk'],C['walk'],stride,R['talk'],C['talk'])
+sub("  D.characters = {\n",sheet_js)
+a=s.index("    player: {\n      name: 'El extraño'"); b=s.index("    duran: {",a)
+s=s[:a]+"""    player: {
+      name: 'El extraño', height: 300, speed: 210, hit: [-50, -300, 100, 300], orient: 'lr',
+      sprite: { src: 'assets/characters/player/sheet_g11.webp', sheet: sheetPlayer,
+        placeholderOpts: { skin: '#e2b48f', hair: '#2b211c', top: '#4f6d8f', hood: '#3f5873', sleeve: '#4f6d8f', legs: '#2f3f5c', shoes: '#eeeeee' } }
+    },
+"""+s[b:]
+
+# ---------- charco: borde suave en lugar de recorte duro
+sub("      g.restore();\n      S.floodPaint = { paint, x, y };","""      // orilla blanda: el agua se desvanece hacia el borde y deja ver el barro húmedo de debajo (sin recorte duro)
+      g.globalCompositeOperation = 'destination-out'; g.lineJoin = 'round';
+      g.filter = 'blur(10px)'; g.strokeStyle = 'rgba(0,0,0,.9)'; g.lineWidth = 34; floodShape(g, flood, x, y); g.stroke();
+      g.filter = 'blur(5px)'; g.strokeStyle = 'rgba(0,0,0,.6)'; g.lineWidth = 14; g.stroke();
+      g.filter = 'none'; g.globalCompositeOperation = 'source-over';
+      g.restore();
+      S.floodPaint = { paint, x, y };""")
+
+sub("      g.globalAlpha = .55; g.strokeStyle = '#d9e4d6'; g.lineWidth = 3; floodShape(g, flood, x, y); g.stroke();\n      g.globalAlpha = .25; g.lineWidth = 9; g.stroke();\n","      g.globalAlpha = 1;\n")
+# ---------- botón de pista «?» y objetivo en el menú
+sub("          drawMenuBtn(ctx);\n","          drawMenuBtn(ctx);\n          drawHintBtn(ctx);\n")
+sub("    function itemIcon(id) {","""    // Pista contextual: la primera de E.DATA.hints cuya condición se cumple. Si el jugador lleva un rato sin avanzar, el botón late.
+    function currentHint() { for (const h of (E.DATA.hints || [])) if (E.state.test(h.if, G.state)) return h; return null; }
+    U.objective = () => { const h = currentHint(); return h ? h.obj : ''; };
+    function drawHintBtn(ctx) {
+      const x = 1530, y = 160, r = 40;
+      const sig = Object.keys(G.state.flags).length + ':' + G.state.inventory.length + ':' + G.state.scene;
+      if (U._hs !== sig) { U._hs = sig; U._ht = G.time; }
+      const idle = G.time - U._ht, pulse = idle > 40 ? 0.5 + 0.5 * Math.sin(G.time * 5) : 0;
+      U.buttons.push({ x: x - r, y: y - r, w: r * 2, h: r * 2, id: 'hint', onTap: () => {
+        E.audio.play('tap'); if (G.runner.busy) return;
+        const h = currentHint(); U._ht = G.time;
+        G.runner.run([{ note: 'PISTA · ' + (h ? h.text : 'Explora, habla con todo el mundo y prueba los objetos del zurrón con lo que veas.') }]);
+      } });
+      ctx.fillStyle = 'rgba(20,15,10,.7)'; ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill();
+      ctx.strokeStyle = pulse ? 'rgba(255,225,140,' + (0.5 + pulse * 0.5) + ')' : COL.panelLine; ctx.lineWidth = 2 + pulse * 5; ctx.stroke();
+      TX.draw(ctx, '?', x, y + 2, { size: 46, bold: true, color: COL.gold, ui: true }, 'cc');
+    }
+
+    function itemIcon(id) {""")
+sub("panel(ctx, 'Pausa', [saved ? 'Último guardado: ' + saved.at.slice(0, 19).replace('T', ' ') : 'Sin partida guardada']);","panel(ctx, 'Pausa', [U.objective() ? 'Objetivo: ' + U.objective() : 'Sin objetivo pendiente']);")
+
 ph=open(os.path.join(HERE,'g11_placeholders.js'),encoding='utf-8').read()
 ct=open(os.path.join(HERE,'g11_content.js'),encoding='utf-8').read()
 marker="<script>/* src/main.js */"

@@ -53,3 +53,10 @@
 - Villano cómico: Don Nuño de Mala-Cuenta (tasa por todo, vanidad ante el espejo, se contradice con su propio bando).
 - Test: `production/G11/tools/pt_g11.py <html> <tag>` recorre todo con taps reales, 0 errores. Viga = palanca de reserva por si Alfonso se queda la pértiga.
 - Pendiente: arte real de todo lo nuevo, sprites propios de los NPC nuevos (ahora muñecos procedurales), integrar clips del protagonista (222/223/216), audio/música, pulir textos y humor.
+
+## G11 RC02 — correcciones tras la prueba de César (6 nov, 20:23)
+- Problema: no se entendía qué hacer (Talavera «inalcanzable», la rueda visible en la ribera no era tocable, nada guiaba). Hecho: objetivo al empezar, botón «?» de pista contextual (`E.DATA.hints` en `g11_content.js`, el botón late tras 40 s sin avanzar; el menú de pausa muestra el objetivo), Talavera/río/aceña/rueda exterior explican y llevan a la puerta de la aceña.
+- Charco de la ribera: borde difuminado (ya no parece un recorte pegado).
+- Protagonista: hoja nueva desde los clips reales 216 (marcha, 36 fot.), 222 (reposo) y 223 (habla, ida y vuelta) con `production/G11/tools/key_player.py` y `build_player.py`; marcha por distancia (stride 190, velocidad 210). La hoja antigua (la de G05/G08, 8 fot. rígidos) ya no se incrusta.
+- Pruebas: `tools/pt_g11.py` (partida completa), `pt_hints.py` (pistas del tramo 1), `pt_ux.py` (clics reales: pista, Talavera, caminar, rueda exterior).
+- Pendiente: reposo con clip propio de escucha; transición habla↔reposo tiene un salto de pose (reposo brazos abajo vs. habla manos en tirantes); stride del jugador estimado (no medido con suelo real).

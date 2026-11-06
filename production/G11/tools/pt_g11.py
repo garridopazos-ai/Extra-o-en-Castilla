@@ -5,7 +5,7 @@ pt_lib.SH='/home/claude/extra-o-en-castilla/production/G11/shots/'
 P=Play(sys.argv[1]); tag=sys.argv[2]; P.new()
 G='LAB1248.G'
 def st(label,r=None):
-    print('%-34s scene=%-12s pos=%s inv=%s %s'%(label,P.ev('LAB1248.scene()'),P.ev('(p=>p&&[Math.round(p.x),Math.round(p.y)])(LAB1248.player())'),P.inv(),'' if r in (True,None) else r))
+    print('%-30s %-11s obj=[%s] %s'%(label,P.ev('LAB1248.scene()'),P.ev('LAB1248.G.ui.objective()'),'' if r in (True,None) else r))
 def choose(txt):
     idx=P.ev(f'{G}.dialogue.options.findIndex(o=>o.o.text.startsWith({json.dumps(txt)}))')
     if idx<0: print('  !! opción no encontrada:',txt,P.ev(f'{G}.dialogue.options.map(o=>o.o.text)')); return 'noopt'
