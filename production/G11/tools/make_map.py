@@ -119,7 +119,7 @@ def field(x,y,w,h,col,col2,ang=-8,rows=None):
     for i in range(1,n): g+='<line x1="%.1f" y1="%.1f" x2="%.1f" y2="%.1f" stroke="%s" stroke-width="2.2" opacity=".75"/>'%(x+3,y+i*h/n,x+w-3,y+i*h/n,col2)
     return g+'</g>'
 for f in [(60,230,120,62,'#e6c557','#c9972f',-6),(190,262,100,56,'#dcb94c','#b88a2a',5),(70,330,110,60,'#b5c76a','#7b9b3c',-3),(190,400,118,54,'#e9cf6a','#c79b36',4),(1230,160,130,56,'#e6c557','#c9972f',3),(1360,200,120,60,'#a9c366','#6f9340',-4),(1250,520+0,0,0,'#000','#000',0),
-          (110,640,140,70,'#9b7ab0','#6a4b86',3),(260,690,120,58,'#c9d066','#8ea33f',-3),(420,650,150,64,'#e8c953','#c4952d',2),(1180,690,130,60,'#e6c557','#c9972f',-3),(1330,740,140,40,'#b5c76a','#7b9b3c',2)]:
+          (40,690,110,60,'#9b7ab0','#6a4b86',3),(200,742,130,40,'#c9d066','#8ea33f',-3),(590,700,110,56,'#e8c953','#c4952d',2),(350,436,150,60,'#e9cf6a','#c79b36',-3),(1180,690,130,60,'#e6c557','#c9972f',-3),(1330,740,140,40,'#b5c76a','#7b9b3c',2)]:
     if f[2]>0: A(field(*f))
 # ---- montañas (Sierra de Gredos) y colinas
 def mountain(x,y,w,h,c1='#9a8f7f',c2='#7b6f63',snow=True):
@@ -173,10 +173,10 @@ for mxx,hh in [(gx-12,58),(gx+14,46)]:
 A(poly([(gx-12,gy-58),(gx+6,gy-54),(gx-12,gy-50)],'#1d1d1d',OUTL,1))
 A(circ(gx-6,gy-54,1.6,'#fff','none',0))
 # ---- barca de Alfonso junto al embarcadero
-A(path('M150,566 l52,0 l-8,9 l-36,0 z','#9a6a3a',OUTL,1.6)+path('M176,566 l14,-30','none',OUTL,2))
+A(path('M140,550 l52,0 l-8,9 l-36,0 z','#9a6a3a',OUTL,1.6)+path('M166,550 l14,-30','none',OUTL,2))
 # ------------------------------------------------------------------ caminos
 for d,w in [('M1120,642 C1180,690 1300,700 1380,760 S1520,840 1620,860',16),('M1120,500 C1110,470 1100,452 1090,440',14),('M1130,505 C1180,480 1220,450 1260,430',12),
-            ('M860,505 L862,478',16),('M590,330 C500,330 420,360 300,420 S220,470 190,505',12),('M760,182 C720,140 640,110 560,60',10)]:
+            ('M860,505 L862,478',16),('M590,330 C500,330 400,342 300,360 S120,384 20,392',12),('M160,600 C220,640 290,668 380,664 S470,652 520,664',10),('M760,182 C720,140 640,110 560,60',10)]:
     A(path(d,'none','#a8814f',w+3,'opacity=".7"')); A(path(d,'none','#e8d29a',w))
 # ------------------------------------------------------------------ Talavera
 RING=[(610,215),(760,182),(930,175),(1088,206),(1136,300),(1102,428),(962,470),(860,478),(758,470),(642,432),(590,322)]
@@ -225,12 +225,13 @@ def nuno_house(x,by):
     g+=path('M%.1f,%.1f q5,-5 9,0 q4,-5 9,0'%(x+4,by-110),'none','#f6e7c3',2)   # bigote en la bandera
     return g+'</g>'
 items.append((262,nuno_house(1000,262)))
-items.append((236,tower(1060,236,44,96,'#e9d9b0','#2f56a8','#c73a2c')))   # alcázar
+
 def fountain(x,y): return ell(x,y,18,7,'#9fd6e6',OUTL,1.4)+rect(x-2.5,y-20,5,20,'#d9c7a0',OUTL,1)+path('M%.1f,%.1f q-8,2 -12,12 M%.1f,%.1f q8,2 12,12'%(x,y-20,x,y-20),'none','#4fb3d4',2)
 items.append((372,fountain(860,372)))
 items.append((360,rect(816,334,7,22,'#9a6a3a',OUTL,1)+poly([(806,334),(832,334),(828,326),(810,326)],'#c73a2c',OUTL,1)))   # tarima del pregonero
 roofs=['#c4553a','#d9703f','#b9482f','#cf5f3a','#d9824a']; walls=['#f6ead0','#f0e2bc','#ead6ac','#f3e4c4']
-reserved=[(760,250,95,70),(1000,240,70,50),(1060,200,30,60),(860,372,75,40)]
+reserved=[(760,250,95,70),(1000,240,70,50),(860,372,75,40),(985,398,34,22)]
+items.append((404,rect(958,390,56,14,'#9a6a3a',OUTL,1.3)+rect(962,376,4,14,'#7a5230',OUTL,1)+rect(1006,376,4,14,'#7a5230',OUTL,1)+path('M962,377 q22,8 48,0','none','#c73a2c',3)))
 for row,yy in enumerate(range(212,470,23)):
     x=600+(row%2)*14
     while x<1140:
@@ -245,6 +246,8 @@ for s in front: A(wall_seg(*s))
 for p in RING:
     if p[1]>=330 and abs(p[0]-860)>20: A(tower(p[0],p[1]+WH,30,50,'#e2d2ac'))
 A(tower(860,502,58,74,'#e9d9b0',None,'#e9a523'))
+A(tower(1150,478,40,70,'#e9d9b0','#2f56a8'))
+A(tower(1112,486,56,112,'#e9d9b0','#2f56a8','#c73a2c'))   # alcázar
 A(path('M848,502 v-22 a12,12 0 0 1 24,0 v22 z','#3b2417','none',0))
 # ------------------------------------------------------------------ alfares (fuera de murallas, al este)
 for x,y in [(1210,400),(1290,372),(1350,430)]:
@@ -271,17 +274,18 @@ A(house(1072,512,36,22,'#b9482f','#f0e2bc'))           # caseta del portazgo
 A(path('M1088,500 l44,-8','none','#c73a2c',4)+path('M1096,498.6 l6,-1 M1112,495.8 l6,-1 M1126,493.3 l6,-1','none','#fff',4))
 A(rect(1052,506,12,8,'#e9a523',OUTL,1))                 # cofre de monedas
 # ------------------------------------------------------------------ aceña de Durán, embarcadero y la llegada
-A(rect(340,470,70,44,'#efe0b8',OUTL,1.6)+poly([(334,471),(346,446),(404,446),(416,471)],'#b9482f',OUTL,1.6)+path('M352,514 v-16 a6,6 0 0 1 12,0 v16 z','#4a2c1a','none',0))
-A(rect(318,512,110,10,'#8a6a3a',OUTL,1.4))              # azud
-A(circ(430,520,30,'none',OUTL,6)+circ(430,520,30,'none','#9a6a3a',3.5))
+A(rect(470,608,70,44,'#efe0b8',OUTL,1.6)+poly([(464,609),(476,584),(534,584),(546,609)],'#b9482f',OUTL,1.6)+path('M482,652 v-16 a6,6 0 0 1 12,0 v16 z','#4a2c1a','none',0))
+A(rect(400,604,74,9,'#8a6a3a',OUTL,1.4))              # azud
+A(circ(450,606,30,'none',OUTL,6)+circ(450,606,30,'none','#9a6a3a',3.5))
 for k in range(8):
-    a=k*math.pi/4; A(path('M430,520 l%.1f,%.1f'%(math.cos(a)*30,math.sin(a)*30),'none','#7a5230',2.6))
-A(circ(430,520,6,'#5b3b24',OUTL,1.2))
-A(path('M404,548 q14,6 26,0 q14,-6 28,0','none','#e9fbff',2.4))
-A(rect(150,520,62,8,'#9a6a3a',OUTL,1.4))               # embarcadero
-for x in (156,176,196,208): A(path('M%d,528 v14'%x,'none',OUTL,3))
+    a=k*math.pi/4; A(path('M450,606 l%.1f,%.1f'%(math.cos(a)*30,math.sin(a)*30),'none','#7a5230',2.6))
+A(circ(450,606,6,'#5b3b24',OUTL,1.2))
+A(path('M420,580 q14,-6 26,0 q14,6 28,0','none','#e9fbff',2.4))
+A(rect(150,560,62,8,'#9a6a3a',OUTL,1.4))               # embarcadero (orilla sur)
+for x in (156,176,196,208): A(path('M%d,568 v16'%x,'none',OUTL,3))
+A(path('M180,548 C320,516 500,604 650,556 S800,522 858,512','none','#ffffff',2.4,'stroke-dasharray="7 7" opacity=".85"'))   # ruta de la barca
 # portal temporal + el extraño
-px,py=262,492
+px,py=300,652
 A(ell(px,py+4,30,9,'rgba(40,20,80,.25)','none',0))
 for k,(r,c) in enumerate([(30,'#7a4cff'),(23,'#36d6ff'),(16,'#ff5cd6'),(9,'#fff6a8')]):
     A(path('M%.1f,%.1f a%.1f,%.1f 0 1 1 %.1f,%.1f'%(px-r,py-20,r,r*.9,r*1.9,r*.4),'none',c,4.2,'opacity=".9"'))
@@ -308,7 +312,8 @@ A(path('M%.1f,%.1f q-9,-4 -7,-14 q2,-6 4,-8 h6 q2,2 4,8 q2,10 -7,14 z'%(dx-16,dy
 for k,(s,o) in enumerate([(14,0),(18,16),(22,34)]): A(text('z',dx-70-o,dy-16-o,s,'#2f56a8','TeX Gyre Bonum','middle','#f8eed0',3,-10,'bold'))
 # ------------------------------------------------------------------ orilla sur: olivos, aldea, molino, ovni
 for i in range(26): A(tree(R.uniform(700,960),R.uniform(650,770),R.uniform(.85,1.05),'olive'))
-for i in range(14): A(tree(R.uniform(40,420),R.uniform(600,640),R.uniform(.8,1),'round'))
+for i in range(10): A(tree(R.uniform(560,690),R.uniform(626,690),R.uniform(.8,1),'round'))
+for i in range(6): A(tree(R.uniform(40,130),R.uniform(600,660),R.uniform(.8,1),'round'))
 for i in range(10): A(tree(R.uniform(1460,1560),R.uniform(600,700),R.uniform(.8,1),'round'))
 for x,y in [(1000,700),(1040,716),(980,736),(1060,748)]: A(house(x,y,26,15,R.choice(roofs),R.choice(walls)))
 # molino de viento (anacronismo: aún faltan siglos y un hidalgo)
@@ -317,7 +322,7 @@ A(path('M%.1f,%.1f l-12,0 l4,-44 l16,0 l4,44 z'%(wx+12,wy),'#f6ead0',OUTL,1.6)+p
 for a in (20,110,200,290):
     r=math.radians(a); A(path('M%.1f,%.1f l%.1f,%.1f'%(wx+2,wy-48,math.cos(r)*34,math.sin(r)*34),'none',OUTL,4)+path('M%.1f,%.1f l%.1f,%.1f'%(wx+2,wy-48,math.cos(r)*34,math.sin(r)*34),'none','#f6ead0',2))
 # ovni abduciendo una oveja
-ux,uy=420,652
+ux,uy=430,404
 A(poly([(ux-14,uy+4),(ux+14,uy+4),(ux+34,uy+82),(ux-34,uy+82)],'rgba(255,250,170,.55)','none',0))
 A(ell(ux,uy,40,11,'#c9d3dc',OUTL,1.8)+path('M%.1f,%.1f a18,15 0 0 1 36,0'%(ux-18,uy-6),'#9fe3ff',OUTL,1.6))
 for k in range(5): A(circ(ux-28+k*14,uy+2,2.4,['#ff5cd6','#fff6a8','#36d6ff'][k%3],'none',0))
@@ -336,12 +341,13 @@ A(path('M%.1f,%.1f v4 M%.1f,%.1f v4'%(cx,cy-67,cx+4,cy-67),'none','#e9a523',1.5)
 A(signpost(1470,772,[('TOLEDO',1,'#f3e3b0'),('SEVILLA (el rey va)',-1,'#f3e3b0'),('MADRID: ¿qué Madrid?',-1,'#e8c9a0')]))
 A(text('TALAVERA',870,118,44,'#c94a35','TeX Gyre Bonum','middle','#f8eed0',7,0,'bold',9))
 A(label('(lo de «de la Reina» llegará en el siglo XIV)',870,142,17))
-A(ribbon('¡TÚ ESTÁS AQUÍ!',262,408,206,36,'#c73a2c','#fff6dc',24,'#8e2418'))
-L=[('Puerta del Río',860,534,21),('Plaza',905,392,17),('Santa María',760,322,20),('(cigüeñas incluidas)',760,338,15),('Casa de Don Nuño · Audiencia',1000,284,18),('(tejado dorado, pagado por todos)',1000,300,15),
-   ('Alcázar',1062,254,16),('Alfares',1300,500,22),('(barro, fuego y paciencia)',1300,517,15),('Monumento al Cántaro',1420,432,15),('Portazgo',1010,496,18),('(se paga hasta por mirar)',1010,512,14),
-   ('Puente Viejo',1225,664,19),('(en obras desde los romanos)',1225,681,15),('Aceña de Durán',376,436,20),('Embarcadero',184,598,19),('Monstruo del Tajo',648,630,18),('(vegetariano)',648,646,15),
+A(ribbon('¡TÚ ESTÁS AQUÍ!',300,724,206,36,'#c73a2c','#fff6dc',24,'#8e2418'))
+L=[('Puerta del Río',860,534,21),('Plaza del Pan',870,406,16),('Santa María',760,322,20),('(cigüeñas incluidas)',760,338,15),('Casa del Portazgo (Don Nuño)',1000,284,18),('(tejado dorado, pagado por todos)',1000,300,15),
+   ('Vista Pública',986,428,15),('Judería',688,414,16),('Morería',1062,346,16),('Puerta de Mérida',556,374,14),('Puerta de Toledo',1186,318,14),('Camino de Mérida',190,354,14),('Camino de Ávila',612,150,14),
+   ('Alcázar',1170,446,17),('Alfar de Yuçaf',1300,500,21),('(barro, fuego y paciencia)',1300,517,15),('Monumento al Cántaro',1420,432,15),('Peaje del puente',1010,496,16),('(se paga hasta por mirar)',1010,512,14),
+   ('Puente Viejo',1225,664,19),('(en obras desde los romanos)',1225,681,15),('Aceña de Durán',505,678,20),('Embarcadero',150,604,19),('Monstruo del Tajo',660,630,18),('(vegetariano)',660,646,15),
    ('Galeón perdido',1440,612,17),('(«¿esto es el mar?»)',1440,628,15),('Aquí hay dragones',1400,160,20),('(dormidos, por suerte)',1400,177,15),('Sierra de Gredos',1180,58,19),
-   ('(oveja en prácticas de vuelo)',420,764,15),('Gigante',1190,758,17),('(dentro de unos 350 años)',1190,774,14),('Aldea de los que llegan tarde',985,784,16)]
+   ('(oveja en prácticas de vuelo)',430,512,15),('Gigante',1190,758,17),('(dentro de unos 350 años)',1190,774,14),('Aldea de los que llegan tarde',985,784,16)]
 for t,x,y,s in L: A(label(t,x,y,s))
 A(text('Río Tajo',960,575,28,'#1f4f86','TeX Gyre Chorus','middle','#bfefff',5,-2))
 # cartela

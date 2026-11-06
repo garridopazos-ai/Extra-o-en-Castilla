@@ -5,18 +5,18 @@ s=open(sys.argv[1],encoding='utf-8').read()
 def sub(old,new,n=1):
     global s
     assert s.count(old)==n,('recuento',s.count(old),old[:80]); s=s.replace(old,new)
-sub("Ribera → Aceña → Embarcadero · RC02","JUEGO COMPLETO · G11 · RC06",s.count("Ribera → Aceña → Embarcadero · RC02"))
-s=s.replace("RIBERA → ACEÑA → EMBARCADERO · RC02","JUEGO COMPLETO · G11 · RC06")
-sub("saveKey: '1248_g10_rc01_save_v1'","saveKey: '1248_g11_rc06_save_v1'")
+sub("Ribera → Aceña → Embarcadero · RC02","JUEGO COMPLETO · G11 · RC07",s.count("Ribera → Aceña → Embarcadero · RC02"))
+s=s.replace("RIBERA → ACEÑA → EMBARCADERO · RC02","JUEGO COMPLETO · G11 · RC07")
+sub("saveKey: '1248_g10_rc01_save_v1'","saveKey: '1248_g11_rc07_save_v1'")
 sub("npc: { duran: '#c9e6ff', alfonso: '#ffd0b8' }","npc: { duran: '#c9e6ff', alfonso: '#ffd0b8', alfonso_b: '#ffd0b8', gil_a: '#d7d7e6', gil_b: '#d7d7e6', yucaf: '#ffe9a8', yucaf_alfar: '#ffe9a8', nuno_puerta: '#e2a8ff', nuno_casa: '#e2a8ff', nuno_aud: '#e2a8ff', sancha: '#ffd9e6', lope: '#ffb890', pregonero: '#ffd24d', benito: '#cfe8c0', mayordomo: '#a8c8ff' }")
 sub("LAB01 · MOTOR · gráficos y textos provisionales","Juego completo · candidato G11 · arte provisional")
-sub("'Juego completo · candidato G11 · arte provisional', C.W / 2, 350, { size: 26, color: COL.dim, ui: true }","'Candidato G11 · RC06 · arte provisional', C.W / 2, 350, { size: 26, color: '#fff3d6', stroke: 'rgba(0,0,0,.85)', ui: true }")
+sub("'Juego completo · candidato G11 · arte provisional', C.W / 2, 350, { size: 26, color: COL.dim, ui: true }","'Candidato G11 · RC07 · arte provisional', C.W / 2, 350, { size: 26, color: '#fff3d6', stroke: 'rgba(0,0,0,.85)', ui: true }")
 sub("'Reiniciar laboratorio'","'Reiniciar partida'",2)
 sub("panel(ctx, 'Fin del laboratorio 01', [","panel(ctx, 'FIN · 1248 · Un extraño en Castilla', [")
 sub("""          'La barca de Alfonso se aparta de la orilla.',
           'Talavera queda atrás, entre la bruma del Tajo.',
           '',""","""          'El horno de los Olleros se apaga con un último destello azul.',
-          s.flags.nuno_derrotado ? 'Don Nuño de Mala-Cuenta carga cántaros hasta Toledo. A pie.' : 'Don Nuño sigue cobrando.',
+          s.flags.nuno_derrotado ? 'Talavera aún habla del día en que Don Nuño de Mala-Cuenta abrió la bolsa.' : 'Don Nuño sigue cobrando.',
           '',""")
 sub("'Durán: ' + (s.relations.duran || 0) + ' · Alfonso: ' + (s.relations.alfonso || 0) + ' · Reputación: ' + s.reputation,","'Durán: ' + (s.relations.duran || 0) + ' · Alfonso: ' + (s.relations.alfonso || 0) + ' · Yuçaf: ' + (s.relations.yucaf || 0) + ' · Reputación: ' + s.reputation,")
 
@@ -55,7 +55,11 @@ sub("      g.restore();\n      S.floodPaint = { paint, x, y };","""      // oril
 
 sub("      g.globalAlpha = .55; g.strokeStyle = '#d9e4d6'; g.lineWidth = 3; floodShape(g, flood, x, y); g.stroke();\n      g.globalAlpha = .25; g.lineWidth = 9; g.stroke();\n","      g.globalAlpha = 1;\n")
 # ---------- botón de pista «?» y objetivo en el menú
-sub("          drawMenuBtn(ctx);\n","          drawMenuBtn(ctx);\n          drawHintBtn(ctx);\n")
+sub("          drawMenuBtn(ctx);\n","          drawMenuBtn(ctx);\n          drawHintBtn(ctx);\n          if (E.journey) E.journey.button(ctx, G, U);\n")
+sub("      if (S && !U.overlay) {\n        drawBubbles(ctx, S);","      if (S && !U.overlay) {\n        if (E.journey && !G.dialogue.active) E.journey.guide(ctx, G, S);\n        drawBubbles(ctx, S);")
+sub("          { label: 'Guardar partida',","          { label: 'Mapa de Talavera', onTap: () => E.journey.open(G, U), id: 'm-map' },\n          { label: 'Guardar partida',")
+sub("items.forEach((b, i) => button(ctx, { x: 520, y: 240 + i * 78, w: 560, h: 64, size: 30, ...b }));","items.forEach((b, i) => button(ctx, { x: 520, y: 226 + i * 70, w: 560, h: 58, size: 30, ...b }));")
+sub("    combine: () => {","    campana: () => { tone(196, 1.2, 'sine', 0.14); tone(392, 0.72, 'sine', 0.08); tone(496, 0.44, 'triangle', 0.06); tone(812, 0.17, 'sine', 0.045); },\n    combine: () => {")
 sub("    function itemIcon(id) {","""    // Pista contextual: la primera de E.DATA.hints cuya condición se cumple. Si el jugador lleva un rato sin avanzar, el botón late.
     function currentHint() { for (const h of (E.DATA.hints || [])) if (E.state.test(h.if, G.state)) return h; return null; }
     U.objective = () => { const h = currentHint(); return h ? h.obj : ''; };
@@ -119,7 +123,7 @@ sub("    function panel(ctx, title, lines) {\n      ctx.fillStyle = 'rgba(0,0,0,
 # ---------- portada: mapa ilustrado de Talavera (art/portada/mapa_talavera.jpg, generado por tools/make_map.py) con zoom de entrada a «¡Tú estás aquí!»
 ta=s.index("      } else if (U.overlay === 'title') {"); tb=s.index("      } else if (U.overlay === 'end') {",ta)
 s=s[:ta]+"""      } else if (U.overlay === 'title') {
-        const now = performance.now(), Z = U.titleZoom, FX = 262, FY = 474;
+        const now = performance.now(), Z = U.titleZoom, FX = 300, FY = 652;
         U.buttons.push({ x: 0, y: 0, w: C.W, h: C.H, z: -2, onTap: () => { if (U.titleZoom) U.titleZoom.t0 = -1e9; }, id: 'ov-bg' });
         const k = Z ? Math.min(1, (now - Z.t0) / 1600) : 0, e = k * k * (3 - 2 * k), sc = 1 + e * 3.4;
         const im = E.illus && E.illus.map;
@@ -141,15 +145,16 @@ s=s[:ta]+"""      } else if (U.overlay === 'title') {
           button(ctx, { x: 200, y: 801, w: 440, h: 62, label: 'Nueva partida', primary: true, id: 't-new', onTap: () => { E.audio.unlock && E.audio.unlock(); U.titleZoom = { t0: performance.now() }; } });
           button(ctx, { x: 670, y: 801, w: 440, h: 62, label: saved ? 'Continuar' : 'Continuar (sin guardado)', disabled: !saved, id: 't-continue', onTap: () => { if (saved) { U.overlay = null; G.loadGame(); } } });
           button(ctx, { x: 1140, y: 801, w: 280, h: 62, size: 26, label: 'Pantalla completa', id: 't-fs', onTap: () => G.fullscreen() });
-          ctx.save(); ctx.font = '15px sans-serif'; ctx.textAlign = 'right'; ctx.fillStyle = 'rgba(255,240,210,.7)'; ctx.fillText('G11 · RC06', C.W - 48, 828); ctx.fillText('arte provisional', C.W - 48, 850); ctx.restore();
+          ctx.save(); ctx.font = '15px sans-serif'; ctx.textAlign = 'right'; ctx.fillStyle = 'rgba(255,240,210,.7)'; ctx.fillText('G11 · RC07', C.W - 48, 828); ctx.fillText('arte provisional', C.W - 48, 850); ctx.restore();
         } else {
           if (k > 0.55) { ctx.fillStyle = 'rgba(0,0,0,' + Math.min(1, (k - 0.55) / 0.42).toFixed(3) + ')'; ctx.fillRect(0, 0, C.W, C.H); }
           if (k >= 1) { U.titleZoom = null; U.overlay = null; G.newGame(); U.fade = 1; U.fadeTarget = 0; }
         }
 """+s[tb:]
+sub("      } else if (U.overlay === 'title') {","      } else if (U.overlay === 'map') {\n        E.journey.draw(ctx, G, U, button);\n      } else if (U.overlay === 'title') {")
 
 ph=open(os.path.join(HERE,'g11_placeholders.js'),encoding='utf-8').read()
-ct=open(os.path.join(HERE,'g11_content.js'),encoding='utf-8').read()
+ct=open(os.path.join(HERE,'g11_content.js'),encoding='utf-8').read()+'\n'+open(os.path.join(HERE,'g11_juglar.js'),encoding='utf-8').read()+'\n'+open(os.path.join(HERE,'g11_journey.js'),encoding='utf-8').read()
 marker="<script>/* src/main.js */"
 assert s.count(marker)==1
 s=s.replace(marker,"<script>/* g11 placeholders */\n"+ph+"\n</script>\n<script>/* g11 content */\n"+ct+"\n</script>\n"+marker)
