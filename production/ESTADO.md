@@ -152,3 +152,8 @@ repintar escenas de la villa (ahora marcadores planos) en acuarela; pedir a Cés
 - César entregó la portada (acuarela: el extraño + siete personajes, título «1248 · Un extraño en Castilla»): `art/portada/portada_1248_original.jpg` (1672×941) y `portada_1248_game.jpg` (1600×900).
 - Ya probada como pantalla de título sobre la línea antigua: `builds/1248_LUNA_G11_COMPLETO_RC11.html` (parche `production/G12/patch_g11_rc11.py`: sustituye el mapa por la portada en el título, sin zoom; prueba `production/G12/tools/pt_title.py`, 0 errores). **Falta llevarla a la línea G12** (siguiente RC de G12: aplicar el mismo cambio al título).
 - César (7 nov): «no hay ni una chica en mi historia». Hoy solo existe Doña Sancha (panadera, plaza) y la portada no tiene ninguna mujer. Decisión narrativa pendiente de César (ver «Esperando a César»); propuesta: personaje femenino con peso en la trama, no solo ornamento.
+
+## Decisión narrativa de César (7 nov): la hija de Durán
+- Ver `docs/PERSONAJE_HIJA_DE_DURAN.md`. Hija de Durán; se enamora del protagonista y Durán lo nota (gags). Nombre provisional «Elvira».
+- Siguiente RC de G12 que toque la aceña: añadir a Elvira (provisional, marcada) con diálogos y gags de Durán; respetar el flujo del puzle actual.
+- Esperando a César: arte/clip de Elvira, nombre y edad definitivos, portada con ella.
