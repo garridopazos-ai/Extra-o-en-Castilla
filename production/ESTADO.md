@@ -1,6 +1,6 @@
 # 1248 · Un extraño en Castilla — ESTADO DEL DESARROLLO (libreta de relevo)
 
-Última actualización: 2026-11-07 · Última candidata: `builds/1248_LUNA_G11_COMPLETO_RC10.html`
+Última actualización: 2026-11-07 · Última candidata: `builds/1248_LUNA_G12_ORILLA_RC02.html` (línea principal: G12)
 
 ## Cómo trabajar (para cada ejecución, también las automáticas)
 1. `git pull`, leer este archivo entero y abrir la última candidata de `builds/`.
@@ -30,8 +30,14 @@
 - 222: se coloca la chaqueta y queda de pie quieto → REPOSO. 223: gesto de habla (fondo verde claro). 224: igual que 223 pero fondo blanco con acuarela (no usar). 225: gestos de señalar/dar. 216: marcha de tres cuartos hacia la IZQUIERDA (el arte mira a la izquierda; corregido en RC04). 218: usa el móvil en plano cerrado (zoom, no sirve como sprite a escala).
 
 ## Siguiente paso concreto
-- (El «Tramo 2» de antes ya está hecho en G11.) Con el juego completo y arte provisional, lo siguiente que avanza sin material nuevo: (a) sprites propios para los NPC procedurales (Gil A/B, Yuçaf, Nuño, Sancha, Lope, Benito, mayordomo, pregonero); (b) suavizar el salto de pose habla↔reposo del protagonista; (c) marco de azulejo (mural) para las cajas de diálogo y el zurrón. Candidata prevista: `1248_LUNA_G11_COMPLETO_RC11.html` (parche en `production/G12/`, partiendo de RC10). Si César sube material a `assets/inbox/` (fondos limpios, clips de NPC), tiene prioridad.
-
+**Línea principal: G12** (ver secciones «G12 RC01/RC02» al final). Build: `python production/G12/patch_g12.py builds/1248_LUNA_G10_ALFONSO_RC02.html builds/1248_LUNA_G12_<TRAMO>_RC##.html RC##`
+(encadena G11 + RC10 + G12). Contenido nuevo en `production/G12/*.js` (añadir el archivo a la lista de `patch_g12.py`). Test de referencia: `production/G12/tools/pt_g12.py` (ampliarlo con cada tramo).
+Personajes nuevos = marionetas (`rig(...)` en g12_content.js, opciones en g12_rig.js). Escenarios nuevos = acuarela procedural tomando como plantilla `production/G12/tools/make_orilla.py` (capas far/near/front con paralaje).
+Plan de tramos (uno por ejecución, en este orden):
+1. **G12 RC03 · Isla del Chamelo y Leonor (amor inesperado).** Con `rueda_libre` el vado de la orilla se abre (hotspot `vado` → nueva escena `isla`, ~3200 px). Leonor: apicultora y pescadora, lista, con genio (rig build 'woman', toca/pañuelo, delantal, colmenas). Primer encuentro cómico (la abeja pica al protagonista; Mingo se ríe; ella se ríe de su ropa y del móvil). Puzle corto: recuperar su barca/nasa o calmar la colmena (humo: Mingo + yesca/paja). Ella cuenta que Nuño esconde en el Chamelo lo que cobra de más (el «arca de los portazgos» o un libro de cuentas doble) y lo vio enterrarlo. Objeto clave: `libro_cuentas` (o llave del arca). Ganchos de amor: diálogos con chispa, rel leonor +, «flor de jara» opcional. Pistas (D.hints) y Mingo comentando todo.
+2. **G12 RC04 · Hambre y lecho en la villa.** En la Plaza del Pan, Doña Sancha vende pan pero Nuño ha subido el «portazgo del pan»: conseguir una hogaza (trueque con los higos de Mingo o un número de juglar). Lecho: el mesón cobra lo que no tienes → pajar del alfar de Yuçaf; escena de noche (fundido, ronquidos de Mingo, sueño corto con el móvil brillando: gancho del final). Objetivos visibles «Comer de verdad» / «Encontrar dónde dormir».
+3. **G12 RC05 · La Vista con Leonor.** En la audiencia, el `libro_cuentas` (o el arca) y el testimonio de Leonor se suman a las pruebas del juglar; Mingo hace la trastada decisiva (distrae al mayordomo / cambia el sello). Desenlace con Nuño más cómico. Ajustar pistas y pt_g12.py.
+4. Después: repintar en acuarela las escenas de la villa (hoy son marcadores planos: puerta_rio, plaza, iglesia, portazgo, audiencia, alfar) con el método de make_orilla.py; marco de azulejo para diálogos/zurrón.
 ## Limitaciones conocidas
 - Arte de aceña y embarcadero provisional (placeholders). Alfonso con una sola pose.
 - Clips del jugador (216-225) sin integrar.
@@ -44,6 +50,7 @@
 - `ref_02.jpg` (captura de la aceña con arte nuevo de rueda/tronco/barriles/muela) ya estaba en refs; trae HUD y texto, no vale como fondo limpio.
 
 ## Esperando a César
+- (7 nov) Para G12 sería ideal arte de Gemini en acuarela: panorámicas por capas de la orilla/Isla del Chamelo y clips (fondo verde) de Mingo, el ciego y Leonor. No bloquea: hay marionetas y acuarela procedural.
 - Material pedido (ver lista en la conversación): fondo limpio de la aceña sin HUD y por capas; clips de Alfonso de habla/escucha/reposo; fondo/capas del embarcadero; arte de la Puerta del Río. Nada bloquea: se avanza con arte provisional.
 - (nada por ahora)
 
