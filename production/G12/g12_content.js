@@ -293,3 +293,23 @@
   A.registerPlaceholder('item_higos', icon((g, w) => { for (const [x, y] of [[34, 50], [58, 46], [46, 66]]) { g.fillStyle = '#5a2e5a'; g.beginPath(); g.ellipse(x, y, 13, 16, 0, 0, 7); g.fill(); g.fillStyle = '#7a9a3a'; g.fillRect(x - 2, y - 22, 4, 8); } }));
   A.registerPlaceholder('g12_cuenco', (w, h) => { const c = cv(w, h), g = c.getContext('2d'); g.fillStyle = '#8a5a30'; g.beginPath(); g.ellipse(w / 2, h * .45, w * .45, h * .3, 0, 0, 7); g.fill(); g.fillStyle = '#5a3a1e'; g.beginPath(); g.ellipse(w / 2, h * .4, w * .36, h * .18, 0, 0, 7); g.fill(); g.strokeStyle = 'rgba(230,245,240,.7)'; g.lineWidth = 2; g.beginPath(); g.moveTo(2, h * .8); g.quadraticCurveTo(w / 2, h, w - 2, h * .8); g.stroke(); return c; });
 })(window.E1248 = window.E1248 || {});
+
+/* G12 · Aceña con el arte mejorado de César (art/escenarios/acena, generado por tools/build_acena.py):
+   fondo con la rueda parada y el tronco; al liberar la rueda, la ventana se repinta sin tronco y la rueda redibujada gira recortada a la ventana. */
+(function (E) {
+  'use strict';
+  const S = E.DATA.scenes.acena; if (!S) return;
+  S.layers = [
+    { id: 'bg', z: 'back', x: 0, y: 0, w: 1600, h: 900, src: 'assets/scenes/acena/bg_g12.webp', placeholder: 'acena_bg' },
+    { id: 'ventana', z: 'back', x: 247, y: 158, w: 281, h: 488, src: 'assets/scenes/acena/ventana_libre.webp', placeholder: 'g11_bando', visibleWhen: 'rueda_libre' },
+    { id: 'poste', z: 'sort', sortY: 708, x: 1063, y: 238, w: 50, h: 471, src: 'assets/scenes/acena/poste.webp', placeholder: 'pillar' }
+  ];
+  S.ambient = [
+    { type: 'spin', asset: 'g12_rueda', src: 'assets/scenes/acena/rueda.webp', x: 298, y: 401, w: 472, h: 472, speed: 0.9, spinWhen: 'rueda_libre', visibleWhen: 'rueda_libre', clipRect: [247, 158, 281, 488] },
+    { type: 'strip', asset: 'fx_water_strip', x: 248, y: 572, w: 280, h: 74, tile: 280, speed: 40, alpha: 0.85, clip: true, visibleWhen: 'rueda_libre' }
+  ];
+  const h = id => S.hotspots.find(x => x.id === id);
+  if (h('rueda')) h('rueda').rect = [240, 150, 300, 500];
+  if (h('sacos')) { const s = h('sacos'); s.name = 'Barriles de harina'; s.verbs.look = [{ say: 'Barriles de harina bien cerrados. Durán los cuenta como si fueran hijos. Los sacos vacíos, apilados detrás.' }]; }
+  if (h('muela')) h('muela').rect = [636, 376, 256, 300];
+})(window.E1248 = window.E1248 || {});

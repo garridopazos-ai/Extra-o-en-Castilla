@@ -141,3 +141,8 @@ repintar escenas de la villa (ahora marcadores planos) en acuarela; pedir a Cés
 - patch_g12.py ahora encadena: patch_g11.py (G10 RC02 → G11 RC09) → patch_g11_rc10.py (tarjetas) → cambios G12. La orilla es el Capítulo II (el resto se renumera); frase de la ribera ajustada al tono del Acto I.
 - **La línea principal pasa a ser G12.** Cualquier mejora nueva se añade a production/G12 (o como parche encadenado en patch_g12.py), no sobre los HTML de G11.
 - Verificado: pt_g12.py partida completa sin errores; inicio desde el botón del título con protagonista y tarjeta de capítulo.
+
+## G12 RC03 · Aceña con el arte mejorado de César (7 nov)
+- `art/escenarios/acena/acena_mejorada_original.jpg` (2576×1438, venía de una captura: traía zurrón y rótulo). `production/G12/tools/build_acena.py` lo limpia (copia tablas del suelo), pinta la puerta de salida (era un rectángulo crema) con luz de día, recorta el poste como capa ordenada y genera: `bg.webp`, `ventana_libre.webp` (ventana sin rueda ni tronco) y `rueda.webp` (rueda completa redibujada con la paleta del arte: 16 álabes, 12 radios, 12 abrazaderas).
+- Rueda parada = el arte tal cual (con el tronco). Al liberarla: ventana limpia + la rueda gira recortada a la ventana (nuevo `clipRect` en ambientes 'spin') + agua.
+- Verificado: capturas parada/girando; pt_g12.py partida completa sin errores.

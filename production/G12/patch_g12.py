@@ -50,12 +50,19 @@ sub("      if (item) return verbs[verb + ':' + item] || verbs[verb + ':*'] || ge
     "      if (item) return verbs[verb + ':' + item] || verbs[verb + ':*'] || generic(verb, item);")
 sub("      return verbs[verb] || generic(verb);\n    }",
     "      const base = verbs[verb] || generic(verb);\n      if (verb === 'look' && t.kind === 'hotspot' && t.h.mingo && E.companion && E.companion.present(G)) return base.concat([{ say: t.h.mingo, who: 'mingo' }]);\n      return base;\n    }")
+# ---------- ambientes que giran: recorte opcional (la rueda de la aceña gira dentro de la ventana)
+sub("        ctx.save(); ctx.translate(x, a.y); ctx.rotate(a._ang);",
+    "        ctx.save(); if (a.clipRect) { ctx.beginPath(); ctx.rect(a.clipRect[0] - S.camX, a.clipRect[1], a.clipRect[2], a.clipRect[3]); ctx.clip(); }\n        ctx.translate(x, a.y); ctx.rotate(a._ang);")
 # ---------- arte de la orilla
 ART = os.path.join(ROOT, 'art', 'escenarios', 'orilla')
 def emb(path, f, mime): return '"' + path + '":"data:' + mime + ';base64,' + base64.b64encode(open(os.path.join(ART, f), 'rb').read()).decode() + '",'
 key = '"assets/characters/player/sheet_g11.webp":"data:'
 sub(key, emb('assets/scenes/orilla/far.jpg', 'far.jpg', 'image/jpeg') + emb('assets/scenes/orilla/near.webp', 'near.webp', 'image/webp')
     + emb('assets/scenes/orilla/reeds_a.webp', 'reeds_a.webp', 'image/webp') + emb('assets/scenes/orilla/reeds_b.webp', 'reeds_b.webp', 'image/webp') + key)
+AC = os.path.join(ROOT, 'art', 'escenarios', 'acena')
+def emb2(path, f, mime): return '"' + path + '":"data:' + mime + ';base64,' + base64.b64encode(open(os.path.join(AC, f), 'rb').read()).decode() + '",'
+sub(key, emb2('assets/scenes/acena/bg_g12.webp', 'bg.webp', 'image/webp') + emb2('assets/scenes/acena/ventana_libre.webp', 'ventana_libre.webp', 'image/webp')
+    + emb2('assets/scenes/acena/rueda.webp', 'rueda.webp', 'image/webp') + emb2('assets/scenes/acena/poste.webp', 'poste.webp', 'image/webp') + key)
 # ---------- scripts G12 (tras el contenido G11)
 js = '\n'.join(open(os.path.join(HERE, f), encoding='utf-8').read() for f in ('g12_rig.js', 'g12_companion.js', 'g12_content.js'))
 marker = "<script>/* src/main.js */"
