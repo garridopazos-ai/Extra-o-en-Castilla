@@ -164,3 +164,10 @@ repintar escenas de la villa (ahora marcadores planos) en acuarela; pedir a Cés
 
 ## Talavera al fondo de puente y aceña (7 nov)
 - Versión provisional procedural pintada en el horizonte de los dos fondos (`art/escenarios/nuevos/*_talavera.jpg`). Detalles, rigor histórico y prompt para la versión definitiva en `docs/TALAVERA_1248_FONDO.md`. Sin cablear en el juego aún.
+
+## LAB ACEÑA RC01 (7 nov) — laboratorio independiente, no toca la línea principal
+- `builds/1248_LAB_ACENA_RC01.html` = G12 RC04 + `production/LAB_ACENA/patch_lab.py` (recursos: `tools/build_assets.py`; contenido: `lab_acena.js`; prueba: `tools/pt_lab.py`, 27/27 en los dos órdenes).
+- EXTERIOR_ACEÑA (acuarela de César `art/escenarios/nuevos/acena.jpg`, sustituible cambiando `assets/scenes/acena_ext/bg.jpg`) ↔ INTERIOR_ACEÑA (muela con puerta iluminada). Escala exterior por el hueco de la puerta (150 px, base y≈640): depth 0,48→0,64; interior 0,8→1,0 (puerta 249 px).
+- Elvira: pose fija recortada de la portada (GrabCut), detrás de la muela (capa `muela_frente` tapa la parte que falta). Durán a 300 de alto. Despill del verde en hojas del viajero y Durán.
+- Botón DEP en pantalla (desactivado al inicio): suelo transitable, obstáculos, zonas, apoyos de los pies.
+- Pendiente de César: retrato del viajero, arte individual de Elvira de cuerpo entero y Durán sobre verde (no llegaron; ZIP «referencias para Flow» = hojas antiguas de G08).
