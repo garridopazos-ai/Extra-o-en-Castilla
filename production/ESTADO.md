@@ -147,3 +147,8 @@ repintar escenas de la villa (ahora marcadores planos) en acuarela; pedir a Cés
 - `art/escenarios/acena/acena_mejorada_original.jpg` (2576×1438, venía de una captura: traía zurrón y rótulo). `production/G12/tools/build_acena.py` lo limpia (copia tablas del suelo), pinta la puerta de salida (era un rectángulo crema) con luz de día, recorta el poste como capa ordenada y genera: `bg.webp`, `ventana_libre.webp` (ventana sin rueda ni tronco) y `rueda.webp` (rueda completa redibujada con la paleta del arte: 16 álabes, 12 radios, 12 abrazaderas).
 - Rueda parada = el arte tal cual (con el tronco). Al liberarla: ventana limpia + la rueda gira recortada a la ventana (nuevo `clipRect` en ambientes 'spin') + agua.
 - Verificado: capturas parada/girando; pt_g12.py partida completa sin errores.
+
+## Portada ilustrada recibida (7 nov) — pendiente de integrar en la línea G12
+- César entregó la portada (acuarela: el extraño + siete personajes, título «1248 · Un extraño en Castilla»): `art/portada/portada_1248_original.jpg` (1672×941) y `portada_1248_game.jpg` (1600×900).
+- Ya probada como pantalla de título sobre la línea antigua: `builds/1248_LUNA_G11_COMPLETO_RC11.html` (parche `production/G12/patch_g11_rc11.py`: sustituye el mapa por la portada en el título, sin zoom; prueba `production/G12/tools/pt_title.py`, 0 errores). **Falta llevarla a la línea G12** (siguiente RC de G12: aplicar el mismo cambio al título).
+- César (7 nov): «no hay ni una chica en mi historia». Hoy solo existe Doña Sancha (panadera, plaza) y la portada no tiene ninguna mujer. Decisión narrativa pendiente de César (ver «Esperando a César»); propuesta: personaje femenino con peso en la trama, no solo ornamento.
