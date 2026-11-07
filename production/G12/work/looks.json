@@ -1,0 +1,10 @@
+[
+ {"name":"Mingo","build":"child","height":195,"skin":"#e2a882","hair":"#5a3418","hairStyle":"mop","top":"#c9953a","sleeve":"#c9953a","legs":"#e2a882","shoes":"bare","belt":"#6a4a2a","patch":"#4a6ea8","freckles":true,"cheeks":true,"mood":"grin","tunicLen":0.42,"sling":true,"work":"juggle","seed":3},
+ {"name":"Ciego","build":"old","skin":"#d7a27e","hair":"#cfc8bc","beard":"full","beardCol":"#d8d2c6","hat":"brim","hatCol":"#4a3a2c","top":"#6a5a46","sleeve":"#6a5a46","cape":"#5a3c2a","legs":"#4a3a2c","eyes":"blind","nose":"big","stick":true,"mood":"sly","tunicLen":0.75,"work":"tap","seed":5},
+ {"name":"Gil","build":"fat","skin":"#dca484","hair":"#4a3a2a","beard":"moustache","hat":"helmet","top":"#8a4a34","sleeve":"#6b6f78","legs":"#4a3a2a","shoes":"boot","belt":"#3a2a1a","mood":"neutral","nose":"big","seed":1},
+ {"name":"Nuño","build":"thin","skin":"#ecc2a2","hair":"#1a1018","beard":"goatee","moustache":true,"hat":"bonete","hatCol":"#2e1a40","feather":"#c9a227","top":"#5b2a6e","sleeve":"#4a2058","legs":"#2e1a40","shoes":"shoe","collar":"#c9a227","cape":"#7a2c6a","mood":"sly","nose":"hook","prop":"keys","seed":2},
+ {"name":"Sancha","build":"woman","skin":"#e0aa86","hat":"toca","hatCol":"#efe6d0","top":"#a8603a","sleeve":"#a8603a","apron":"#f0e6cc","legs":"#7a5a3a","tunicLen":0.95,"mood":"happy","cheeks":true,"seed":4},
+ {"name":"Yuçaf","build":"adult","skin":"#c08a62","hair":"#2a2018","beard":"full","hat":"turban","hatCol":"#e8e2cc","top":"#9c6b3f","sleeve":"#8a5a33","apron":"#d8c8a0","legs":"#5a4632","tunicLen":0.7,"mood":"happy","work":"stir","seed":6},
+ {"name":"Benito","build":"fat","skin":"#e8b494","hair":"#9a9288","hairStyle":"tonsure","top":"#5a4a32","sleeve":"#5a4a32","legs":"#5a4a32","belt":"#d8c8a0","tunicLen":1.0,"mood":"worried","cheeks":true,"seed":7},
+ {"name":"Lope","build":"adult","skin":"#c99070","hair":"#2a2018","beard":"stubble","top":"#6b3e2a","sleeve":"#6b3e2a","apron":"#3a3a3a","legs":"#3a3a3a","shoes":"boot","mood":"sly","work":"hammer","seed":8}
+]

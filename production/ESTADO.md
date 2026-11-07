@@ -107,3 +107,25 @@
 
 ## Esperando a César
 - Nada bloquea. Siguen siendo bienvenidos: fondo limpio de aceña/embarcadero/Puerta del Río y clips de habla/escucha de NPC.
+## G12 RC01 · Acto I «La orilla» (7 nov)
+Petición de César: más encanto Monkey Island, personajes mejor estructurados, un chico pícaro compañero, mejores animaciones,
+escenarios por los que pasear (entorno del Tajo, Los Sifones, Isla del Chamelo), acabado pictórico/acuarela, guiño al Lazarillo
+con un ciego, y objetivos que den dirección (comer, un lecho, un amor inesperado) hacia el desenlace con el villano.
+Hecho (production/G12, build con `python production/G12/patch_g12.py builds/1248_LUNA_G10_ALFONSO_RC02.html salida.html RC01`):
+- **Marionetas articuladas** (g12_rig.js): todos los vecinos (Gil, Yuçaf, Nuño, Sancha, Lope, pregonero, Benito, Gutierre) + Mingo y el ciego
+  se dibujan en vivo con esqueleto: marcha con pies plantados (IK), respiración, parpadeo, boca y gesto al hablar, cabeceo al escuchar,
+  trabajos (martillo, pregón, remover, malabares, bastón). Protagonista, Durán y Alfonso siguen con sus clips.
+- **Mingo** (g12_companion.js): roba el móvil al llegar, se esconde en la higuera; tras el trato se une: sigue al jugador entre escenas,
+  hace malabares/comenta si se aburre, comenta lo que miras (campo `mingo` de los hotspots), está en el zurrón como «objeto» para
+  «Usar Mingo con…» (verbos `use:mingo`; si no hay, se niega con gracia) y da la pista actual con su voz («¿Y ahora qué hacemos?»).
+- **La orilla · Soto de los Sifones**: escena de 4000 px (2,5 pantallas) con paralaje (cielo/Talavera a 0,55, juncos delante a 1,22),
+  acuarela procedural (production/G12/tools/make_orilla.py → art/escenarios/orilla/). Sifón de Maese Hamid (guiño a Los Sifones),
+  huerta con espantapájaros y cuervo Tello, higuera, parra del ciego, vado e Isla del Chamelo (aún cerrada: gancho del Acto II, Leonor).
+- **El ciego Nicolás** (guiño al Lazarillo): uvas «de una en una / de dos en dos / de tres en tres», la paja del vino, la longaniza por el nabo, el «¡saltad, que es estrecho!».
+- Cadena: llegada con hambre → Mingo roba el móvil → orilla → trato con Mingo → el ciego pide su cuenco (pértiga) → uvas → Mingo devuelve el móvil y se une.
+  Sin Mingo no se sube a la barca (los puzles de la villa necesitan el móvil). Luego sigue la trama del juglar intacta.
+- Filtro acuarela offline sobre la ribera: probado y descartado (ensucia la pintura). El acabado acuarela va en el arte nuevo y en el pedido de arte.
+- Verificado: production/G12/tools/pt_g12.py = partida completa (Acto I + toda la trama) sin errores; 60 fps en orilla y plaza.
+Siguiente (plan Actos II-III): hambre 2 en la Plaza del Pan (Sancha, el pan gravado por Nuño), lecho (mesón caro → pajar; escena de noche),
+amor inesperado con Leonor en la Isla del Chamelo (vado abierto al liberar la rueda; ella sabe el secreto de Nuño) → pruebas para la Vista;
+repintar escenas de la villa (ahora marcadores planos) en acuarela; pedir a César arte Gemini/clips para Mingo, ciego, Leonor y panorámicas.
