@@ -129,3 +129,8 @@ Hecho (production/G12, build con `python production/G12/patch_g12.py builds/1248
 Siguiente (plan Actos II-III): hambre 2 en la Plaza del Pan (Sancha, el pan gravado por Nuño), lecho (mesón caro → pajar; escena de noche),
 amor inesperado con Leonor en la Isla del Chamelo (vado abierto al liberar la rueda; ella sabe el secreto de Nuño) → pruebas para la Vista;
 repintar escenas de la villa (ahora marcadores planos) en acuarela; pedir a César arte Gemini/clips para Mingo, ciego, Leonor y panorámicas.
+
+## G12 RC02 (7 nov) = G12 RC01 + tarjetas de capítulo de G11 RC10
+- patch_g12.py ahora encadena: patch_g11.py (G10 RC02 → G11 RC09) → patch_g11_rc10.py (tarjetas) → cambios G12. La orilla es el Capítulo II (el resto se renumera); frase de la ribera ajustada al tono del Acto I.
+- **La línea principal pasa a ser G12.** Cualquier mejora nueva se añade a production/G12 (o como parche encadenado en patch_g12.py), no sobre los HTML de G11.
+- Verificado: pt_g12.py partida completa sin errores; inicio desde el botón del título con protagonista y tarjeta de capítulo.

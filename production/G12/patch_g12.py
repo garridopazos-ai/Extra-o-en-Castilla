@@ -6,15 +6,23 @@ HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.join(HERE, '..
 RC = sys.argv[3] if len(sys.argv) > 3 else 'RC01'
 tmp = os.path.join(tempfile.gettempdir(), 'g12_base.html')
 subprocess.check_call([sys.executable, os.path.join(ROOT, 'production', 'G11', 'patch_g11.py'), sys.argv[1], tmp], stdout=subprocess.DEVNULL)
-s = open(tmp, encoding='utf-8').read()
+tmp2 = os.path.join(tempfile.gettempdir(), 'g12_base_rc10.html')
+subprocess.check_call([sys.executable, os.path.join(HERE, 'patch_g11_rc10.py'), tmp, tmp2], stdout=subprocess.DEVNULL)   # tarjetas de capítulo (G11 RC10)
+s = open(tmp2, encoding='utf-8').read()
 def sub(old, new, n=1):
     global s
     assert s.count(old) == n, ('recuento', s.count(old), old[:90]); s = s.replace(old, new)
 # ---------- versión
-s = s.replace('JUEGO COMPLETO · G11 · RC09', 'G12 · ACTO I «LA ORILLA» · ' + RC).replace('Candidato G11 · RC09', 'Candidato G12 · ' + RC)
-s = s.replace("ctx.fillText('G11 · RC09', C.W - 48, 828)", "ctx.fillText('G12 · " + RC + "', C.W - 48, 828)")
+s = s.replace('JUEGO COMPLETO · G11 · RC10', 'G12 · ACTO I «LA ORILLA» · ' + RC).replace('Candidato G11 · RC10', 'Candidato G12 · ' + RC)
+s = s.replace("ctx.fillText('G11 · RC10', C.W - 48, 828)", "ctx.fillText('G12 · " + RC + "', C.W - 48, 828)")
 sub("saveKey: '1248_g11_rc09_save_v1'", "saveKey: '1248_g12_" + RC.lower() + "_save_v1'")
 sub("npc: { duran: '#c9e6ff',", "npc: { mingo: '#ffcf6b', ciego: '#c8d8ff', duran: '#c9e6ff',")
+# ---------- capítulos: la orilla entra como capítulo II
+for old, new in [("ribera:      ['I', 'Talavera, 1248. Llueve en el Tajo y el río ha decidido salirse.'],", "ribera:      ['I', 'Talavera, 1248. Un forastero, un río y un estómago vacío.'],\n      orilla:      ['II', 'Un soto, un sifón, un ciego y un ladrón de muy corta estatura.'],"),
+                 ("acena:       ['II',", "acena:       ['III',"), ("embarcadero: ['III',", "embarcadero: ['IV',"), ("travesia:    ['IV',", "travesia:    ['V',"),
+                 ("puerta_rio:  ['V',", "puerta_rio:  ['VI',"), ("plaza:       ['VI',", "plaza:       ['VII',"), ("iglesia:     ['VII',", "iglesia:     ['VIII',"),
+                 ("portazgo:    ['VIII',", "portazgo:    ['IX',"), ("audiencia:   ['IX',", "audiencia:   ['X',"), ("alfar:       ['X',", "alfar:       ['XI',")]:
+    sub(old, new)
 # ---------- marionetas: dibujo en vivo y sin hoja que cargar
 sub("      const img = E.assets.get('char:' + charId);\n", "      if (a.def.rig) { E.rig.draw(ctx, a, S.depthScale(a.y) * (a.def.scale || 1), S.camX); return; }\n      const img = E.assets.get('char:' + charId);\n")
 sub("        return E.assets.acquire({ id: 'char:' + cid,", "        return cd.rig ? null : E.assets.acquire({ id: 'char:' + cid,")
