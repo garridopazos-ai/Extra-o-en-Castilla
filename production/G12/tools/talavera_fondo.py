@@ -8,7 +8,7 @@ def town(w,h,seed,haze,HILL):
     """Capa RGBA (w x h) con el perfil de la villa: cerca con almenas, torres albarranas, alcázar, campanario de Santa María y casas."""
     rnd=random.Random(seed); W,H=w*SS,h*SS
     im=Image.new('RGBA',(W,H),(0,0,0,0)); d=ImageDraw.Draw(im)
-    wall=(228,196,142); wallsh=(188,156,112); roof=(196,106,70); roofsh=(160,84,60); ink=(92,70,52,200)
+    wall=(214,192,156); wallsh=(176,156,128); brick=(196,132,96); roof=(196,106,70); roofsh=(160,84,60); ink=(92,70,52,200)
     base=int(H*0.96); lw=max(2,int(SS*0.9))
     def box(x0,y0,x1,y1,c,sh=None):
         d.rectangle([x0,y0,x1,y1],fill=c+(255,),outline=ink,width=lw)
@@ -32,12 +32,36 @@ def town(w,h,seed,haze,HILL):
     box(W*0.02,wy,W*0.98,base,wall,None); merlons(W*0.02,W*0.98,wy,int(w/5)*2,H*0.05)
     for i in range(int(w/9)):   # saeteras
         px=W*0.04+i*(W*0.92)/int(w/9); d.rectangle([px,wy+H*0.08,px+SS*1.2,wy+H*0.15],fill=(90,68,52,230))
-    for tx,th,tw in ((0.12,0.62,0.05),(0.33,0.55,0.045),(0.66,0.58,0.05),(0.90,0.52,0.045)):
+    # bandas de ladrillo en el lienzo (mampostería de granito con hiladas de ladrillo)
+    for k in (0.35,0.62):
+        d.rectangle([W*0.02+lw,wy+(base-wy)*k,W*0.98-lw,wy+(base-wy)*k+H*0.025],fill=brick+(255,))
+    # torres macizas del lienzo (cuadradas) y una semicircular
+    for tx,th,tw in ((0.12,0.52,0.045),(0.66,0.50,0.045)):
         x0=W*tx; x1=x0+W*tw; yt=base-H*th
         box(x0,yt,x1,base,wall,wallsh); merlons(x0-SS,x1+SS,yt,3,H*0.045)
         d.rectangle([x0+(x1-x0)*0.4,yt+H*0.08,x0+(x1-x0)*0.6,yt+H*0.16],fill=(90,68,52,230))
+    sx0=W*0.40; sx1=sx0+W*0.05; syt=base-H*0.50
+    d.rectangle([sx0,syt,sx1,base],fill=wall+(255,),outline=ink,width=lw); d.ellipse([sx0,syt-H*0.03,sx1,syt+H*0.05],fill=wall+(255,),outline=ink,width=lw)
+    merlons(sx0,sx1,syt,3,H*0.04)
+    # TORRES ALBARRANAS: exentas, adelantadas al lienzo y unidas a él por un gran arco (en Talavera hubo 17; las ochavadas se ven con caras)
+    for tx,th in ((0.27,0.66),(0.58,0.70),(0.84,0.62)):
+        x0=W*tx; x1=x0+W*0.05; yt=base-H*th; fy=base+H*0.02
+        # arco de unión con el lienzo (pasadizo sobre un gran arco, detrás de la torre)
+        ax0=x1-SS; ax1=x1+W*0.06; ay=base-H*0.44
+        d.rectangle([ax0,ay,ax1,base],fill=wallsh+(255,),outline=ink,width=lw)
+        d.pieslice([ax0+SS,ay+H*0.07,ax1-SS,base+H*0.30],180,360,fill=(84,64,50,235))
+        merlons(ax0,ax1,ay,3,H*0.04)
+        # torre ochavada (caras: luz/sombra) exenta, algo más alta y más ancha arriba
+        d.polygon([(x0,fy),(x0,yt),(x1,yt),(x1,fy)],fill=wall+(255,),outline=ink)
+        d.polygon([(x0+(x1-x0)*0.55,fy),(x0+(x1-x0)*0.55,yt),(x1,yt),(x1,fy)],fill=wallsh+(255,))
+        d.rectangle([x0-SS*1.2,yt-H*0.045,x1+SS*1.2,yt+H*0.01],fill=wall+(255,),outline=ink,width=lw)   # coronamiento volado
+        merlons(x0-SS*1.2,x1+SS*1.2,yt-H*0.045,4,H*0.04)
+        d.rectangle([x0+(x1-x0)*0.4,yt+H*0.10,x0+(x1-x0)*0.62,yt+H*0.19],fill=(90,68,52,230))
+        d.rectangle([x0,fy-H*0.10,x1,fy],fill=brick+(255,))   # zócalo de ladrillo
+    # barbacana: antemuro bajo almenado por delante del lienzo
+    d.rectangle([W*0.0,base-H*0.07,W*1.0,base+H*0.04],fill=wallsh+(255,),outline=ink,width=lw); merlons(0,W,base-H*0.07,int(w/6)*2,H*0.03)
     # alcázar: gran torre del homenaje a la izquierda
-    ax0=W*0.20; ax1=ax0+W*0.09; ay=base-H*0.88
+    ax0=W*0.16; ax1=ax0+W*0.10; ay=base-H*0.78
     box(ax0,ay,ax1,base,wall,wallsh); merlons(ax0-SS*1.5,ax1+SS*1.5,ay,5,H*0.06)
     for k in range(2): d.rectangle([ax0+(ax1-ax0)*(0.2+0.4*k),ay+H*0.14,ax0+(ax1-ax0)*(0.32+0.4*k),ay+H*0.26],fill=(90,68,52,230))
     # Santa María la Mayor: campanario cuadrado con vanos y chapitel bajo
