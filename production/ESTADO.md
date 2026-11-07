@@ -1,6 +1,6 @@
 # 1248 · Un extraño en Castilla — ESTADO DEL DESARROLLO (libreta de relevo)
 
-Última actualización: 2026-11-07 · Última candidata: `builds/1248_LUNA_G12_ORILLA_RC02.html` (línea principal: G12)
+Última actualización: 2026-11-07 · Última candidata: `builds/1248_LUNA_G12_ORILLA_RC03.html` (línea principal: G12)
 
 ## Cómo trabajar (para cada ejecución, también las automáticas)
 1. `git pull`, leer este archivo entero y abrir la última candidata de `builds/`.
@@ -50,6 +50,7 @@ Plan de tramos (uno por ejecución, en este orden):
 - `ref_02.jpg` (captura de la aceña con arte nuevo de rueda/tronco/barriles/muela) ya estaba en refs; trae HUD y texto, no vale como fondo limpio.
 
 ## Esperando a César
+- (7 nov) Decisión de estilo abierta con César: propuesta «línea de cómic + lavado de acuarela» para todo (fondos suaves, personajes con tinta fuerte, proporciones de dibujo animado, camino de suelo claro en el tercio inferior de cada fondo). Documento con fichas de personajes, movimientos y plantillas para Flow/Gemini: https://claude.ai/artifact/WCkmcfbDPhCHDQZDV77Pcp (Claude Docs). Hasta que responda, no repintar escenas en un estilo definitivo; seguir con contenido y marionetas.
 - (7 nov) Para G12 sería ideal arte de Gemini en acuarela: panorámicas por capas de la orilla/Isla del Chamelo y clips (fondo verde) de Mingo, el ciego y Leonor. No bloquea: hay marionetas y acuarela procedural.
 - Material pedido (ver lista en la conversación): fondo limpio de la aceña sin HUD y por capas; clips de Alfonso de habla/escucha/reposo; fondo/capas del embarcadero; arte de la Puerta del Río. Nada bloquea: se avanza con arte provisional.
 - (nada por ahora)
