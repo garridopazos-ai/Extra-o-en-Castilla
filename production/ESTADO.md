@@ -157,3 +157,7 @@ repintar escenas de la villa (ahora marcadores planos) en acuarela; pedir a Cés
 - Ver `docs/PERSONAJE_HIJA_DE_DURAN.md`. Hija de Durán; se enamora del protagonista y Durán lo nota (gags). Nombre provisional «Elvira».
 - Siguiente RC de G12 que toque la aceña: añadir a Elvira (provisional, marcada) con diálogos y gags de Durán; respetar el flujo del puzle actual.
 - Esperando a César: arte/clip de Elvira, nombre y edad definitivos, portada con ella.
+
+## Mapas de zona caminable de 6 fondos nuevos (7 nov)
+- Puente, plaza del mercado, aceña, calle de casas, taberna, puerta de muralla: ver `production/G12/walkmaps/` (JSON + capturas) y fondos en `art/escenarios/nuevos/`. Sin integrar todavía; son la base del Acto II (villa/taberna/Puerta).
+- Portada con Elvira: G12 RC04 (`production/G12/patch_cover.py`).

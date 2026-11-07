@@ -1,0 +1,292 @@
+{
+ "puente": {
+  "nombre": "Puente viejo sobre el río",
+  "fondo": "art/escenarios/nuevos/puente.jpg",
+  "size": [
+   1600,
+   900
+  ],
+  "walk": {
+   "outer": [
+    [
+     0,
+     713
+    ],
+    [
+     400,
+     705
+    ],
+    [
+     801,
+     709
+    ],
+    [
+     1201,
+     697
+    ],
+    [
+     1600,
+     681
+    ],
+    [
+     1600,
+     809
+    ],
+    [
+     1121,
+     821
+    ],
+    [
+     721,
+     805
+    ],
+    [
+     320,
+     813
+    ],
+    [
+     0,
+     805
+    ]
+   ],
+   "holes": []
+  },
+  "depth": {
+   "yFar": 681,
+   "sFar": 0.8,
+   "yNear": 821,
+   "sNear": 1.0
+  }
+ },
+ "plaza_mercado": {
+  "nombre": "Plaza del mercado (puestos y puerta al fondo)",
+  "fondo": "art/escenarios/nuevos/plaza_mercado.jpg",
+  "size": [
+   1600,
+   900
+  ],
+  "walk": {
+   "outer": [
+    [
+     0,
+     725
+    ],
+    [
+     561,
+     725
+    ],
+    [
+     1001,
+     725
+    ],
+    [
+     1600,
+     725
+    ],
+    [
+     1600,
+     890
+    ],
+    [
+     0,
+     890
+    ]
+   ],
+   "holes": []
+  },
+  "depth": {
+   "yFar": 725,
+   "sFar": 0.8,
+   "yNear": 890,
+   "sNear": 1.0
+  }
+ },
+ "acena": {
+  "nombre": "Aceña (camino delante del molino)",
+  "fondo": "art/escenarios/nuevos/acena.jpg",
+  "size": [
+   1600,
+   900
+  ],
+  "walk": {
+   "outer": [
+    [
+     0,
+     703
+    ],
+    [
+     561,
+     698
+    ],
+    [
+     1201,
+     687
+    ],
+    [
+     1600,
+     679
+    ],
+    [
+     1600,
+     805
+    ],
+    [
+     1201,
+     801
+    ],
+    [
+     561,
+     793
+    ],
+    [
+     0,
+     789
+    ]
+   ],
+   "holes": []
+  },
+  "depth": {
+   "yFar": 679,
+   "sFar": 0.8,
+   "yNear": 805,
+   "sNear": 1.0
+  }
+ },
+ "calle_casas": {
+  "nombre": "Calle de casas con arcos y puertas",
+  "fondo": "art/escenarios/nuevos/calle_casas.jpg",
+  "size": [
+   1600,
+   900
+  ],
+  "walk": {
+   "outer": [
+    [
+     0,
+     762
+    ],
+    [
+     1600,
+     762
+    ],
+    [
+     1600,
+     890
+    ],
+    [
+     0,
+     890
+    ]
+   ],
+   "holes": []
+  },
+  "depth": {
+   "yFar": 762,
+   "sFar": 0.8,
+   "yNear": 890,
+   "sNear": 1.0
+  }
+ },
+ "taberna": {
+  "nombre": "Taberna (interior)",
+  "fondo": "art/escenarios/nuevos/taberna.jpg",
+  "size": [
+   1600,
+   900
+  ],
+  "walk": {
+   "outer": [
+    [
+     24,
+     743
+    ],
+    [
+     1600,
+     743
+    ],
+    [
+     1600,
+     775
+    ],
+    [
+     1277,
+     775
+    ],
+    [
+     1277,
+     890
+    ],
+    [
+     344,
+     890
+    ],
+    [
+     344,
+     775
+    ],
+    [
+     24,
+     775
+    ]
+   ],
+   "holes": []
+  },
+  "depth": {
+   "yFar": 743,
+   "sFar": 0.8,
+   "yNear": 890,
+   "sNear": 1.0
+  }
+ },
+ "puerta_muralla": {
+  "nombre": "Puerta de la muralla",
+  "fondo": "art/escenarios/nuevos/puerta_muralla.jpg",
+  "size": [
+   1600,
+   900
+  ],
+  "walk": {
+   "outer": [
+    [
+     0,
+     789
+    ],
+    [
+     448,
+     765
+    ],
+    [
+     673,
+     715
+    ],
+    [
+     905,
+     715
+    ],
+    [
+     1121,
+     754
+    ],
+    [
+     1600,
+     778
+    ],
+    [
+     1600,
+     863
+    ],
+    [
+     0,
+     863
+    ]
+   ],
+   "holes": []
+  },
+  "depth": {
+   "yFar": 715,
+   "sFar": 0.8,
+   "yNear": 863,
+   "sNear": 1.0
+  }
+ }
+}
