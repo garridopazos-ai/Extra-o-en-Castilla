@@ -1,0 +1,7 @@
+# Talavera de 1248 al fondo (puente y aceña)
+Hecho (provisional, procedural): `art/escenarios/nuevos/puente_talavera.jpg` y `acena_talavera.jpg` (script `production/G12/tools/talavera_fondo.py`, capas sueltas en `production/G12/walkmaps/talavera_capa_*.png`). Villa en la lejanía con bruma: cerca almenada con torres, alcázar a la izquierda, campanario cuadrado de Santa María y casas de tejado rojo.
+
+Rigor histórico (lo que sí / lo que NO): sí cerca con torres (también albarranas), alcázar, Santa María la Mayor con campanario bajo y cuadrado, casas de adobe/ladrillo con teja; NO la torre-chapitel gótica alta ni la cúpula de las pinturas de ciudades posteriores, ni el puente de arcos del s. XV (en 1248 el Tajo se cruza en barca, coherente con el juego). Es una hipótesis artística, no un plano.
+
+## Prompt para generar la versión definitiva (misma acuarela con tinta que los fondos)
+«Misma ilustración, mismo encuadre y estilo, sin cambiar nada del primer plano: añade en la lejanía, en la loma del horizonte, la ciudad amurallada de Talavera de la Reina en 1248, vista desde lejos y algo velada por la bruma: lienzo de muralla almenada de piedra clara con cuatro o cinco torres cuadradas, un alcázar con torre del homenaje a la izquierda, un campanario cuadrado y bajo de iglesia con tejado a cuatro aguas y casas de tejado rojo asomando sobre la muralla. Sin torres góticas ni cúpulas barrocas ni puentes de arcos. Acuarela con contorno fino de tinta marrón, colores suaves y desvaídos por la distancia, sin texto.»

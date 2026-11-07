@@ -161,3 +161,6 @@ repintar escenas de la villa (ahora marcadores planos) en acuarela; pedir a Cés
 ## Mapas de zona caminable de 6 fondos nuevos (7 nov)
 - Puente, plaza del mercado, aceña, calle de casas, taberna, puerta de muralla: ver `production/G12/walkmaps/` (JSON + capturas) y fondos en `art/escenarios/nuevos/`. Sin integrar todavía; son la base del Acto II (villa/taberna/Puerta).
 - Portada con Elvira: G12 RC04 (`production/G12/patch_cover.py`).
+
+## Talavera al fondo de puente y aceña (7 nov)
+- Versión provisional procedural pintada en el horizonte de los dos fondos (`art/escenarios/nuevos/*_talavera.jpg`). Detalles, rigor histórico y prompt para la versión definitiva en `docs/TALAVERA_1248_FONDO.md`. Sin cablear en el juego aún.
