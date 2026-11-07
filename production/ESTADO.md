@@ -1,6 +1,6 @@
 # 1248 · Un extraño en Castilla — ESTADO DEL DESARROLLO (libreta de relevo)
 
-Última actualización: 2026-11-06 · Última candidata: `builds/1248_LUNA_G10_ALFONSO_RC02.html`
+Última actualización: 2026-11-07 · Última candidata: `builds/1248_LUNA_G11_COMPLETO_RC10.html`
 
 ## Cómo trabajar (para cada ejecución, también las automáticas)
 1. `git pull`, leer este archivo entero y abrir la última candidata de `builds/`.
@@ -30,7 +30,7 @@
 - 222: se coloca la chaqueta y queda de pie quieto → REPOSO. 223: gesto de habla (fondo verde claro). 224: igual que 223 pero fondo blanco con acuarela (no usar). 225: gestos de señalar/dar. 216: marcha de tres cuartos hacia la IZQUIERDA (el arte mira a la izquierda; corregido en RC04). 218: usa el móvil en plano cerrado (zoom, no sirve como sprite a escala).
 
 ## Siguiente paso concreto
-- **Tramo 2 · Puerta del Río / murallas** (Biblia G06, SCN_03_PUERTA_RIO): carreta atascada, postigo, mesa de portazgo. Sustituir el final provisional (`endLab` al subir a la barca) por la transición a esta escena (cruce del Tajo → llegada a la puerta). Candidata prevista: `1248_LUNA_G11_PUERTA_RIO_RC01.html`.
+- (El «Tramo 2» de antes ya está hecho en G11.) Con el juego completo y arte provisional, lo siguiente que avanza sin material nuevo: (a) sprites propios para los NPC procedurales (Gil A/B, Yuçaf, Nuño, Sancha, Lope, Benito, mayordomo, pregonero); (b) suavizar el salto de pose habla↔reposo del protagonista; (c) marco de azulejo (mural) para las cajas de diálogo y el zurrón. Candidata prevista: `1248_LUNA_G11_COMPLETO_RC11.html` (parche en `production/G12/`, partiendo de RC10). Si César sube material a `assets/inbox/` (fondos limpios, clips de NPC), tiene prioridad.
 
 ## Limitaciones conocidas
 - Arte de aceña y embarcadero provisional (placeholders). Alfonso con una sola pose.
@@ -98,3 +98,12 @@
 ## G11 RC09 (arreglo: no salía el protagonista)
 - Desde RC06, al empezar con «Nueva partida» (zoom del mapa) la ribera aparecía SIN protagonista y el juego quedaba en transición. Causa: tras G.newGame() el título ponía U.fadeTarget = 0, y el cambio de escena del motor espera a que el fundido llegue a 1 → nunca cargaba al jugador. Ahora solo se pone U.fade = 1 y el motor hace su fundido.
 - Las pruebas automáticas no lo detectaban porque llaman a G.newGame() directamente; tools/dbg_start.py ahora entra por el botón real del título y comprueba que existe el jugador.
+
+## G11 RC10 — tarjetas de capítulo (7 nov, ejecución automática)
+- Primera visita a cada lugar (10 escenas): cartela grande «Capítulo N · nombre · frase» (4,2 s, no bloquea; un revisit vuelve al rótulo pequeño; al cargar partida guardada no sale). Textos de las frases = provisionales, de tono cómico, editables en `CHAPTERS` de `production/G12/patch_g11_rc10.py`.
+- Build: `builds/1248_LUNA_G11_COMPLETO_RC10.html` = RC09 + `python production/G12/patch_g11_rc10.py RC09 RC10` (los parches de RC10 se aplican sobre el HTML de RC09, no sobre G10).
+- Verificado en navegador (Chromium, artefactos desactivados): `production/G12/tools/pt_cards.py` (tarjeta en ribera y aceña, revisita sin tarjeta, capturas en `production/G12/shots/`) y `production/G11/tools/pt_juglar.py` (partida completa hasta el horno, 0 errores, 0 avisos). No probado: móvil real, ni tarjetas de portazgo/audiencia/alfar/iglesia con captura (misma ruta de código).
+- Nota: la primera ejecución de pt_juglar sobre RC10 falló una vez con un `undefined.exit` (timing al lanzarlo junto a otro test); repetida dos veces, pasa igual que RC09.
+
+## Esperando a César
+- Nada bloquea. Siguen siendo bienvenidos: fondo limpio de aceña/embarcadero/Puerta del Río y clips de habla/escucha de NPC.
