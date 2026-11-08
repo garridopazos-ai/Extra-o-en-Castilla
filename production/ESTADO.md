@@ -1,6 +1,6 @@
 # 1248 · Un extraño en Castilla — ESTADO DEL DESARROLLO (libreta de relevo)
 
-Última actualización: 2026-11-08 · Última candidata: `builds/1248_CHAMELO_RC08.html` (línea principal: CHAMELO)
+Última actualización: 2026-11-08 · Última candidata: `builds/1248_CHAMELO_RC09.html` (línea principal: CHAMELO)
 
 ## Cómo trabajar (para cada ejecución, también las automáticas)
 1. `git pull`, leer este archivo entero y abrir la última candidata de `builds/`.
@@ -30,17 +30,16 @@
 - 222: se coloca la chaqueta y queda de pie quieto → REPOSO. 223: gesto de habla (fondo verde claro). 224: igual que 223 pero fondo blanco con acuarela (no usar). 225: gestos de señalar/dar. 216: marcha de tres cuartos hacia la IZQUIERDA (el arte mira a la izquierda; corregido en RC04). 218: usa el móvil en plano cerrado (zoom, no sirve como sprite a escala).
 
 ## Siguiente paso concreto
-**Línea principal: CHAMELO** (desde el 8 nov). Base: `referencias/1248_CHAMELO_RC06.html` (hecha en otra sesión: Isla del Chamelo con Raimundo y Elvira, hojas Flow de Elvira/Mingo/Raimundo/Nuño/ciego, fondos ilustrados de toda la villa, puzle del amarre). Encima va RC07:
-`python production/CHAMELO/tools/make_map_v2.py && python production/CHAMELO/patch_rc07.py referencias/1248_CHAMELO_RC06.html builds/1248_CHAMELO_RC08.html RC08`
-(`patch_rc07.py` genera la versión vigente del módulo `production/CHAMELO/rc07.js`; el número de RC sale del argumento; ver secciones «CHAMELO RC07/RC08» al final). Tramos nuevos: un `production/CHAMELO/patch_rc09.py` que tome `builds/1248_CHAMELO_RC08.html` y meta su contenido antes de `<script>/* src/main.js */` (y nueva RC cada vez).
-Pruebas: `tools/pt_offscreen.py` (nadie habla fuera de plano al entrar en el soto; Mingo en la rama), `tools/pt_chamelo.py` (partida completa de principio a fin, debe acabar con `ended True`), `tools/pt_features.py` (portada real, audio, cámara, mapa, zonas, prisa, menú, comentarios, paneo), `tools/audio_check.py` (nivel de ambiente por escena), `tools/shots_rc07.py`. En las pruebas automáticas poner `LAB1248.E.rc07.autoDegrade=false` (sin GPU el navegador de pruebas va lento y rebajaría efectos).
+**Línea principal: CHAMELO.** Última candidata `builds/1248_CHAMELO_RC09.html` = RC08 + `python production/CHAMELO/patch_rc09.py builds/1248_CHAMELO_RC08.html builds/1248_CHAMELO_RC09.html RC09` (el módulo es `production/CHAMELO/rc09.js`; RC08 sale de `referencias/1248_CHAMELO_RC06.html` con `make_map_v2.py` + `patch_rc07.py ... RC08`). Tramos nuevos: `patch_rc10.py` que tome `builds/1248_CHAMELO_RC09.html`, inserte su módulo antes de `<script>/* src/main.js */` (el regex de versión de patch_rc09 ya renombra «CHAMELO RCnn»).
+Pruebas: `tools/pt_rc09.py <html> <tag> higos|numero` (partida completa con la ruta de comida elegida; debe acabar `ended True`), `tools/pt_rc09_noche.py` (final rápido: sin comer no se duerme, dormir, horno), más las de RC07/RC08 (`pt_offscreen`, `pt_features`, `audio_check`). En pruebas automáticas: `LAB1248.E.rc07.autoDegrade=false`. No lanzar dos partidas completas a la vez (Chromium sin GPU: se ralentizan mucho).
 Plan de tramos (uno por ejecución):
 1. **Si llegan clips Flow** (lista en «Esperando a César»): integrarlos primero (viajero nuevo con reposo/andar/hablar/reacciones; Elvira y Nuño hablar; Durán y Alfonso en estilo Flow; vecinos de la villa sustituyendo marionetas). Mismo formato de hoja que `assets/characters/mingo/flow_rc01.webp` (200×288, 8 columnas, ancla [100,278]).
-2. **Hambre y lecho en la villa.** Plaza del Pan: Sancha vende pan pero Nuño ha subido el «portazgo del pan»; conseguir una hogaza (trueque con los higos de Mingo o un número de juglar). Lecho: el mesón cobra lo que no tienes → pajar del alfar de Yuçaf; escena de noche (fundido, ronquidos de Mingo, sueño corto con el móvil brillando). Objetivos «Comer de verdad» / «Encontrar dónde dormir» en D.hints.
-3. **Amor inesperado con Elvira** (la hija de Durán; en RC06 ya hay chispa: Mingo los hace pasar por sus padres). Dos o tres momentos cortos con diálogo con gracia, sin cursilería; ella aporta una prueba o un gesto decisivo en la Vista contra Nuño.
-4. Pulido de la Vista y del final con Nuño (más cómico; Mingo hace la trastada decisiva).
+2. ~~Hambre y lecho~~ **HECHO en RC09** (ver abajo).
+3. **Amor inesperado con Elvira** (la hija de Durán; en RC06 ya hay chispa: Mingo los hace pasar por sus padres). Dos o tres momentos cortos con diálogo con gracia, sin cursilería; ella aporta una prueba o un gesto decisivo en la Vista contra Nuño. Ojo: Elvira solo está en la aceña y el Chamelo; hace falta una razón para que aparezca en la villa (p. ej. trae el pan de Durán a la plaza) o un momento en la aceña antes de cruzar.
+4. Pulido de la Vista y del final con Nuño (más cómico; Mingo hace la trastada decisiva). Idea: la noche del alfar podría traer una pequeña despedida de Mingo/Yuçaf antes del horno.
 ## Limitaciones conocidas
 - Arte de aceña y embarcadero provisional (placeholders). Alfonso con una sola pose.
+- RC09: el pajar del alfar es un dibujo procedural PROVISIONAL (montón de paja); Sancha, Per de la Voz y Mingo usan marionetas/sprites actuales; la noche es una capa de color + luz de horno (no hay fondo nocturno pintado); los ronquidos son sintetizados. No probado en el Pixel.
 - Clips del jugador (216-225) sin integrar.
 - Marcha de Durán reproducida a ~1,8× la velocidad natural del clip (105 px/s con stride 125).
 - La rueda del fondo de la ribera aparece girando aunque esté parada (viene del arte).
@@ -198,3 +197,10 @@ César: tamaños mal proporcionados; mensajes de personajes que no están en pla
 - **Franjas negras**: fuera. Acercamiento más suave (×1,06 en diálogos, ×1,035 en escenas).
 - **Raimundo**: limpieza de su hoja (`tools/clean_rai.py`): fuera la mancha de suelo pintado bajo los pies en reposo y habla, sin comerse piernas ni zapatos; fuera motas sueltas.
 - Verificado: partida completa (`pt_chamelo.py`, ended True, 0 errores), `pt_offscreen.py` (0 bocadillos fuera de plano), `pt_features.py` (sin franjas, zoom 1,035/1,06 y vuelta a 1). Capturas en `production/CHAMELO/capturas/rc08_*`.
+
+## CHAMELO RC09 (8 nov, ejecución automática) — «Comer de verdad» y «Encontrar dónde dormir» · `builds/1248_CHAMELO_RC09.html`
+- **Hambre (Plaza del Pan)**: Doña Sancha. «Quisiera una hogaza» → precio con tasas de Nuño (4 dineros, no tienes) → dos vías: dar los **higos** de Mingo (los coge en la higuera del soto, usando a Mingo sobre ella; zurrón → higos → tocar a Sancha) o **«Hago un número a cambio de pan»** (cámara delantera del móvil como espejo ante Sancha; el pregonero y vecinos asoman). Ambas acaban en escena de comer con Mingo (flags `hogaza_ganada`, `comido`). La segunda vía existe siempre, así no hay bloqueo si no se cogen los higos.
+- **Lecho (alfar)**: tras ganar la Vista Yuçaf ofrece su pajar (el mesón cobra 8 dineros). Hotspot `pajar` (montón de paja provisional) y `sacos`. Sin haber comido se niega («no se duerme con hambre»); comido → fundido, ronquidos de Mingo (sintetizados), sueño corto del móvil («1 % · Buscando red…», voz de Nuño cobrando por mirar), noche (flags `durmio`, `noche`: capa azul con luz de horno que pasa de naranja a azul). **El horno solo responde tras dormir.**
+- Pistas «?» nuevas para comer/dormir (delante de las del final); nota de OBJETIVO al pisar la plaza por primera vez sin haber comido. Acción de guion nueva `{rc09:'fadeout'|'fadein'|'night'|'snore'}` (parche mínimo en script.js).
+- Verificado en navegador (Chromium, efectos de artefacto desactivados): `pt_rc09.py ... higos` partida completa hasta el horno → `ended True`, 0 errores; ruta `numero` también completa → `ended True`, 0 errores; `pt_rc09_noche.py` sobre la build final (sin comer no duerme; duerme; horno → fin; 0 errores). Capturas `production/CHAMELO/shots/rc09_*`.
+- Textos de las frases = provisionales (tono cómico), editables en `rc09.js`.
