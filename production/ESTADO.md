@@ -1,6 +1,6 @@
 # 1248 · Un extraño en Castilla — ESTADO DEL DESARROLLO (libreta de relevo)
 
-Última actualización: 2026-11-08 · Última candidata: `builds/1248_CHAMELO_RC09.html` (línea principal: CHAMELO)
+Última actualización: 2026-11-08 · Última candidata: `builds/1248_CHAMELO_RC10.html` (línea principal: CHAMELO)
 
 ## Cómo trabajar (para cada ejecución, también las automáticas)
 1. `git pull`, leer este archivo entero y abrir la última candidata de `builds/`.
@@ -30,7 +30,7 @@
 - 222: se coloca la chaqueta y queda de pie quieto → REPOSO. 223: gesto de habla (fondo verde claro). 224: igual que 223 pero fondo blanco con acuarela (no usar). 225: gestos de señalar/dar. 216: marcha de tres cuartos hacia la IZQUIERDA (el arte mira a la izquierda; corregido en RC04). 218: usa el móvil en plano cerrado (zoom, no sirve como sprite a escala).
 
 ## Siguiente paso concreto
-**Línea principal: CHAMELO.** Última candidata `builds/1248_CHAMELO_RC09.html` = RC08 + `python production/CHAMELO/patch_rc09.py builds/1248_CHAMELO_RC08.html builds/1248_CHAMELO_RC09.html RC09` (el módulo es `production/CHAMELO/rc09.js`; RC08 sale de `referencias/1248_CHAMELO_RC06.html` con `make_map_v2.py` + `patch_rc07.py ... RC08`). Tramos nuevos: `patch_rc10.py` que tome `builds/1248_CHAMELO_RC09.html`, inserte su módulo antes de `<script>/* src/main.js */` (el regex de versión de patch_rc09 ya renombra «CHAMELO RCnn»).
+**Línea principal: CHAMELO.** Última candidata `builds/1248_CHAMELO_RC10.html` = RC09 + `python production/CHAMELO/patch_rc09.py builds/1248_CHAMELO_RC09.html builds/1248_CHAMELO_RC10.html RC10 rc10.js` (el script acepta el módulo como 4.º argumento). RC09 = RC08 + `python production/CHAMELO/patch_rc09.py builds/1248_CHAMELO_RC08.html builds/1248_CHAMELO_RC09.html RC09` (el módulo es `production/CHAMELO/rc09.js`; RC08 sale de `referencias/1248_CHAMELO_RC06.html` con `make_map_v2.py` + `patch_rc07.py ... RC08`). Tramos nuevos: `patch_rc10.py` que tome `builds/1248_CHAMELO_RC09.html`, inserte su módulo antes de `<script>/* src/main.js */` (el regex de versión de patch_rc09 ya renombra «CHAMELO RCnn»).
 Pruebas: `tools/pt_rc09.py <html> <tag> higos|numero` (partida completa con la ruta de comida elegida; debe acabar `ended True`), `tools/pt_rc09_noche.py` (final rápido: sin comer no se duerme, dormir, horno), más las de RC07/RC08 (`pt_offscreen`, `pt_features`, `audio_check`). En pruebas automáticas: `LAB1248.E.rc07.autoDegrade=false`. No lanzar dos partidas completas a la vez (Chromium sin GPU: se ralentizan mucho).
 Plan de tramos (uno por ejecución):
 1. **Si llegan clips Flow** (lista en «Esperando a César»): integrarlos primero (viajero nuevo con reposo/andar/hablar/reacciones; Elvira y Nuño hablar; Durán y Alfonso en estilo Flow; vecinos de la villa sustituyendo marionetas). Mismo formato de hoja que `assets/characters/mingo/flow_rc01.webp` (200×288, 8 columnas, ancla [100,278]).
@@ -204,3 +204,11 @@ César: tamaños mal proporcionados; mensajes de personajes que no están en pla
 - Pistas «?» nuevas para comer/dormir (delante de las del final); nota de OBJETIVO al pisar la plaza por primera vez sin haber comido. Acción de guion nueva `{rc09:'fadeout'|'fadein'|'night'|'snore'}` (parche mínimo en script.js).
 - Verificado en navegador (Chromium, efectos de artefacto desactivados): `pt_rc09.py ... higos` partida completa hasta el horno → `ended True`, 0 errores; ruta `numero` también completa → `ended True`, 0 errores; `pt_rc09_noche.py` sobre la build final (sin comer no duerme; duerme; horno → fin; 0 errores). Capturas `production/CHAMELO/shots/rc09_*`.
 - Textos de las frases = provisionales (tono cómico), editables en `rc09.js`.
+
+## CHAMELO RC10 (8 nov) — Elvira con motivo · `builds/1248_CHAMELO_RC10.html`
+Pedido de César: dar razón a Elvira en el Chamelo y en la villa; en la plaza vende pan; en el Chamelo pide consejo a Rai («sabe cosas»); Mingo junto al protagonista.
+- Aceña: Elvira explica que desde que Nuño tasó la rueda su padre apenas habla, y va a pedir consejo a Raimundo; invita al viajero «con Mingo». Tras la visita deja de estar en la aceña.
+- Chamelo: llega a pedir consejo; Mingo entra junto al viajero (mantiene el gag de la «familia»). Consejo de Raimundo en tres partes: el saco que sonaba a barro cocido, «cuando alguien calla mira lo que carga», «baja a la villa: en la plaza lo que no se dice se vende». Elvira decide bajar con pan de aceña; (`chamelo_familia`, `pista_leonor`).
+- Plaza del Pan: al entrar tras la visita Elvira está junto al puesto de Sancha (flag `elvira_en_plaza`) con diálogo (`L.elvira_plaza`): tercera vía para el hambre («Tengo hambre» → pan de aceña, `comido`), qué le dijo Raimundo y su padre; semillas del romance, aún sin gesto decisivo.
+- Parche de motor: la hoja de Elvira se carga también fuera del Chamelo tras la visita.
+- Verificado: `tools/pt_rc10.py` (aceña → Chamelo → plaza → pan, 14 comprobaciones OK, 0 errores) y capturas. No re-corrida la partida completa con RC10 (cambios aislados; RC09 sí completa). Texto provisional.

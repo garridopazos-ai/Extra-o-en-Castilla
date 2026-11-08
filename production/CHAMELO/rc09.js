@@ -30,7 +30,7 @@
   }
 
   // ---------- 1) HAMBRE: Doña Sancha y el «portazgo del pan»
-  const COMER = [
+  const COMER = RC9.COMER = [
     { set: ['hogaza_ganada', 'comido'] }, { sfx: 'success' },
     { note: '(Doña Sancha parte la hogaza en dos y le tiende la mitad más grande a Mingo, que ya tiene las dos manos abiertas.)' },
     say('¡Está caliente! ¡Y crujiente! ¿Quién me ha cambiado la vida?', 'mingo'),
