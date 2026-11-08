@@ -494,6 +494,12 @@
       if (name === 'plop') { tone(t, 950, 280, 0.09, 0.03, 'sine', rnd(-0.5, 0.5)); burst(t + 0.02, 0.14, 0.02, 'lowpass', 1300, 0, rnd(-0.5, 0.5)); }
       else if (name === 'flap') { for (let i = 0; i < 9; i++) burst(t + i * 0.055 + Math.random() * 0.02, 0.035, 0.03, 'bandpass', 1300, 1.2, rnd(-0.4, 0.4)); }
       else if (name === 'pop') tone(t, 620, 1250, 0.07, 0.035, 'sine', 0, E.audio.master);
+      else if (name === 'magic') {     // caldero de Rai: burbujeo, destellos y un «fush» al desaparecer (≈7 s)
+        const M = E.audio.master;
+        for (let i = 0; i < 26; i++) { const tt = t + 0.6 + Math.random() * 5.4, f = rnd(170, 420); tone(tt, f, f * 1.6, 0.09, 0.03, 'sine', rnd(-0.3, 0.3), M); }
+        for (const [t0, base] of [[0.4, 1047], [2.6, 1175], [5.2, 1319]]) [0, 1, 2, 3].forEach(j => tone(t + t0 + j * 0.07, base * [1, 1.25, 1.5, 2][j], base * [1, 1.25, 1.5, 2][j], 0.35, 0.018, 'triangle', rnd(-0.5, 0.5), M));
+        burst(t + 6.0, 0.6, 0.05, 'bandpass', 2400, 0.8, 0, M); tone(t + 6.0, 1800, 3600, 0.5, 0.02, 'sine', 0, M);
+      }
       else if (name === 'twinkle') { tone(t, 1568, 1568, 0.18, 0.03, 'triangle', 0, E.audio.master); tone(t + 0.08, 2093, 2093, 0.22, 0.025, 'triangle', 0, E.audio.master); }
     }
     function tick(G) {
@@ -538,7 +544,7 @@
     ciego: ['Dicen que soy ciego. Yo digo que el mundo está muy mal iluminado.', '¿Mingo? No lo he visto. Literalmente.', 'Huelo uvas. Y huelo a un niño que huele uvas.', 'Forastero, no hace falta que me hagáis señas. Ya sé que me estáis haciendo señas.'],
     duran: ['Treinta y uno, treinta y dos... ¿Quién me ha movido un saco?', 'Una aceña parada es como un molinero sin chismes: no sirve de nada.', 'Si el Tajo sube un palmo más, cobro el pan a precio de pescado.'],
     elvira_aceña: ['Llevas las botas más raras de Castilla. Y mira que he visto botas.', '¿De verdad en tu tiempo la harina viene en cajas? Qué tristeza de molinos.', 'Mi padre dice que no hable con forasteros. Por eso hablo bajito.'],
-    elvira: ['Mingo, deja la miel. Te estoy viendo. Bueno, te estoy oyendo masticar.', 'Raimundo dice que lee el futuro en las abejas. El mío dice «siéntate».'],
+    elvira: ['Mingo, deja la miel. Te estoy viendo. Bueno, te estoy oyendo masticar.', 'Rai dice que lee el futuro en las abejas. El mío dice «siéntate».'],
     leonor: ['¿Hechicero? Apicultor con buena fama, que no es lo mismo.', 'Las abejas me avisan de las visitas. Esta vez han dicho «otra vez el niño».', 'La miel lo cura todo. Menos la curiosidad: esa la empeora.'],
     alfonso: ['Una moneda por cruzar. Dos si cantas. Tres si cantas mal.', 'El Tajo me conoce. Por eso no me ahoga: le daría vergüenza.', 'Esta barca tiene más remiendos que mi capa. Y aguanta mejor.'],
     alfonso_b: ['Rema tú si quieres; yo ya he remado esta mañana. Y la de ayer.', 'Si ves al monstruo del Tajo, no le mires a los ojos. Es muy tímido.'],
@@ -938,6 +944,62 @@
     set('mingo', 'walk_right', { stride: 113 });   // algo más larga que la medida (97): Mingo sigue al viajero y si no, correría a saltitos
   }
 
+  // ---------- Viñeta ilustrada con un clip (fondo pintado que no se puede recortar): {vineta:[clave, rótulo]} en el guion
+  const vig = { on: false, t: 0, closing: 0, done: true, cache: {} };
+  function vidEl(key) {
+    if (vig.cache[key]) return vig.cache[key];
+    const src = (window.E1248_VIDEOS || {})[key]; if (!src) return null;
+    try {
+      const bin = atob(src.slice(src.indexOf(',') + 1)), u = new Uint8Array(bin.length);
+      for (let i = 0; i < bin.length; i++) u[i] = bin.charCodeAt(i);
+      const el = document.createElement('video');
+      el.muted = true; el.playsInline = true; el.setAttribute('playsinline', ''); el.setAttribute('muted', ''); el.preload = 'auto';
+      el.src = URL.createObjectURL(new Blob([u], { type: src.slice(5, src.indexOf(';')) })); el.load();
+      vig.cache[key] = el; return el;
+    } catch (e) { E.log.warn('Viñeta: ' + e.message); return null; }
+  }
+  RC.preloadVideo = key => vidEl(key);
+  RC.vignette = (key, caption) => {
+    const el = vidEl(key);
+    Object.assign(vig, { on: true, t: 0, closing: 0, done: false, el, cap: caption || '', fail: !el });
+    if (el) { try { el.currentTime = 0; } catch (e) {} el.onended = () => { if (!vig.closing) vig.closing = 0.001; };
+      const p = el.play(); if (p && p.catch) p.catch(err => { vig.fail = true; E.log.warn('Viñeta: ' + err.message); }); }
+    snd.event('magic');
+    return () => vig.done;
+  };
+  RC.vignetteOn = () => vig.on;
+  function vignetteDraw(ctx, dt) {
+    if (!vig.on) return;
+    vig.t += dt;
+    if (vig.fail && vig.t > 1.6 && !vig.closing) vig.closing = 0.001;
+    if (vig.t > 14 && !vig.closing) vig.closing = 0.001;
+    if (vig.closing) { vig.closing += dt; if (vig.closing > 0.4) { vig.on = false; vig.done = true; if (vig.el) try { vig.el.pause(); } catch (e) {} return; } }
+    const a = Math.min(1, vig.t / 0.35) * (vig.closing ? Math.max(0, 1 - vig.closing / 0.4) : 1);
+    ctx.save(); ctx.globalAlpha = a; ctx.fillStyle = 'rgba(12,8,4,.62)'; ctx.fillRect(0, 0, C.W, C.H);
+    const ph = 760, pw = Math.round(ph * 9 / 16), cx = 800, cy = 432, pop = 0.94 + 0.06 * Math.min(1, vig.t / 0.35);
+    ctx.translate(cx, cy); ctx.rotate(-0.018); ctx.scale(pop, pop);
+    // marco de pergamino con tinta (viñeta de cómic)
+    ctx.fillStyle = 'rgba(0,0,0,.35)'; ctx.fillRect(-pw / 2 - 14, -ph / 2 - 6, pw + 36, ph + 36);
+    ctx.fillStyle = '#efe0bb'; ctx.fillRect(-pw / 2 - 18, -ph / 2 - 18, pw + 36, ph + 36);
+    ctx.strokeStyle = '#3b2417'; ctx.lineWidth = 4; ctx.strokeRect(-pw / 2 - 18, -ph / 2 - 18, pw + 36, ph + 36);
+    ctx.lineWidth = 2; ctx.strokeRect(-pw / 2 - 8, -ph / 2 - 8, pw + 16, ph + 16);
+    const el = vig.el;
+    if (el && el.readyState >= 2) ctx.drawImage(el, -pw / 2, -ph / 2, pw, ph);
+    else { ctx.fillStyle = '#d9c79c'; ctx.fillRect(-pw / 2, -ph / 2, pw, ph); }
+    ctx.strokeStyle = '#3b2417'; ctx.lineWidth = 3; ctx.strokeRect(-pw / 2, -ph / 2, pw, ph);
+    if (vig.cap) {
+      ctx.font = 'italic bold 30px Georgia, serif'; const tw = ctx.measureText(vig.cap).width;
+      ctx.fillStyle = '#c73a2c'; ctx.fillRect(-tw / 2 - 26, ph / 2 - 4, tw + 52, 46); ctx.strokeStyle = '#3b2417'; ctx.lineWidth = 3; ctx.strokeRect(-tw / 2 - 26, ph / 2 - 4, tw + 52, 46);
+      ctx.fillStyle = '#fff6dc'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(vig.cap, 0, ph / 2 + 19);
+    }
+    ctx.restore();
+  }
+  // «Raimundo» → «Rai» en todos los textos del juego (nombre que ha dado César; así cuadra con las letras de la túnica)
+  function renameAll(o, seen) {
+    if (!o || typeof o !== 'object' || seen.has(o)) return; seen.add(o);
+    for (const k of Object.keys(o)) { const v = o[k]; if (typeof v === 'string') { if (v.indexOf('Raimundo') >= 0) o[k] = v.replace(/Raimundo/g, 'Rai'); } else renameAll(v, seen); }
+  }
+
   const SIZE = { elvira: 290, mingo: 226, leonor: 392, nuno: 305, ciego: 300, duran: 318 };
   // =====================================================================================================
   // 7 · INSTALACIÓN
@@ -957,6 +1019,7 @@
     // proporciones: altura VISIBLE (cabeza-pies, sin margen del dibujo) respecto al viajero (≈293): mujer 0,93, niño ~10 años 0,72,
     // hombres 0,9–1,03 según complexión. La zancada de cada animación de andar se escala igual (los pies no patinan).
     fixWalks();
+    renameAll(E.DATA, new Set());
     { const R = E.DATA.scenes.ribera, L = id => R.layers.find(l => l.id === id), H = id => R.hotspots.find(h => h.id === id);
       if (L('rope')) Object.assign(L('rope'), { x: 1915, y: 636, w: 145, h: 90 });
       if (L('pole')) Object.assign(L('pole'), { x: 858, y: 712, w: 190, h: 52 });
@@ -1004,7 +1067,7 @@
     E.scene.draw = (ctx, S, G2) => {
       const dt = G.paused || G.display.portrait ? 0 : Math.min(0.05, G.lastFrameDt || 0.016), now = performance.now() / 1000;
       if (S !== lastS && G.player && !G.transitioning) {
-        lastS = S; glint = null; glintT = 2.5; atmosEnter(S); cameraEnter(S, G); bark.enter = now; em.length = 0; reveal = 0;
+        lastS = S; glint = null; glintT = 2.5; atmosEnter(S); if (S.def.id === 'chamelo') RC.preloadVideo('rai_caldero'); cameraEnter(S, G); bark.enter = now; em.length = 0; reveal = 0;
         wantedScene = S.def.id;
       }
       if (wantedScene && snd.scene !== wantedScene && snd.ready()) snd.start(wantedScene);
@@ -1024,6 +1087,9 @@
     G.ui.draw = (ctx, S) => {
       if (S && !G.ui.overlay) { const dt = G.paused ? 0 : Math.min(0.05, G.lastFrameDt || 0.016); drawEmotes(ctx, S, dt); drawReveal(ctx, S, G, dt); }
       ui0(ctx, S);
+      if (!G.ui.overlay) vignetteDraw(ctx, G.paused ? 0 : Math.min(0.05, G.lastFrameDt || 0.016));
     };
+    const adv0 = G.ui.advance;
+    G.ui.advance = () => { if (vig.on) { if (vig.t > 0.8 && !vig.closing) vig.closing = 0.001; return true; } return adv0(); };
   };
 })(window.E1248);

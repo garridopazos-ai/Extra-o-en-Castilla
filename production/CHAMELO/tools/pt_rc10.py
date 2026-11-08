@@ -30,7 +30,7 @@ ok(not P.ev("!!LAB1248.state().flags.elvira_en_plaza"),'aún en el Chamelo')
 P.ev(f"{G}.runner.run([{{goto:['plaza','from_puerta']}}])"); P.pg.wait_for_timeout(3000); settle(60)
 ok(fl('elvira_en_plaza'),'Elvira llega a la plaza'); ok(P.ev(f"!!{G}.sceneNpcs.find(n=>n.def.id==='elvira')"),'Elvira visible en la plaza'); P.shot(tag+'_plaza')
 r=P.verb('npc','elvira','talk'); ok(r=='options','diálogo de Elvira con opciones')
-choose('¿Qué te dijo Raimundo'); choose('Tengo hambre'); 
+choose('¿Qué te dijo Rai'); choose('Tengo hambre'); 
 while P.ev(f'{G}.dialogue.active'):
     o=P.ev(f'{G}.dialogue.options.map(o=>o.o.text)'); choose(o[-1]) if o else settle(30)
 settle(60); ok(fl('comido'),'Elvira da pan (comido)'); P.shot(tag+'_pan')

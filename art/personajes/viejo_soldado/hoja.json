@@ -1,0 +1,22 @@
+{
+ "frameW": 192,
+ "frameH": 288,
+ "cols": 8,
+ "anchor": [
+  96,
+  280
+ ],
+ "baseFacing": "right",
+ "anims": {
+  "idle_right": {
+   "row": 0,
+   "frames": 16,
+   "fps": 6
+  },
+  "talk_right": {
+   "row": 2,
+   "frames": 24,
+   "fps": 8
+  }
+ }
+}

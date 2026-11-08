@@ -176,6 +176,12 @@ def embf(path, f, mime): return '"' + path + '":"data:' + mime + ';base64,' + ba
 key = '"assets/characters/player/sheet_g11.webp":"data:'
 sub(key, embf('assets/scenes/ribera/rope.png', 'rope.png', 'image/png') + embf('assets/scenes/ribera/pole.png', 'pole.png', 'image/png') + key)
 
+# ---------- 10d) RC13: hoja del viejo soldado, vídeo del caldero de Rai y acción de guion {vineta:[clave, rótulo]}
+key = '"assets/characters/player/sheet_g11.webp":"data:'
+sub(key, '"assets/characters/soldado/hoja.webp":"data:image/webp;base64,' + base64.b64encode(open(os.path.join(ROOT, 'art', 'personajes', 'viejo_soldado', 'hoja.webp'), 'rb').read()).decode() + '",' + key)
+sub("<script>/* src/main.js */", "<script>window.E1248_VIDEOS={rai_caldero:'data:video/webm;base64," + base64.b64encode(open(os.path.join(ROOT, 'art', 'videos', 'rai_caldero.webm'), 'rb').read()).decode() + "'};</script>\n<script>/* src/main.js */")
+sub("      E.log.warn('Acción desconocida: ' + JSON.stringify(a));", "      if (a.vineta !== undefined && E.rc07) return E.rc07.vignette(a.vineta[0], a.vineta[1]);\n      E.log.warn('Acción desconocida: ' + JSON.stringify(a));")
+
 # ---------- 11) módulo RC07 antes de main.js
 marker = "<script>/* src/main.js */"
 sub(marker, "<script>/* CHAMELO " + RC + ": luz, atmósfera, cámara, sonido, carisma y mapa */\n" + open(os.path.join(HERE, 'rc07.js'), encoding='utf-8').read() + "\n</script>\n" + marker)
