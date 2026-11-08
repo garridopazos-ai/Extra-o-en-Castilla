@@ -770,6 +770,164 @@
     };
   }
 
+
+  // =====================================================================================================
+  // 8 · RC09: desbordamiento natural del río, destellos en objetos clave, objetos de la ribera y ciclos de andar
+  // Agua que rebosa por la orilla y se extiende sobre el camino: forma irregular, poco profunda (se ve la arena debajo en los bordes),
+  // arena mojada alrededor y corriente suave. Al liberar la rueda queda el suelo húmedo y algún charco.
+  const FLOOD = [[300, 717], [380, 712], [462, 710], [562, 709], [662, 711], [758, 717], [785, 730], [768, 746], [790, 770], [812, 786], [790, 806], [768, 826], [792, 850], [780, 876], [760, 900],
+    [360, 900], [338, 884], [312, 862], [330, 838], [300, 812], [285, 786], [310, 762], [296, 740], [318, 722]];
+  const FLOOD_NAV = [[286, 700], [772, 700], [806, 722], [790, 746], [814, 770], [836, 786], [812, 806], [790, 826], [814, 850], [802, 876], [784, 900],
+    [340, 900], [316, 884], [290, 862], [308, 838], [276, 812], [262, 786], [288, 762], [274, 740], [296, 720]];
+  const PUDDLES = [[872, 832, 32, 8], [244, 856, 28, 7], [852, 880, 18, 5]];
+  const FX0 = 200, FY0 = 664, FW = 760, FH = 236;
+  function smoothPath(g, pts, ox, oy) {
+    const n = pts.length; g.beginPath();
+    for (let i = 0; i < n; i++) {
+      const p0 = pts[(i - 1 + n) % n], p1 = pts[i], p2 = pts[(i + 1) % n], p3 = pts[(i + 2) % n];
+      if (i === 0) g.moveTo(p1[0] - ox, p1[1] - oy);
+      g.bezierCurveTo(p1[0] + (p2[0] - p0[0]) / 6 - ox, p1[1] + (p2[1] - p0[1]) / 6 - oy, p2[0] - (p3[0] - p1[0]) / 6 - ox, p2[1] - (p3[1] - p1[1]) / 6 - oy, p2[0] - ox, p2[1] - oy);
+    }
+    g.closePath();
+  }
+  function maskCanvas(fill, blur, erode) {
+    const c = E.createCanvas(FW, FH), g = c.getContext('2d');
+    g.filter = blur ? 'blur(' + blur + 'px)' : 'none';
+    g.fillStyle = '#fff'; smoothPath(g, FLOOD, FX0, FY0); g.fill();
+    if (erode) { g.globalCompositeOperation = 'destination-out'; g.lineWidth = erode; g.strokeStyle = '#000'; g.lineJoin = 'round'; smoothPath(g, FLOOD, FX0, FY0); g.stroke(); }
+    if (fill) for (const [x, y, rx, ry] of PUDDLES) { g.beginPath(); g.ellipse(x - FX0, y - FY0, rx, ry, 0, 0, TAU); g.fill(); }
+    g.filter = 'none'; g.globalCompositeOperation = 'source-over';
+    return c;
+  }
+  function buildFlood(S) {
+    const river = E.assets.get('ribera:bg');
+    const wet = E.createCanvas(FW, FH), gw = wet.getContext('2d');               // arena mojada alrededor
+    gw.filter = 'blur(14px)'; gw.fillStyle = 'rgba(78,52,30,.36)'; gw.strokeStyle = 'rgba(78,52,30,.36)'; gw.lineWidth = 46; gw.lineJoin = 'round';
+    smoothPath(gw, FLOOD, FX0, FY0); gw.fill(); gw.stroke();
+    for (const [x, y, rx, ry] of PUDDLES) { gw.beginPath(); gw.ellipse(x - FX0, y - FY0, rx + 16, ry + 8, 0, 0, TAU); gw.fill(); }
+    gw.filter = 'none';
+    const water = E.createCanvas(FW, FH), g = water.getContext('2d');               // agua: el propio río del fondo, en teselas espejadas
+    // agua pintada como el río del fondo: base gris verdosa y pinceladas horizontales (claras, ocres de reflejo y oscuras)
+    const base = g.createLinearGradient(0, 0, 0, FH); base.addColorStop(0, '#86a2a6'); base.addColorStop(0.5, '#73929b'); base.addColorStop(1, '#7f9a97');
+    g.fillStyle = base; g.fillRect(0, 0, FW, FH);
+    const grain = (i, n) => ((Math.sin(i * 91.7 + n * 41.3) * 43758.5453) % 1 + 1) % 1;
+    g.lineCap = 'round';
+    const COLS = [['201,214,216', 0.75], ['232,240,242', 0.7], ['185,160,106', 0.45], ['79,100,102', 0.45], ['104,126,128', 0.5]];
+    for (let i = 0; i < 260; i++) {
+      const x = grain(i, 1) * (FW + 40) - 20, y = grain(i, 2) * FH, l = 16 + grain(i, 3) * 54;
+      const c = COLS[i % 5], top = y < 70 && i % 5 === 2;      // reflejos ocres sobre todo cerca de la orilla
+      if (i % 5 === 2 && !top && grain(i, 7) > 0.35) continue;
+      g.strokeStyle = 'rgba(' + c[0] + ',' + (c[1] * (0.6 + 0.4 * grain(i, 5))).toFixed(3) + ')'; g.lineWidth = 1.6 + grain(i, 4) * 2.6;
+      g.beginPath(); g.moveTo(x, y); g.quadraticCurveTo(x + l / 2, y + (grain(i, 6) - 0.5) * 3, x + l, y + (grain(i, 8) - 0.5) * 2); g.stroke();
+    }
+    const sky = g.createLinearGradient(0, 0, 0, FH); sky.addColorStop(0, 'rgba(215,232,240,.18)'); sky.addColorStop(1, 'rgba(120,96,64,.22)');
+    g.fillStyle = sky; g.fillRect(0, 0, FW, FH);
+    const out = E.createCanvas(FW, FH), go = out.getContext('2d');
+    go.drawImage(wet, 0, 0);
+    const layer = (mask, alpha) => { const t = E.createCanvas(FW, FH), gt = t.getContext('2d'); gt.drawImage(water, 0, 0); gt.globalCompositeOperation = 'destination-in'; gt.drawImage(mask, 0, 0); go.globalAlpha = alpha; go.drawImage(t, 0, 0); go.globalAlpha = 1; };
+    layer(maskCanvas(true, 4), 0.6);           // borde: agua fina, se ve la arena
+    layer(maskCanvas(false, 10, 30), 0.78);    // centro: más profundo
+    // brillo húmedo en la orilla del agua (línea rota, como la de un charco)
+    const sh = E.createCanvas(FW, FH), gs = sh.getContext('2d');
+    gs.strokeStyle = 'rgba(245,250,255,.55)'; gs.lineWidth = 2.2; gs.setLineDash([24, 16, 8, 14]); gs.lineJoin = 'round';
+    smoothPath(gs, FLOOD, FX0, FY0); gs.stroke(); gs.globalCompositeOperation = 'destination-in'; gs.drawImage(maskCanvas(true, 2), 0, 0);
+    go.drawImage(sh, 0, 0);
+    // matas de hierba que asoman del agua (con su reflejo) y una rama flotando: el agua es poco profunda y está donde antes había camino
+    const tuft = (x, y, k) => {
+      for (const [dx, h, lean] of [[-8, 20, -0.95], [-4, 28, -0.45], [0, 34, -0.05], [4, 27, 0.4], [8, 19, 0.9]]) {
+        for (const refl of [1, 0]) {
+          const sgn = refl ? 0.55 : -1, x0 = x + dx * k - FX0, y0 = y - FY0;
+          go.globalAlpha = refl ? 0.22 : 1; go.lineCap = 'round';
+          go.strokeStyle = refl ? '#d8e4e0' : '#2e2a16'; go.lineWidth = refl ? 1.6 : 3.2;
+          go.beginPath(); go.moveTo(x0, y0); go.quadraticCurveTo(x0 + lean * h * 0.15 * k, y0 + sgn * h * 0.6 * k, x0 + lean * h * 0.6 * k, y0 + sgn * h * k); go.stroke();
+          if (!refl) { go.strokeStyle = '#8c9a45'; go.lineWidth = 1.8; go.stroke(); }
+        }
+      }
+      go.globalAlpha = 1;
+      go.strokeStyle = 'rgba(240,248,250,.6)'; go.lineWidth = 1.4; go.beginPath(); go.ellipse(x - FX0, y - FY0 + 1, 16 * k, 3 * k, 0, 0, TAU); go.stroke();
+    };
+    tuft(430, 786, 1); tuft(640, 846, 1.1); tuft(712, 762, 0.8);
+    go.save(); go.translate(540 - FX0, 812 - FY0); go.rotate(-0.12);
+    go.strokeStyle = '#2e2216'; go.lineWidth = 5; go.lineCap = 'round'; go.beginPath(); go.moveTo(-26, 0); go.lineTo(26, 0); go.moveTo(6, 0); go.lineTo(16, -7); go.stroke();
+    go.strokeStyle = '#8a6a44'; go.lineWidth = 2.6; go.stroke();
+    go.strokeStyle = 'rgba(240,248,250,.5)'; go.lineWidth = 1.2; go.beginPath(); go.moveTo(-30, 5); go.lineTo(30, 5); go.stroke();
+    go.restore();
+    // la orilla de hierba se ve a través del agua al entrar (sin corte duro con el río)
+    go.globalCompositeOperation = 'destination-out';
+    const top = go.createLinearGradient(0, 40, 0, 62); top.addColorStop(0, 'rgba(0,0,0,1)'); top.addColorStop(1, 'rgba(0,0,0,0)');
+    go.fillStyle = top; go.fillRect(0, 0, FW, 62);
+    go.globalCompositeOperation = 'source-over';
+    S._flood = { out, wet };
+  }
+  RC.drawFlood = (ctx, S, state) => {
+    if (S.def.id !== 'ribera') return;
+    if (S.camX > FX0 + FW) return;
+    if (!S._flood) buildFlood(S);
+    const free = T('rueda_libre', state), x = FX0 - S.camX, t = S.time;
+    if (free) { ctx.globalAlpha = 0.55; ctx.drawImage(S._flood.wet, x, FY0); ctx.globalAlpha = 1;
+      ctx.fillStyle = 'rgba(120,150,150,.35)'; for (const [px, py, rx, ry] of PUDDLES) { ctx.beginPath(); ctx.ellipse(px - S.camX, py, rx * 0.8, ry * 0.8, 0, 0, TAU); ctx.fill(); }
+      return; }
+    ctx.drawImage(S._flood.out, x, FY0);
+    // corriente: reflejos que avanzan desde el río hacia el camino
+    ctx.save(); smoothPath(ctx, FLOOD, S.camX, 0); ctx.clip(); ctx.lineCap = 'round';
+    for (let i = 0; i < 18; i++) {
+      const ph = (t * 0.11 + i * 0.0557) % 1, gx = FX0 + 60 + ((i * 97.3) % 540), gy = FY0 + 30 + ph * (FH - 20);
+      const a = Math.sin(ph * Math.PI) * 0.42, len = 14 + (i % 4) * 7;
+      ctx.strokeStyle = 'rgba(240,248,252,' + a.toFixed(3) + ')'; ctx.lineWidth = 1.6;
+      ctx.beginPath(); ctx.moveTo(gx - S.camX + Math.sin(t + i) * 6, gy); ctx.quadraticCurveTo(gx - S.camX + len / 2, gy + 2, gx - S.camX + len, gy - 1); ctx.stroke();
+    }
+    ctx.restore();
+  };
+
+  // Destellos discretos en los objetos que se pueden coger (cada 4–7 s, uno distinto cada vez)
+  const KEY_EXTRA = { ribera: [['poste', 1958, 668, '!cuerda_cogida']] };
+  function keyPoints(S) {
+    const out = [];
+    for (const h of S.def.hotspots) {
+      if (!h.verbs || !h.verbs.pick || !h.visibleWhen || h.exit) continue;
+      let cx, cy; if (h.rect) { cx = h.rect[0] + h.rect[2] / 2; cy = h.rect[1] + h.rect[3] / 2; } else if (h.poly) { cx = h.poly.reduce((a, p) => a + p[0], 0) / h.poly.length; cy = h.poly.reduce((a, p) => a + p[1], 0) / h.poly.length; } else continue;
+      out.push([h.id, cx, cy, h.visibleWhen]);
+    }
+    for (const k of KEY_EXTRA[S.def.id] || []) if (!out.find(o => o[0] === k[0])) out.push(k);
+    return out;
+  }
+  let glint = null, glintT = 3;
+  function glintsUpdate(dt, G) {
+    if (!G.S || G.runner.busy || G.dialogue.active) return;
+    glintT -= dt;
+    if (glint) { glint.t += dt; if (glint.t > 0.9) glint = null; }
+    if (glintT <= 0) {
+      glintT = rnd(4, 7);
+      const pts = keyPoints(G.S).filter(k => T(k[3], G.state) && onScreenX(G.S, k[1]));
+      if (pts.length) { const k = pick(pts); glint = { x: k[1], y: k[2], t: 0 }; }
+    }
+  }
+  function onScreenX(S, x) { const sx = x - S.camX; return sx > 40 && sx < C.W - 40; }
+  function glintDraw(ctx, S) {
+    if (!glint) return;
+    const u = glint.t / 0.9, a = Math.sin(u * Math.PI), r = 9 + 7 * a, x = glint.x - S.camX, y = glint.y;
+    ctx.save(); ctx.translate(x, y); ctx.rotate(u * 0.8);
+    ctx.globalCompositeOperation = 'screen'; ctx.globalAlpha = 0.55 * a; ctx.drawImage(soft, -r * 1.6, -r * 1.6, r * 3.2, r * 3.2);
+    ctx.globalCompositeOperation = 'source-over'; ctx.globalAlpha = 0.9 * a; ctx.strokeStyle = '#fffbe8'; ctx.lineWidth = 2; ctx.lineCap = 'round';
+    ctx.beginPath(); ctx.moveTo(-r, 0); ctx.lineTo(r, 0); ctx.moveTo(0, -r); ctx.lineTo(0, r); ctx.stroke();
+    ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(-r * 0.45, -r * 0.45); ctx.lineTo(r * 0.45, r * 0.45); ctx.moveTo(-r * 0.45, r * 0.45); ctx.lineTo(r * 0.45, -r * 0.45); ctx.stroke();
+    ctx.restore();
+  }
+
+  // Ciclos de andar: zancada medida en el propio dibujo (velocidad del pie apoyado × fotogramas), para que los pies no patinen.
+  // Durán: su clip tenía en medio unos fotogramas arrastrando los pies (se repetía el paso); se usa el ciclo limpio de 19.
+  function fixWalks() {
+    const C2 = E.DATA.characters, set = (id, k, o) => { const c = C2[id]; if (c && c.sprite && c.sprite.sheet && c.sprite.sheet.anims[k]) Object.assign(c.sprite.sheet.anims[k], o); };
+    const seq = []; for (let i = 0; i <= 6; i++) seq.push(i); for (let i = 14; i <= 25; i++) seq.push(i);
+    set('duran', 'walk_left', { frames: seq.length, seq, stride: 134 });
+    set('player', 'walk_left', { stride: 171 });
+    set('alfonso', 'walk_right', { stride: 132 });
+    set('nuno', 'walk_right', { stride: 141 });
+    set('elvira', 'walk_right', { stride: 107 });
+    set('leonor', 'walk_right', { stride: 82 });
+    set('mingo', 'walk_right', { stride: 113 });   // algo más larga que la medida (97): Mingo sigue al viajero y si no, correría a saltitos
+  }
+
   const SIZE = { elvira: 290, mingo: 226, leonor: 392, nuno: 305, ciego: 300, duran: 318 };
   // =====================================================================================================
   // 7 · INSTALACIÓN
@@ -788,6 +946,15 @@
     };
     // proporciones: altura VISIBLE (cabeza-pies, sin margen del dibujo) respecto al viajero (≈293): mujer 0,93, niño ~10 años 0,72,
     // hombres 0,9–1,03 según complexión. La zancada de cada animación de andar se escala igual (los pies no patinan).
+    fixWalks();
+    { const R = E.DATA.scenes.ribera, L = id => R.layers.find(l => l.id === id), H = id => R.hotspots.find(h => h.id === id);
+      if (L('rope')) Object.assign(L('rope'), { x: 1915, y: 636, w: 145, h: 90 });
+      if (L('pole')) Object.assign(L('pole'), { x: 858, y: 712, w: 190, h: 52 });
+      if (H('pertiga')) { H('pertiga').rect = [856, 700, 196, 70]; H('pertiga').walkTo = [960, 815]; }
+      if (H('poste')) H('poste').rect = [1915, 560, 145, 168];
+      if (H('inundacion')) { H('inundacion').poly = FLOOD.map(p => p.slice()); H('inundacion').walkTo = [860, 815]; }
+      const hole = (R.walk.holes || []).find(h => h.id === 'inundacion'); if (hole) hole.poly = FLOOD_NAV.map(p => p.slice());
+      R.flood = FLOOD; }
     for (const [id, h] of Object.entries(SIZE)) {
       const c = E.DATA.characters[id]; if (!c || !c.sprite || !c.sprite.sheet || c.rig) continue;
       const k = h / c.height; c.height = h;
@@ -827,18 +994,19 @@
     E.scene.draw = (ctx, S, G2) => {
       const dt = G.paused || G.display.portrait ? 0 : Math.min(0.05, G.lastFrameDt || 0.016), now = performance.now() / 1000;
       if (S !== lastS && G.player && !G.transitioning) {
-        lastS = S; atmosEnter(S); cameraEnter(S, G); bark.enter = now; em.length = 0; reveal = 0;
+        lastS = S; glint = null; glintT = 2.5; atmosEnter(S); cameraEnter(S, G); bark.enter = now; em.length = 0; reveal = 0;
         wantedScene = S.def.id;
       }
       if (wantedScene && snd.scene !== wantedScene && snd.ready()) snd.start(wantedScene);
       if (G.runner.busy || G.dialogue.active || G.ui.notes.length) RC.lastBusy = now;
-      if (dt) { guard(G.lastFrameDt, G); atmosUpdate(dt, G); cameraUpdate(dt, G); snd.tick(G); barksUpdate(G, now); }
+      if (dt) { guard(G.lastFrameDt, G); glintsUpdate(dt, G); atmosUpdate(dt, G); cameraUpdate(dt, G); snd.tick(G); barksUpdate(G, now); }
       if (G.dialogue.active && !lastDlg) { const n = G.dialogueNpc(); if (n) RC.emote(n, '!', 1.1); }
       lastDlg = G.dialogue.active;
       const z = cam.z, zoom = z !== 1 || cam.sx || cam.sy;
       if (zoom) { ctx.save(); ctx.translate(cam.fx, cam.fy); ctx.scale(z, z); ctx.translate(-cam.fx + cam.sx, -cam.fy + cam.sy); }
       sceneDraw(ctx, S, G2);
       if (RC.fxOn && RC.atmFx) atmosWorld(ctx, G);
+      glintDraw(ctx, S);
       if (zoom) ctx.restore();
       if (RC.fxOn && RC.atmFx) atmosScreen(ctx);
     };

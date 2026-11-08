@@ -1,6 +1,6 @@
 # 1248 · Un extraño en Castilla — ESTADO DEL DESARROLLO (libreta de relevo)
 
-Última actualización: 2026-11-08 · Última candidata: `builds/1248_CHAMELO_RC10.html` (línea principal: CHAMELO)
+Última actualización: 2026-11-08 · Última candidata: `builds/1248_CHAMELO_RC11.html` (línea principal: CHAMELO)
 
 ## Cómo trabajar (para cada ejecución, también las automáticas)
 1. `git pull`, leer este archivo entero y abrir la última candidata de `builds/`.
@@ -30,7 +30,8 @@
 - 222: se coloca la chaqueta y queda de pie quieto → REPOSO. 223: gesto de habla (fondo verde claro). 224: igual que 223 pero fondo blanco con acuarela (no usar). 225: gestos de señalar/dar. 216: marcha de tres cuartos hacia la IZQUIERDA (el arte mira a la izquierda; corregido en RC04). 218: usa el móvil en plano cerrado (zoom, no sirve como sprite a escala).
 
 ## Siguiente paso concreto
-**Línea principal: CHAMELO.** Última candidata `builds/1248_CHAMELO_RC10.html` = RC09 + `python production/CHAMELO/patch_rc09.py builds/1248_CHAMELO_RC09.html builds/1248_CHAMELO_RC10.html RC10 rc10.js` (el script acepta el módulo como 4.º argumento). RC09 = RC08 + `python production/CHAMELO/patch_rc09.py builds/1248_CHAMELO_RC08.html builds/1248_CHAMELO_RC09.html RC09` (el módulo es `production/CHAMELO/rc09.js`; RC08 sale de `referencias/1248_CHAMELO_RC06.html` con `make_map_v2.py` + `patch_rc07.py ... RC08`). Tramos nuevos: `patch_rc10.py` que tome `builds/1248_CHAMELO_RC09.html`, inserte su módulo antes de `<script>/* src/main.js */` (el regex de versión de patch_rc09 ya renombra «CHAMELO RCnn»).
+**Línea principal: CHAMELO.** Última candidata `builds/1248_CHAMELO_RC11.html`. Se construye SIEMPRE desde la referencia, en cadena (así los cambios de motor de `rc07.js`/`patch_rc07.py` y los tramos de historia conviven):
+`python production/CHAMELO/patch_rc07.py referencias/1248_CHAMELO_RC06.html /tmp/base.html RCnn && python production/CHAMELO/patch_rc09.py /tmp/base.html /tmp/mid.html RCnn rc09.js && python production/CHAMELO/patch_rc09.py /tmp/mid.html builds/1248_CHAMELO_RCnn.html RCnn rc10.js` (+ un paso más por cada módulo de tramo nuevo: `rc11.js`, … con `patch_rc09.py ... RCnn rcXX.js`). Mejoras de motor/arte/animación → `rc07.js` + `patch_rc07.py`; historia → módulo de tramo nuevo. (`make_map_v2.py`, `make_props.py` generan el arte que embebe patch_rc07.)
 Pruebas: `tools/pt_rc09.py <html> <tag> higos|numero` (partida completa con la ruta de comida elegida; debe acabar `ended True`), `tools/pt_rc09_noche.py` (final rápido: sin comer no se duerme, dormir, horno), más las de RC07/RC08 (`pt_offscreen`, `pt_features`, `audio_check`). En pruebas automáticas: `LAB1248.E.rc07.autoDegrade=false`. No lanzar dos partidas completas a la vez (Chromium sin GPU: se ralentizan mucho).
 Plan de tramos (uno por ejecución):
 1. **Si llegan clips Flow** (lista en «Esperando a César»): integrarlos primero (viajero nuevo con reposo/andar/hablar/reacciones; Elvira y Nuño hablar; Durán y Alfonso en estilo Flow; vecinos de la villa sustituyendo marionetas). Mismo formato de hoja que `assets/characters/mingo/flow_rc01.webp` (200×288, 8 columnas, ancla [100,278]).
@@ -212,3 +213,13 @@ Pedido de César: dar razón a Elvira en el Chamelo y en la villa; en la plaza v
 - Plaza del Pan: al entrar tras la visita Elvira está junto al puesto de Sancha (flag `elvira_en_plaza`) con diálogo (`L.elvira_plaza`): tercera vía para el hambre («Tengo hambre» → pan de aceña, `comido`), qué le dijo Raimundo y su padre; semillas del romance, aún sin gesto decisivo.
 - Parche de motor: la hoja de Elvira se carga también fuera del Chamelo tras la visita.
 - Verificado: `tools/pt_rc10.py` (aceña → Chamelo → plaza → pan, 14 comprobaciones OK, 0 errores) y capturas. No re-corrida la partida completa con RC10 (cambios aislados; RC09 sí completa). Texto provisional.
+
+## CHAMELO RC11 (8 nov, mañana) — andar de Durán, zancadas, texto, objetos clave, desbordamiento · `builds/1248_CHAMELO_RC11.html`
+(= cadena RC06 → patch_rc07 → rc09.js → rc10.js; incluye comer/dormir de RC09 y Elvira de RC10.) Pedido de César: el ciclo de pasos de Durán se ve extraño; inventario de carencias de animación (respondido en el chat, tabla por personaje); texto de los personajes poco legible (blanco y algo más grande); objetos clave mal colocados (la cuerda); el desbordamiento del río mal hecho.
+- **Durán**: su clip de andar (26 fotogramas) tenía en medio ~7 fotogramas arrastrando los pies y la zancada mal (125 configurada, 183 real) → pies patinando y saltos. Ahora usa el ciclo limpio de 19 fotogramas (0–6 + 14–25, campo `seq` nuevo en la animación) con zancada medida 134.
+- **Zancadas medidas** (`tools/stride_check.py`: velocidad del pie apoyado × fotogramas): viajero 171, Alfonso 132, Nuño 141, Elvira 107, Raimundo 82, Mingo 113 (medida 97; algo más larga porque sigue al viajero). Antes había ratios de 0,4 a 1,5.
+- **Bocadillos**: blanco, 38 px (antes 34 y de color por personaje), negrita con serifa, contorno más grueso y halo suave.
+- **Objetos de la ribera** (`tools/make_props.py` → `art/escenarios/ribera/`): la cuerda (antes un aro provisional sobre la cabeza del poste) va atada al poste con cabo y rollo en el suelo; la pértiga varada en la orilla junto a la piedra. Destello discreto cada 4–7 s en un objeto que se puede coger y está en pantalla.
+- **Desbordamiento**: fuera el canal recto de bordes duros. Agua que rebosa por la orilla y ocupa el camino: forma irregular, pintada con pinceladas como el río, arena mojada alrededor, matas que asoman, rama flotando, corriente suave. Con la rueda libre queda arena húmeda y charcos. Paso bloqueado y zona «Camino inundado» siguen el contorno nuevo.
+- Verificado: `pt_rc09.py ... higos` partida completa (comer + dormir + horno) → ended True, 0 errores; `pt_rc10.py` 14/14 OK; `pt_offscreen.py` 0 voces fuera de plano; capturas `capturas/rc11_*` (`tools/check_rc11.py`).
+- Siguiente (plan de la mañana): gesto procedural al hablar para Elvira, Nuño y Alfonso (no tienen clip de hablar); repasar objetos clave escena a escena; clips Flow cuando lleguen.

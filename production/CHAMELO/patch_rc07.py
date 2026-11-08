@@ -134,6 +134,28 @@ from clean_rai import clean_rai
 m, im = embed_img('assets/characters/raimundo/flow.webp')
 put_img(m, Image.fromarray(clean_rai(np.array(im.convert('RGBA')))), 'WEBP', quality=90, method=5)
 
+
+# ---------- 12) RC09: ciclos de andar con orden propio de fotogramas (Durán), texto de bocadillos, desbordamiento, objetos de la ribera
+sub("    if (an.stride && key.startsWith('walk')) fi = Math.floor((((a.walkDist || 0) / an.stride) % 1 + 1) % 1 * an.frames) % an.frames;",
+    "    if (an.stride && key.startsWith('walk')) fi = Math.floor((((a.walkDist || 0) / an.stride) % 1 + 1) % 1 * an.frames) % an.frames;\n"
+    "    if (an.seq && key.startsWith('walk')) fi = an.seq[fi % an.seq.length];   // ciclo limpio elegido a mano dentro del clip")
+# texto: contorno más grueso opcional y halo suave (legibilidad sobre fondos claros)
+sub("      (opts.bold ? 1 : 0) + (opts.italic ? 1 : 0) + (opts.ui ? 1 : 0) + '|' + (opts.stroke || '');",
+    "      (opts.bold ? 1 : 0) + (opts.italic ? 1 : 0) + (opts.ui ? 1 : 0) + '|' + (opts.stroke || '') + '|' + (opts.strokeW || '') + (opts.halo ? 'h' : '');")
+sub("    const pad = opts.stroke ? Math.ceil(size * 0.18) : 2;", "    const pad = opts.halo ? Math.ceil(size * 0.26) : opts.stroke ? Math.ceil(size * 0.18) : 2;")
+sub("      if (opts.stroke) { g.lineJoin = 'round'; g.lineWidth = Math.max(3, size * 0.16); g.strokeStyle = opts.stroke; g.strokeText(l, ax, y); }",
+    "      if (opts.halo) { g.lineJoin = 'round'; g.lineWidth = size * 0.42; g.strokeStyle = 'rgba(0,0,0,.28)'; g.strokeText(l, ax, y); }\n"
+    "      if (opts.stroke) { g.lineJoin = 'round'; g.lineWidth = Math.max(3, size * (opts.strokeW || 0.16)); g.strokeStyle = opts.stroke; g.strokeText(l, ax, y); }")
+# bocadillos: blanco, algo más grande, contorno más grueso con halo (la letra con serifa se mantiene, en negrita)
+sub("        const e = TX.get(b.text, { size: 34, color, maxW: 640, align: 'center', stroke: 'rgba(0,0,0,.9)' });",
+    "        const e = TX.get(b.text, { size: 38, color: '#ffffff', bold: true, maxW: 700, align: 'center', stroke: 'rgba(12,8,4,.96)', strokeW: 0.22, halo: true }); void color;")
+# desbordamiento natural (RC09)
+sub("    drawFlood(ctx, S, st);\n    // Marcador de destino temporal", "    if (E.rc07 && E.rc07.drawFlood) E.rc07.drawFlood(ctx, S, st); else drawFlood(ctx, S, st);\n    // Marcador de destino temporal")
+# cuerda atada al poste y pértiga varada (antes eran marcadores provisionales sin imagen)
+def embf(path, f, mime): return '"' + path + '":"data:' + mime + ';base64,' + base64.b64encode(open(os.path.join(ROOT, 'art', 'escenarios', 'ribera', f), 'rb').read()).decode() + '",'
+key = '"assets/characters/player/sheet_g11.webp":"data:'
+sub(key, embf('assets/scenes/ribera/rope.png', 'rope.png', 'image/png') + embf('assets/scenes/ribera/pole.png', 'pole.png', 'image/png') + key)
+
 # ---------- 11) módulo RC07 antes de main.js
 marker = "<script>/* src/main.js */"
 sub(marker, "<script>/* CHAMELO " + RC + ": luz, atmósfera, cámara, sonido, carisma y mapa */\n" + open(os.path.join(HERE, 'rc07.js'), encoding='utf-8').read() + "\n</script>\n" + marker)
