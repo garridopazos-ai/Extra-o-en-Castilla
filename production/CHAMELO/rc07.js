@@ -916,7 +916,17 @@
 
   // Ciclos de andar: zancada medida en el propio dibujo (velocidad del pie apoyado × fotogramas), para que los pies no patinen.
   // Durán: su clip tenía en medio unos fotogramas arrastrando los pies (se repetía el paso); se usa el ciclo limpio de 19.
+  // Hablar (clips de Flow del 8 nov, filas añadidas por patch_rc07.py con tools/build_talk.py, 24 fotogramas a 8 fps)
+  // Alfonso: su reposo y su andar siguen siendo los antiguos; mientras conversa (habla o escucha) usa el estilo nuevo,
+  // así solo cambia al empezar y acabar la conversación, no a cada paso de su rutina.
+  function addTalk() {
+    const C2 = E.DATA.characters, A = id => C2[id] && C2[id].sprite && C2[id].sprite.sheet && C2[id].sprite.sheet.anims;
+    if (A('elvira')) A('elvira').talk_right = { row: 5, frames: 24, fps: 8 };
+    if (A('nuno')) A('nuno').talk_right = { row: 4, frames: 24, fps: 8 };
+    if (A('alfonso')) { A('alfonso').talk_right = { row: 4, frames: 24, fps: 8 }; A('alfonso').listen_right = { row: 4, frames: 1, seq: [24], breath: true }; }
+  }
   function fixWalks() {
+    addTalk();
     const C2 = E.DATA.characters, set = (id, k, o) => { const c = C2[id]; if (c && c.sprite && c.sprite.sheet && c.sprite.sheet.anims[k]) Object.assign(c.sprite.sheet.anims[k], o); };
     const seq = []; for (let i = 0; i <= 6; i++) seq.push(i); for (let i = 14; i <= 25; i++) seq.push(i);
     set('duran', 'walk_left', { frames: seq.length, seq, stride: 134 });

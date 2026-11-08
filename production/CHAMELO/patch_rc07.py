@@ -134,11 +134,31 @@ from clean_rai import clean_rai
 m, im = embed_img('assets/characters/raimundo/flow.webp')
 put_img(m, Image.fromarray(clean_rai(np.array(im.convert('RGBA')))), 'WEBP', quality=90, method=5)
 
+# ---------- 10c) clips de Flow para HABLAR (8 nov): Elvira, Nuño y Alfonso → filas nuevas en sus hojas
+#      (las animaciones las declara rc07.js en TALK; aquí se comprueba que la fila y el número de fotogramas coinciden)
+import tempfile, subprocess, glob as _glob
+from build_talk import build as build_talk
+CLIPS = ROOT + '/assets/source_clips/'
+TALK = [  # hoja, clip, frameW, frameH, cols, fila de reposo de referencia, fila esperada, fotograma quieto
+    ('assets/characters/elvira/flow_rc01.webp', 'elvira_habla_1000702939.mp4', 200, 288, 8, 0, 5, False),
+    ('assets/characters/nuno/flow.webp', 'nuno_habla_1000703047.mp4', 216, 288, 8, 0, 4, False),
+    ('assets/characters/alfonso/sheet_g10.webp', 'alfonso_habla_1000703048.mp4', 192, 348, 16, 0, 4, True)]
+for key_, clip, fw, fh, cols, idle_row, row_expected, still in TALK:
+    m, im = embed_img(key_)
+    with tempfile.TemporaryDirectory() as td:
+        subprocess.run(['ffmpeg', '-v', 'error', '-i', CLIPS + clip, td + '/%04d.png'], check=True)
+        sd = {'frameW': fw, 'frameH': fh, 'cols': cols, 'anims': {'idle': {'row': idle_row, 'frames': 8 if cols >= 8 else 1}}}
+        if 'alfonso' in key_: sd['anims']['idle']['frames'] = 1
+        out, info = build_talk(td, np.array(im.convert('RGBA')), sd, 'idle', 24, 3, still=still)
+    assert info['row'] == row_expected, (key_, info['row'])
+    print('habla', key_, 'fila', info['row'], 'fotogramas', info['frames'], 'quieto', info['still'], 'costura', info['seam'], 'escala', info['scale'])
+    put_img(m, Image.fromarray(out), 'WEBP', quality=88, method=5)
+
 
 # ---------- 12) RC09: ciclos de andar con orden propio de fotogramas (Durán), texto de bocadillos, desbordamiento, objetos de la ribera
-sub("    if (an.stride && key.startsWith('walk')) fi = Math.floor((((a.walkDist || 0) / an.stride) % 1 + 1) % 1 * an.frames) % an.frames;",
-    "    if (an.stride && key.startsWith('walk')) fi = Math.floor((((a.walkDist || 0) / an.stride) % 1 + 1) % 1 * an.frames) % an.frames;\n"
-    "    if (an.seq && key.startsWith('walk')) fi = an.seq[fi % an.seq.length];   // ciclo limpio elegido a mano dentro del clip")
+sub("    else fi = Math.floor((a.animT - a._t0) * (an.fps || 8)) % an.frames;\n",
+    "    else fi = Math.floor((a.animT - a._t0) * (an.fps || 8)) % an.frames;\n"
+    "    if (an.seq) fi = an.seq[fi % an.seq.length];   // orden de fotogramas elegido a mano (ciclo limpio, fotograma quieto...)\n")
 # texto: contorno más grueso opcional y halo suave (legibilidad sobre fondos claros)
 sub("      (opts.bold ? 1 : 0) + (opts.italic ? 1 : 0) + (opts.ui ? 1 : 0) + '|' + (opts.stroke || '');",
     "      (opts.bold ? 1 : 0) + (opts.italic ? 1 : 0) + (opts.ui ? 1 : 0) + '|' + (opts.stroke || '') + '|' + (opts.strokeW || '') + (opts.halo ? 'h' : '');")

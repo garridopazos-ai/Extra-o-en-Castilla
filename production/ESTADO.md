@@ -1,6 +1,6 @@
 # 1248 · Un extraño en Castilla — ESTADO DEL DESARROLLO (libreta de relevo)
 
-Última actualización: 2026-11-08 · Última candidata: `builds/1248_CHAMELO_RC11.html` (línea principal: CHAMELO)
+Última actualización: 2026-11-08 · Última candidata: `builds/1248_CHAMELO_RC12.html` (línea principal: CHAMELO)
 
 ## Cómo trabajar (para cada ejecución, también las automáticas)
 1. `git pull`, leer este archivo entero y abrir la última candidata de `builds/`.
@@ -30,7 +30,7 @@
 - 222: se coloca la chaqueta y queda de pie quieto → REPOSO. 223: gesto de habla (fondo verde claro). 224: igual que 223 pero fondo blanco con acuarela (no usar). 225: gestos de señalar/dar. 216: marcha de tres cuartos hacia la IZQUIERDA (el arte mira a la izquierda; corregido en RC04). 218: usa el móvil en plano cerrado (zoom, no sirve como sprite a escala).
 
 ## Siguiente paso concreto
-**Línea principal: CHAMELO.** Última candidata `builds/1248_CHAMELO_RC11.html`. Se construye SIEMPRE desde la referencia, en cadena (así los cambios de motor de `rc07.js`/`patch_rc07.py` y los tramos de historia conviven):
+**Línea principal: CHAMELO.** Última candidata `builds/1248_CHAMELO_RC12.html`. Se construye SIEMPRE desde la referencia, en cadena (así los cambios de motor de `rc07.js`/`patch_rc07.py` y los tramos de historia conviven):
 `python production/CHAMELO/patch_rc07.py referencias/1248_CHAMELO_RC06.html /tmp/base.html RCnn && python production/CHAMELO/patch_rc09.py /tmp/base.html /tmp/mid.html RCnn rc09.js && python production/CHAMELO/patch_rc09.py /tmp/mid.html builds/1248_CHAMELO_RCnn.html RCnn rc10.js` (+ un paso más por cada módulo de tramo nuevo: `rc11.js`, … con `patch_rc09.py ... RCnn rcXX.js`). Mejoras de motor/arte/animación → `rc07.js` + `patch_rc07.py`; historia → módulo de tramo nuevo. (`make_map_v2.py`, `make_props.py` generan el arte que embebe patch_rc07.)
 Pruebas: `tools/pt_rc09.py <html> <tag> higos|numero` (partida completa con la ruta de comida elegida; debe acabar `ended True`), `tools/pt_rc09_noche.py` (final rápido: sin comer no se duerme, dormir, horno), más las de RC07/RC08 (`pt_offscreen`, `pt_features`, `audio_check`). En pruebas automáticas: `LAB1248.E.rc07.autoDegrade=false`. No lanzar dos partidas completas a la vez (Chromium sin GPU: se ralentizan mucho).
 Plan de tramos (uno por ejecución):
@@ -54,6 +54,7 @@ Plan de tramos (uno por ejecución):
 - (7 nov) Decisión de estilo abierta con César: propuesta «línea de cómic + lavado de acuarela» para todo (fondos suaves, personajes con tinta fuerte, proporciones de dibujo animado, camino de suelo claro en el tercio inferior de cada fondo). Documento con fichas de personajes, movimientos y plantillas para Flow/Gemini: https://claude.ai/artifact/WCkmcfbDPhCHDQZDV77Pcp (Claude Docs). Hasta que responda, no repintar escenas en un estilo definitivo; seguir con contenido y marionetas.
 - (7 nov) Para G12 sería ideal arte de Gemini en acuarela: panorámicas por capas de la orilla/Isla del Chamelo y clips (fondo verde) de Mingo, el ciego y Leonor. No bloquea: hay marionetas y acuarela procedural.
 - Material pedido (ver lista en la conversación): fondo limpio de la aceña sin HUD y por capas; clips de Alfonso de habla/escucha/reposo; fondo/capas del embarcadero; arte de la Puerta del Río. Nada bloquea: se avanza con arte provisional.
+- (8 nov, 12:30) Recibidos y montados: hablar de Elvira, Nuño y Alfonso (RC12).
 - (8 nov) **Clips Flow para dar carisma** (fondo verde, cámara fija, cuerpo entero, de perfil, 2–3 s): viajero (reposo, andar, hablar + encogerse de hombros, rascarse la cabeza, agacharse a coger, sorpresa); Elvira hablar; Nuño hablar, frotarse las manos, contar monedas; Mingo reírse/burlarse, salir corriendo; Durán y Alfonso reposo/andar/hablar en estilo Flow; los 7 vecinos de la villa (2 Giles, Yuçaf, Sancha, Lope, pregonero, Benito, mayordomo) reposo + hablar. No bloquea.
 - (8 nov) Opcional: sonidos de ambiente grabados (río, pájaros, interior de molino, mercado, horno; bucles de 30–60 s). Hoy se sintetizan.
 - (8 nov) Raimundo lleva «RAI» escrito en la túnica (viene de su hoja Flow de RC06). Preguntado a César si es intencionado; si no, hace falta un clip nuevo de Raimundo (reposo, hablar, andar) sin letras y sin suelo pintado.
@@ -223,3 +224,10 @@ Pedido de César: dar razón a Elvira en el Chamelo y en la villa; en la plaza v
 - **Desbordamiento**: fuera el canal recto de bordes duros. Agua que rebosa por la orilla y ocupa el camino: forma irregular, pintada con pinceladas como el río, arena mojada alrededor, matas que asoman, rama flotando, corriente suave. Con la rueda libre queda arena húmeda y charcos. Paso bloqueado y zona «Camino inundado» siguen el contorno nuevo.
 - Verificado: `pt_rc09.py ... higos` partida completa (comer + dormir + horno) → ended True, 0 errores; `pt_rc10.py` 14/14 OK; `pt_offscreen.py` 0 voces fuera de plano; capturas `capturas/rc11_*` (`tools/check_rc11.py`).
 - Siguiente (plan de la mañana): gesto procedural al hablar para Elvira, Nuño y Alfonso (no tienen clip de hablar); repasar objetos clave escena a escena; clips Flow cuando lleguen.
+
+## CHAMELO RC12 (8 nov, 12:30) — Elvira, Nuño y Alfonso hablan con clip propio · `builds/1248_CHAMELO_RC12.html`
+César mandó tres clips de Flow (fondo verde, 8 s, 24 fps): `assets/source_clips/elvira_habla_1000702939.mp4`, `nuno_habla_1000703047.mp4`, `alfonso_habla_1000703048.mp4` (este con verde grisáceo).
+- `tools/build_talk.py`: recorte por distancia de color al verde del fondo en Lab (umbral sacado del ruido del propio fondo; vale para verde saturado y grisáceo), reflejo verde quitado solo en el borde (el vestido de Elvira es verde), misma altura visible y mismos pies que el reposo de la hoja (no salta al empezar a hablar), bucle de 24 fotogramas a 8 fps elegido donde primer y último fotograma más se parecen.
+- `patch_rc07.py` (10c) añade las filas a las hojas embebidas (Elvira fila 5, Nuño fila 4, Alfonso filas 4–5) y `rc07.js` (`addTalk`) declara `talk_right`. Alfonso: su reposo y andar siguen siendo los antiguos; mientras conversa usa el estilo nuevo (habla + `listen_right` = fotograma quieto del clip, campo `seq`), así solo cambia al empezar y acabar la conversación y no a cada paso de su rutina. Para unificarlo del todo haría falta un clip Flow de Alfonso andando (y uno de reposo).
+- Arreglo de motor: `seq` (orden de fotogramas a mano) vale ya para cualquier animación, no solo andar.
+- Verificado: `tools/check_talk.py` (reposo → habla → escucha en aceña, portazgo y embarcadero; capturas `capturas/rc12_hablar_*`), `pt_rc10.py` sin fallos, `pt_rc09.py ... higos` partida completa → ended True, 0 errores.
