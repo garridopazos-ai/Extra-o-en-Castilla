@@ -185,7 +185,8 @@ sub("      E.log.warn('Acción desconocida: ' + JSON.stringify(a));", "      if 
 # ---------- 10e) RC14: Corredera del Cristo (fondo provisional y poste indicador en la Puerta del Río) + acción {rc14:...}
 CO = os.path.join(ROOT, 'art', 'escenarios', 'corredera')
 key = '"assets/characters/player/sheet_g11.webp":"data:'
-sub(key, '"assets/scenes/corredera/bg.jpg":"data:image/jpeg;base64,' + base64.b64encode(open(os.path.join(CO, 'bg.jpg'), 'rb').read()).decode() + '",'
+sub(key, '"assets/scenes/corredera/exterior.jpg":"data:image/jpeg;base64,' + base64.b64encode(open(os.path.join(CO, 'exterior.jpg'), 'rb').read()).decode() + '",'
+    + '"assets/scenes/taberna/bg.webp":"data:image/webp;base64,' + base64.b64encode(open(os.path.join(CO, 'interior.webp'), 'rb').read()).decode() + '",'
     + '"assets/scenes/puerta_rio/poste_corredera.png":"data:image/png;base64,' + base64.b64encode(open(os.path.join(CO, 'poste_puerta.png'), 'rb').read()).decode() + '",' + key)
 sub("      E.log.warn('Acción desconocida: ' + JSON.stringify(a));", "      if (a.rc14 !== undefined && E.rc14) return E.rc14.act(a.rc14, G);\n      E.log.warn('Acción desconocida: ' + JSON.stringify(a));")
 

@@ -42,7 +42,8 @@
     acena: { dir: [-1, -0.3], rim: '#cfe5ff', rimA: 0.95, shade: '#251d33', shadeA: 0.5, rim2: { dir: [1, -0.25], col: '#ffe2a6', a: 0.6 } },
     alfar: { dir: [-1, 0.05], rim: '#ff9c55', rimA: 0.62, shade: '#3a2638', shadeA: 0.42, rim2: { dir: [1, -0.35], col: '#e2f1ff', a: 0.75 } },
     portazgo: { dir: [-1, -0.55], rim: '#ffd894', rimA: 0.9, shade: '#3a2a3e', shadeA: 0.44 },
-    corredera: {}
+    corredera: {},
+    taberna: { dir: [0.25, -1], rim: '#ffcf86', rimA: 0.9, shade: '#3a2430', shadeA: 0.42 }
   };
   function lightFor(S) {
     const o = LIGHT[S.def.id]; if (!o) return null;
@@ -171,7 +172,8 @@
     iglesia: { sun: SUN, grade: GR_DAY, vig: 0.24, birds: 0.8, seeds: 8 },
     plaza: { sun: SUN, grade: GR_DAY, vig: 0.22, birds: 0.6, seeds: 8, pigeons: [520, 705, 1350, 800, 6] },
     puerta_rio: { sun: SUN, grade: GR_DAY, vig: 0.22, birds: 0.8, seeds: 8, fish: [20, 430, 390, 610] },
-    corredera: { sun: SUN, grade: GR_DAY, vig: 0.22, birds: 1.3, seeds: 8, smoke: [[1382, 62, 0.9]], pigeons: [560, 760, 1100, 860, 4] },
+    corredera: { sun: SUN, grade: GR_DAY, vig: 0.2, birds: 1.2, leaves: [0, 460, 20, 160], smoke: [[125, 222, 1]], glow: [[678, 540, 60, '255,190,90', 0.28], [380, 600, 80, '255,180,80', 0.2]] },
+    taberna: { grade: ['rgba(255,170,90,.05)', 'rgba(40,20,10,.12)'], vig: 0.32, glow: [[1450, 520, 230, '255,120,40', 0.22, 'lighter'], [595, 215, 110, '255,200,120', 0.14], [1435, 215, 110, '255,200,120', 0.14], [265, 385, 70, '255,200,120', 0.15], [2620, 365, 70, '255,200,120', 0.15]], embers: [1360, 470, 1560, 590], dust: [200, 250, 2300, 450, 46] },
     audiencia: { sun: SUN, grade: GR_DAY, vig: 0.24, birds: 0.5, pigeons: [560, 795, 1300, 860, 4] }
   };
   let A = null;           // estado de atmósfera de la escena actual
@@ -392,7 +394,8 @@
     alfar: { fire: 0.5, room: 0.3 },
     portazgo: { room: 0.35, coins: 1 },
     audiencia: { crowd: 0.3, birds: 0.3, pigeons: 0.6 },
-    corredera: { crowd: 0.12, birds: 0.9, swallows: 1.4, pigeons: 0.5, wind: 0.2 }
+    corredera: { crowd: 0.1, birds: 1, swallows: 0.8, wind: 0.25 },
+    taberna: { crowd: 0.32, fire: 0.6, room: 0.25, coins: 0.4 }
   };
   const snd = RC.snd = (() => {
     let ac = null, bus = null, group = null, bufs = null, ev = {}, prof = null, duck = 1, beeNode = null;
@@ -658,7 +661,7 @@
     ribera: [1, 300, 652, 'Ribera del Tajo'], orilla: [2, 738, 624, 'Soto de los Sifones'], acena: [3, 505, 628, 'Aceña de Durán'], chamelo: [4, 1048, 562, 'Isla del Chamelo'],
     embarcadero: [5, 180, 572, 'Embarcadero'], travesia: [6, 520, 562, 'Travesía del Tajo'], puerta_rio: [7, 860, 500, 'Puerta del Río'], plaza: [8, 860, 372, 'Plaza del Pan'],
     iglesia: [9, 780, 284, 'Santa María'], portazgo: [10, 1000, 236, 'Casa del Portazgo'], audiencia: [11, 986, 390, 'Vista Pública'], alfar: [12, 1300, 446, 'Alfar de Yuçaf'],
-    corredera: [13, 1040, 452, 'Corredera del Cristo']
+    corredera: [13, 1040, 452, 'Corredera del Cristo'], taberna: [14, 1066, 476, 'La Taberna del Miedo']
   };
   // escena x → punto del mapa (se interpola entre puntos de control)
   const TRACK = {
@@ -668,7 +671,7 @@
     puerta_rio: [[0, 780, 520], [1400, 856, 508], [2200, 945, 492]],
     plaza: [[0, 842, 404], [1500, 872, 384], [2600, 918, 372]],
     acena: [[0, 486, 636], [1600, 524, 636]], iglesia: [[0, 768, 300], [1600, 794, 300]], portazgo: [[0, 988, 252], [1600, 1014, 252]],
-    audiencia: [[0, 974, 404], [1600, 1000, 404]], alfar: [[0, 1286, 462], [1600, 1314, 462]], chamelo: [[0, 966, 574], [1600, 1008, 574]], corredera: [[0, 960, 470], [1600, 1060, 448]]
+    audiencia: [[0, 974, 404], [1600, 1000, 404]], alfar: [[0, 1286, 462], [1600, 1314, 462]], chamelo: [[0, 966, 574], [1600, 1008, 574]], corredera: [[0, 1000, 462], [1600, 1060, 448]], taberna: [[0, 1056, 476], [2700, 1076, 476]]
   };
   const ROUTE = [[180, 548], [330, 538], [500, 574], [650, 556], [780, 528], [858, 512]];
   const LANDMARKS = {
@@ -676,7 +679,8 @@
     orilla: [[0, 'saliendo de la ribera'], [200, 'junto al mojón'], [1000, 'junto al banco'], [1550, 'en la huerta del espantapájaros'], [2100, 'bajo la higuera'], [2750, 'bajo la parra del ciego'], [3220, 'frente al vado del Chamelo']],
     embarcadero: [[450, 'en el muelle'], [1100, 'junto a la red'], [1750, 'ante la choza de Alfonso']],
     puerta_rio: [[150, 'en la orilla'], [750, 'al pie de la torre'], [1400, 'ante el portón'], [2050, 'camino de la Corredera']],
-    corredera: [[100, 'llegando por la ronda'], [420, 'al pie de la torre albarrana'], [1120, 'a la puerta de El Miedo'], [1400, 'en la mesa de la taberna']],
+    corredera: [[150, 'junto a la parra'], [385, 'ante el porche de la taberna'], [580, 'junto a los toneles'], [955, 'bajo el arco'], [1300, 'junto a los cipreses'], [1540, 'camino de la Puerta del Río']],
+    taberna: [[150, 'junto a la puerta'], [600, 'en la barra'], [1400, 'junto a la chimenea'], [1970, 'en la mesa del fondo'], [2450, 'al pie de la escalera']],
     plaza: [[150, 'junto a la Puerta del Río'], [550, 'entre los puestos de pan'], [1150, 'junto a la fuente'], [1500, 'ante Santa María'], [1980, 'frente al Portazgo'], [2280, 'ante la Vista Pública'], [2500, 'camino del alfar']]
   };
   function along(pts, x) {

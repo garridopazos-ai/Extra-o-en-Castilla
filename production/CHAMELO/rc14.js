@@ -113,7 +113,7 @@
   // ---------- tertulia: cuando no hablas con nadie, el soldado sigue contando y los desconocidos le contestan
   let ti = 0, step = 0, tNext = 5;
   function tick(G, dt) {
-    if (!G.S || G.S.def.id !== 'corredera') { step = 0; tNext = 5; return; }
+    if (!G.S || G.S.def.id !== ((E.rc14 && E.rc14.scene) || 'corredera')) { step = 0; tNext = 5; return; }
     if (G.runner.busy || G.dialogue.active || G.ui.overlay || G.ui.notes.length || G.transitioning) { tNext = Math.max(tNext, 4); return; }
     if (G.ui.bubbles.some(b => !b.done && (b.blocking || !b.tert))) return;
     tNext -= dt; if (tNext > 0) return;

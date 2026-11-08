@@ -232,13 +232,13 @@ for c, k in enumerate((1.0, 0.92, 0.85)):
     im[..., c] *= 1 + 0.045 * low * k + 0.02 * mid
 im = cv2.bilateralFilter(np.clip(im, 0, 255).astype(np.uint8), 7, 30, 6).astype(np.float32)
 im *= (1 + 0.018 * hi)[..., None]
-Image.fromarray(np.clip(im, 0, 255).astype(np.uint8)).save(os.path.join(OUT, 'bg.jpg'), quality=88)
+Image.fromarray(np.clip(im, 0, 255).astype(np.uint8)).save(os.path.join(OUT, 'bg_provisional.jpg'), quality=88)
 os.remove(os.path.join(OUT, '_bg_big.png'))
 defs = svg[svg.index('<defs>'):svg.index('</defs>') + 7]
-post = '<svg xmlns="http://www.w3.org/2000/svg" width="260" height="240" viewBox="0 0 260 240">' + defs + signpost(30, 236, [('CORREDERA DEL CRISTO', 1, 162), ('TABERNA «EL MIEDO»', 1, 146)], 214) + '</svg>'
+post = '<svg xmlns="http://www.w3.org/2000/svg" width="260" height="240" viewBox="0 0 260 240">' + defs + signpost(30, 236, [('CORREDERA DEL CRISTO', 1, 162), ('LA TABERNA DEL MIEDO', 1, 146)], 214) + '</svg>'
 with sync_playwright() as p:
     b = p.chromium.launch(); pg = b.new_page(viewport={'width': 260, 'height': 240}, device_scale_factor=2)
     pg.set_content('<html><body style="margin:0;background:transparent">' + post + '</body></html>'); pg.wait_for_timeout(300)
     pg.screenshot(path=os.path.join(OUT, '_post.png'), omit_background=True, clip={'x': 0, 'y': 0, 'width': 260, 'height': 240}); b.close()
 Image.open(os.path.join(OUT, '_post.png')).resize((260, 240), Image.LANCZOS).save(os.path.join(OUT, 'poste_puerta.png')); os.remove(os.path.join(OUT, '_post.png'))
-print('ok', os.path.getsize(os.path.join(OUT, 'bg.jpg')) // 1024, 'KB')
+print('ok', os.path.getsize(os.path.join(OUT, 'bg_provisional.jpg')) // 1024, 'KB')
