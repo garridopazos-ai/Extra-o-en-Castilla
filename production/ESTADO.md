@@ -1,6 +1,6 @@
 # 1248 · Un extraño en Castilla — ESTADO DEL DESARROLLO (libreta de relevo)
 
-Última actualización: 2026-11-07 · Última candidata: `builds/1248_LUNA_G12_ORILLA_RC03.html` (línea principal: G12)
+Última actualización: 2026-11-08 · Última candidata: `builds/1248_CHAMELO_RC07.html` (línea principal: CHAMELO)
 
 ## Cómo trabajar (para cada ejecución, también las automáticas)
 1. `git pull`, leer este archivo entero y abrir la última candidata de `builds/`.
@@ -30,14 +30,15 @@
 - 222: se coloca la chaqueta y queda de pie quieto → REPOSO. 223: gesto de habla (fondo verde claro). 224: igual que 223 pero fondo blanco con acuarela (no usar). 225: gestos de señalar/dar. 216: marcha de tres cuartos hacia la IZQUIERDA (el arte mira a la izquierda; corregido en RC04). 218: usa el móvil en plano cerrado (zoom, no sirve como sprite a escala).
 
 ## Siguiente paso concreto
-**Línea principal: G12** (ver secciones «G12 RC01/RC02» al final). Build: `python production/G12/patch_g12.py builds/1248_LUNA_G10_ALFONSO_RC02.html builds/1248_LUNA_G12_<TRAMO>_RC##.html RC##`
-(encadena G11 + RC10 + G12). Contenido nuevo en `production/G12/*.js` (añadir el archivo a la lista de `patch_g12.py`). Test de referencia: `production/G12/tools/pt_g12.py` (ampliarlo con cada tramo).
-Personajes nuevos = marionetas (`rig(...)` en g12_content.js, opciones en g12_rig.js). Escenarios nuevos = acuarela procedural tomando como plantilla `production/G12/tools/make_orilla.py` (capas far/near/front con paralaje).
-Plan de tramos (uno por ejecución, en este orden):
-1. **G12 RC03 · Isla del Chamelo y Leonor (amor inesperado).** Con `rueda_libre` el vado de la orilla se abre (hotspot `vado` → nueva escena `isla`, ~3200 px). Leonor: apicultora y pescadora, lista, con genio (rig build 'woman', toca/pañuelo, delantal, colmenas). Primer encuentro cómico (la abeja pica al protagonista; Mingo se ríe; ella se ríe de su ropa y del móvil). Puzle corto: recuperar su barca/nasa o calmar la colmena (humo: Mingo + yesca/paja). Ella cuenta que Nuño esconde en el Chamelo lo que cobra de más (el «arca de los portazgos» o un libro de cuentas doble) y lo vio enterrarlo. Objeto clave: `libro_cuentas` (o llave del arca). Ganchos de amor: diálogos con chispa, rel leonor +, «flor de jara» opcional. Pistas (D.hints) y Mingo comentando todo.
-2. **G12 RC04 · Hambre y lecho en la villa.** En la Plaza del Pan, Doña Sancha vende pan pero Nuño ha subido el «portazgo del pan»: conseguir una hogaza (trueque con los higos de Mingo o un número de juglar). Lecho: el mesón cobra lo que no tienes → pajar del alfar de Yuçaf; escena de noche (fundido, ronquidos de Mingo, sueño corto con el móvil brillando: gancho del final). Objetivos visibles «Comer de verdad» / «Encontrar dónde dormir».
-3. **G12 RC05 · La Vista con Leonor.** En la audiencia, el `libro_cuentas` (o el arca) y el testimonio de Leonor se suman a las pruebas del juglar; Mingo hace la trastada decisiva (distrae al mayordomo / cambia el sello). Desenlace con Nuño más cómico. Ajustar pistas y pt_g12.py.
-4. Después: repintar en acuarela las escenas de la villa (hoy son marcadores planos: puerta_rio, plaza, iglesia, portazgo, audiencia, alfar) con el método de make_orilla.py; marco de azulejo para diálogos/zurrón.
+**Línea principal: CHAMELO** (desde el 8 nov). Base: `referencias/1248_CHAMELO_RC06.html` (hecha en otra sesión: Isla del Chamelo con Raimundo y Elvira, hojas Flow de Elvira/Mingo/Raimundo/Nuño/ciego, fondos ilustrados de toda la villa, puzle del amarre). Encima va RC07:
+`python production/CHAMELO/tools/make_map_v2.py && python production/CHAMELO/patch_rc07.py referencias/1248_CHAMELO_RC06.html builds/1248_CHAMELO_RC07.html RC07`
+(todo lo nuevo está en `production/CHAMELO/rc07.js`; ver sección «CHAMELO RC07» al final). Tramos nuevos: un `production/CHAMELO/patch_rc08.py` que tome `builds/1248_CHAMELO_RC07.html` y meta su contenido antes de `<script>/* src/main.js */` (y nueva RC cada vez).
+Pruebas: `tools/pt_chamelo.py` (partida completa de principio a fin, debe acabar con `ended True`), `tools/pt_features.py` (portada real, audio, cámara, mapa, zonas, prisa, menú, comentarios, paneo), `tools/audio_check.py` (nivel de ambiente por escena), `tools/shots_rc07.py`. En las pruebas automáticas poner `LAB1248.E.rc07.autoDegrade=false` (sin GPU el navegador de pruebas va lento y rebajaría efectos).
+Plan de tramos (uno por ejecución):
+1. **Si llegan clips Flow** (lista en «Esperando a César»): integrarlos primero (viajero nuevo con reposo/andar/hablar/reacciones; Elvira y Nuño hablar; Durán y Alfonso en estilo Flow; vecinos de la villa sustituyendo marionetas). Mismo formato de hoja que `assets/characters/mingo/flow_rc01.webp` (200×288, 8 columnas, ancla [100,278]).
+2. **Hambre y lecho en la villa.** Plaza del Pan: Sancha vende pan pero Nuño ha subido el «portazgo del pan»; conseguir una hogaza (trueque con los higos de Mingo o un número de juglar). Lecho: el mesón cobra lo que no tienes → pajar del alfar de Yuçaf; escena de noche (fundido, ronquidos de Mingo, sueño corto con el móvil brillando). Objetivos «Comer de verdad» / «Encontrar dónde dormir» en D.hints.
+3. **Amor inesperado con Elvira** (la hija de Durán; en RC06 ya hay chispa: Mingo los hace pasar por sus padres). Dos o tres momentos cortos con diálogo con gracia, sin cursilería; ella aporta una prueba o un gesto decisivo en la Vista contra Nuño.
+4. Pulido de la Vista y del final con Nuño (más cómico; Mingo hace la trastada decisiva).
 ## Limitaciones conocidas
 - Arte de aceña y embarcadero provisional (placeholders). Alfonso con una sola pose.
 - Clips del jugador (216-225) sin integrar.
@@ -53,7 +54,10 @@ Plan de tramos (uno por ejecución, en este orden):
 - (7 nov) Decisión de estilo abierta con César: propuesta «línea de cómic + lavado de acuarela» para todo (fondos suaves, personajes con tinta fuerte, proporciones de dibujo animado, camino de suelo claro en el tercio inferior de cada fondo). Documento con fichas de personajes, movimientos y plantillas para Flow/Gemini: https://claude.ai/artifact/WCkmcfbDPhCHDQZDV77Pcp (Claude Docs). Hasta que responda, no repintar escenas en un estilo definitivo; seguir con contenido y marionetas.
 - (7 nov) Para G12 sería ideal arte de Gemini en acuarela: panorámicas por capas de la orilla/Isla del Chamelo y clips (fondo verde) de Mingo, el ciego y Leonor. No bloquea: hay marionetas y acuarela procedural.
 - Material pedido (ver lista en la conversación): fondo limpio de la aceña sin HUD y por capas; clips de Alfonso de habla/escucha/reposo; fondo/capas del embarcadero; arte de la Puerta del Río. Nada bloquea: se avanza con arte provisional.
-- (nada por ahora)
+- (8 nov) **Clips Flow para dar carisma** (fondo verde, cámara fija, cuerpo entero, de perfil, 2–3 s): viajero (reposo, andar, hablar + encogerse de hombros, rascarse la cabeza, agacharse a coger, sorpresa); Elvira hablar; Nuño hablar, frotarse las manos, contar monedas; Mingo reírse/burlarse, salir corriendo; Durán y Alfonso reposo/andar/hablar en estilo Flow; los 7 vecinos de la villa (2 Giles, Yuçaf, Sancha, Lope, pregonero, Benito, mayordomo) reposo + hablar. No bloquea.
+- (8 nov) Opcional: sonidos de ambiente grabados (río, pájaros, interior de molino, mercado, horno; bucles de 30–60 s). Hoy se sintetizan.
+- (8 nov) Raimundo lleva «RAI» escrito en la túnica (viene de su hoja Flow de RC06). Preguntado a César si es intencionado.
+- (nada más por ahora)
 
 ## G11 · Juego completo con arte provisional (RC01) — HECHO
 - Build: `builds/1248_LUNA_G11_COMPLETO_RC01.html` (se genera con `production/G11/patch_g11.py` desde G10 RC02 + `g11_placeholders.js` + `g11_content.js`).
@@ -171,3 +175,17 @@ repintar escenas de la villa (ahora marcadores planos) en acuarela; pedir a Cés
 - Elvira: pose fija recortada de la portada (GrabCut), detrás de la muela (capa `muela_frente` tapa la parte que falta). Durán a 300 de alto. Despill del verde en hojas del viajero y Durán.
 - Botón DEP en pantalla (desactivado al inicio): suelo transitable, obstáculos, zonas, apoyos de los pies.
 - Pendiente de César: retrato del viajero, arte individual de Elvira de cuerpo entero y Durán sobre verde (no llegaron; ZIP «referencias para Flow» = hojas antiguas de G08).
+
+## CHAMELO RC07 (8 nov) — luz, atmósfera, cámara, sonido, carisma y mapa · `builds/1248_CHAMELO_RC07.html`
+Pedido de César sobre CHAMELO RC06: rim light, que sea precioso, ambiente que no moleste, buena jugabilidad, más atmósfera y humor, movimientos de cámara y mapa con la posición exacta. Todo en `production/CHAMELO/rc07.js` + parches de motor en `patch_rc07.py`. El guardado sigue siendo el de RC06 (`1248_g12_rc03_save_v1`): se puede continuar la partida.
+- **Peso**: 34 → 24 MB quitando imágenes repetidas o sin uso (ribera PNG de 4,4 MB sustituida por su JPEG, capas viejas de la orilla y la aceña, Mingo duplicado).
+- **Arreglo importante**: Mingo desaparecía al seguir al viajero a otra escena (en RC06 pasó de marioneta a sprite y su hoja no se cargaba en la escena de llegada). Ahora se carga siempre que `mingo_sigue`.
+- **Luz de personajes**: contraluz del lado de la luz de cada escena (tabla LIGHT: cálido en exteriores; ventana fría + puerta cálida en la aceña; horno naranja + puerta fría en el alfar) y sombra propia con oclusión en los pies. Sprites con caché por fotograma; marionetas pintadas a lienzo propio y luz a media resolución. Menú «Efectos visuales: SÍ/NO»; si el móvil no llega (>26 ms durante 3 s) se rebajan solos (primero marionetas, luego atmósfera).
+- **Atmósfera** (tabla ATM): gradación y viñeta, sol, rayos de luz (aceña, alfar, portazgo), polvo en suspensión, vilanos, hojas que caen, bandadas, peces que saltan (con «plop»), abejas en las colmenas del Chamelo, humo de chimeneas (Chamelo y su casa vista desde la orilla), ascuas del horno, palomas en la plaza y la Vista que salen volando si te acercas.
+- **Sonido**: fuera el ruido continuo; paisajes sintetizados por escena (río, arroyo, chapoteo de la barca, viento, murmullo de mercado, fuego, interior; pájaros, cuco, patos, palomas, vencejos, monedas de Nuño, goteo/agua y crujidos del molino según la rueda, zumbido de abejas que crece al acercarse). Fundido entre escenas y se aparta en las conversaciones. Menú: «Música» (alta/media/baja/no) y «Ambiente» (alto/medio/bajo/no, por defecto bajo). Medido en «bajo»: −45 a −53 dBFS RMS según escena.
+- **Cámara**: acercamiento suave (×1,06 escenas, ×1,10 diálogos) con bandas de cine; asentamiento en la primera visita a escenas fijas; paneo de presentación en lugares anchos cuya primera entrada no tiene conversación (orilla, embarcadero); anticipación al andar; temblor al liberar la rueda. Los toques y bocadillos siguen a la cámara.
+- **Carisma**: comentarios espontáneos de casi todos los personajes (tabla BARKS) sin pisarse entre ellos; frases del viajero si llevas un rato quieto; iconos «!» al empezar a hablar con alguien, «?» y meneo cuando algo no funciona, «♪» y saltito al conseguir algo, destellos al coger objetos; más frases genéricas.
+- **Jugabilidad**: viajero un 25 % más rápido; doble toque = ir con prisa (y en una salida, salir ya); pulsación larga en el suelo = ver todas las zonas y nombres; los toques que llegan justo al acabar una frase ya no te mandan a pasear ni a una salida; tecla M = mapa.
+- **Mapa**: nuevo dibujo (`art/portada/mapa_talavera_v2.*`: sin el «¡Tú estás aquí!» pintado, con Isla del Chamelo y Soto de los Sifones); chinchetas en orden de historia (1 ribera … 12 alfar); el viajero (y Mingo si va con él) aparece en el punto exacto según dónde está dentro del lugar, con banderín «TÚ»; la barra dice el sitio («Plaza del Pan · junto a la fuente»); la ruta sale de donde estás.
+- Verificado (Chromium sin GPU): partida completa de principio a fin con `pt_chamelo.py` (`ended True`, 0 errores), portada real con audio en marcha, zoom en llegada y diálogo y vuelta a 1, mapa con M/Escape, zonas, prisa, salida rápida (1,2 s con fundido), menú a dos columnas, comentarios, paneo, palomas, niveles de audio por escena. Rendimiento en ese navegador: plaza con 3 marionetas 9,5 ms de mundo con efectos (3,4 sin); en móvil con GPU debería ir sobrado y si no, se rebaja solo. **No probado en el Pixel.**
+- Capturas: `production/CHAMELO/capturas/`.
