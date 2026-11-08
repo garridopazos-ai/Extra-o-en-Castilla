@@ -313,7 +313,7 @@
       for (const a of actors) { if (!a || !a.visible) continue; const hx = a.x - S.camX; x0 = Math.min(x0, hx - 70); x1 = Math.max(x1, hx + 70); hy = Math.min(hy, E.actor.headY(a, S.depthScale(a.y))); }
       if (x1 > x0) {
         const mx = clamp((x0 + x1) / 2, 60, C.W - 60), my = clamp(hy + 30, 120, 640);
-        tz = dlg ? 1.1 : 1.06;
+        tz = dlg ? 1.06 : 1.035;
         if (mx - x0 > 1) tz = Math.min(tz, (mx - 24) / (mx - x0));
         if (x1 - mx > 1) tz = Math.min(tz, (C.W - 24 - mx) / (x1 - mx));
         tz = Math.max(1, tz);
@@ -334,7 +334,8 @@
     const first = G.state.visited[S.def.id] === 1;
     cam.z = 1; cam.tz = 1; cam.busyT = 0;
     if (!first || !RC.camOn) return;
-    const quiet = (S.def.firstEnter || []).every(st => st.note || st.set || st.wait != null || (st.say && (!st.who || st.who === 'player')));
+    // paneo solo si al entrar nadie habla (ni siquiera el viajero): si no, se quedaría hablando fuera de plano
+    const quiet = (S.def.firstEnter || []).every(st => st.note || st.set || st.wait != null);
     if (S.def.width > C.W && quiet) {
       const right = G.player.x < S.def.width / 2, from = right ? S.def.width - C.W : 0;
       S._pan = { t: 0, hold: 1.0, dur: clamp(Math.abs(from - clamp(G.player.x - C.W / 2, 0, S.def.width - C.W)) / 700, 2.2, 4.5), from };
@@ -356,9 +357,14 @@
         return;
       }
       if (S.def.width > C.W && G.player) {
-        const want = G.player.moving ? (G.player.lastH === 'left' ? -150 : 150) : 0;
-        cam.la += (want - cam.la) * Math.min(1, dt * 1.2);
-        px += cam.la;
+        // si habla (frase de guion) alguien que no está en plano, la cámara lo busca: encuadre entre él y el viajero
+        const sp = G.ui.bubbles.find(b => b.blocking && !b.done && b.actor && b.actor !== G.player && b.actor.visible);
+        if (sp) { const a = sp.actor, dx = a.x - G.player.x; px = Math.abs(dx) < 1100 ? (a.x + G.player.x) / 2 : a.x; cam.la *= 0.9; }
+        else {
+          const want = G.player.moving ? (G.player.lastH === 'left' ? -150 : 150) : 0;
+          cam.la += (want - cam.la) * Math.min(1, dt * 1.2);
+          px += cam.la;
+        }
       }
       return upd(S, px, dt, snap, k);
     };
@@ -565,7 +571,14 @@
   RC.wobble = a => { if (a) a._wob = 0.001; };
   RC.lastBusy = 0;
   RC.swallow = () => performance.now() / 1000 - RC.lastBusy < 0.35;
-  RC.quiet = (G, n) => !!(G.runner.busy || G.dialogue.active || G.ui.notes.length || G.ui.overlay || G.ui.bubbles.some(b => !b.done && b.actor !== n.actor));
+  // ¿se ve este personaje en pantalla? (con la cámara acercada incluida)
+  function onScreen(G, a, margin) {
+    if (!G.S || !a || !a.visible) return false;
+    const x = cam.toScreen(a.x - G.S.camX, a.y)[0], m = margin == null ? 30 : margin;
+    return x > m && x < C.W - m;
+  }
+  RC.onScreen = onScreen;
+  RC.quiet = (G, n) => !!(G.runner.busy || G.dialogue.active || G.ui.notes.length || G.ui.overlay || !onScreen(G, n.actor, 60) || G.ui.bubbles.some(b => !b.done && b.actor !== n.actor));
   RC.reveal = () => { reveal = 2.4; snd.event('twinkle'); };
   const bark = { last: 0, per: {}, idx: {}, enter: 0 };
   let lastInput = 0, lastQuip = 0, qi = Math.floor(Math.random() * QUIPS.length);
@@ -757,6 +770,7 @@
     };
   }
 
+  const SIZE = { elvira: 290, mingo: 226, leonor: 392, nuno: 305, ciego: 300, duran: 318 };
   // =====================================================================================================
   // 7 · INSTALACIÓN
   RC.install = G => {
@@ -766,6 +780,23 @@
     for (const k in MORE_GENERIC) if (E.DATA.generic[k]) E.DATA.generic[k].push(...MORE_GENERIC[k]);
     installCamera(G);
     installMap(G);
+    // comentarios sueltos (no bloqueantes) de alguien que no se ve: no salen
+    const say0 = G.ui.say;
+    G.ui.say = (actor, text, blocking) => {
+      if (!blocking && actor && G.S && !onScreen(G, actor, 20)) return { actor, text, t: 0, dur: 0, done: true, blocking: false };
+      return say0(actor, text, blocking);
+    };
+    // proporciones: altura VISIBLE (cabeza-pies, sin margen del dibujo) respecto al viajero (≈293): mujer 0,93, niño ~10 años 0,72,
+    // hombres 0,9–1,03 según complexión. La zancada de cada animación de andar se escala igual (los pies no patinan).
+    for (const [id, h] of Object.entries(SIZE)) {
+      const c = E.DATA.characters[id]; if (!c || !c.sprite || !c.sprite.sheet || c.rig) continue;
+      const k = h / c.height; c.height = h;
+      for (const an of Object.values(c.sprite.sheet.anims)) if (an.stride) an.stride = Math.round(an.stride * k);
+      if (c.speed) c.speed = Math.round(c.speed * Math.sqrt(k));
+    }
+    // Mingo subido a la higuera: la rama es ahora más corta (ver patch: fondo del soto)
+    const perch = (E.DATA.scenes.ribera.firstEnter || []).find(st => st.npcPlace && st.npcPlace[0] === 'mingo' && st.npcPlace[1] === 'orilla');
+    if (perch) perch.npcPlace[2] = 2228;
     const di = G.input.drain;
     G.input.drain = () => { const evs = di(); if (evs.length) lastInput = performance.now() / 1000; return evs; };
     const play0 = E.audio.play;
@@ -810,7 +841,6 @@
       if (RC.fxOn && RC.atmFx) atmosWorld(ctx, G);
       if (zoom) ctx.restore();
       if (RC.fxOn && RC.atmFx) atmosScreen(ctx);
-      if (cam.lb > 0.01) { const h = 34 * cam.lb; ctx.fillStyle = 'rgba(8,5,3,.92)'; ctx.fillRect(0, 0, C.W, h); ctx.fillRect(0, C.H - h, C.W, h); }
     };
     const ui0 = G.ui.draw;
     G.ui.draw = (ctx, S) => {

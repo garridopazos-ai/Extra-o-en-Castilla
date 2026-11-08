@@ -1,6 +1,6 @@
 # 1248 · Un extraño en Castilla — ESTADO DEL DESARROLLO (libreta de relevo)
 
-Última actualización: 2026-11-08 · Última candidata: `builds/1248_CHAMELO_RC07.html` (línea principal: CHAMELO)
+Última actualización: 2026-11-08 · Última candidata: `builds/1248_CHAMELO_RC08.html` (línea principal: CHAMELO)
 
 ## Cómo trabajar (para cada ejecución, también las automáticas)
 1. `git pull`, leer este archivo entero y abrir la última candidata de `builds/`.
@@ -31,9 +31,9 @@
 
 ## Siguiente paso concreto
 **Línea principal: CHAMELO** (desde el 8 nov). Base: `referencias/1248_CHAMELO_RC06.html` (hecha en otra sesión: Isla del Chamelo con Raimundo y Elvira, hojas Flow de Elvira/Mingo/Raimundo/Nuño/ciego, fondos ilustrados de toda la villa, puzle del amarre). Encima va RC07:
-`python production/CHAMELO/tools/make_map_v2.py && python production/CHAMELO/patch_rc07.py referencias/1248_CHAMELO_RC06.html builds/1248_CHAMELO_RC07.html RC07`
-(todo lo nuevo está en `production/CHAMELO/rc07.js`; ver sección «CHAMELO RC07» al final). Tramos nuevos: un `production/CHAMELO/patch_rc08.py` que tome `builds/1248_CHAMELO_RC07.html` y meta su contenido antes de `<script>/* src/main.js */` (y nueva RC cada vez).
-Pruebas: `tools/pt_chamelo.py` (partida completa de principio a fin, debe acabar con `ended True`), `tools/pt_features.py` (portada real, audio, cámara, mapa, zonas, prisa, menú, comentarios, paneo), `tools/audio_check.py` (nivel de ambiente por escena), `tools/shots_rc07.py`. En las pruebas automáticas poner `LAB1248.E.rc07.autoDegrade=false` (sin GPU el navegador de pruebas va lento y rebajaría efectos).
+`python production/CHAMELO/tools/make_map_v2.py && python production/CHAMELO/patch_rc07.py referencias/1248_CHAMELO_RC06.html builds/1248_CHAMELO_RC08.html RC08`
+(`patch_rc07.py` genera la versión vigente del módulo `production/CHAMELO/rc07.js`; el número de RC sale del argumento; ver secciones «CHAMELO RC07/RC08» al final). Tramos nuevos: un `production/CHAMELO/patch_rc09.py` que tome `builds/1248_CHAMELO_RC08.html` y meta su contenido antes de `<script>/* src/main.js */` (y nueva RC cada vez).
+Pruebas: `tools/pt_offscreen.py` (nadie habla fuera de plano al entrar en el soto; Mingo en la rama), `tools/pt_chamelo.py` (partida completa de principio a fin, debe acabar con `ended True`), `tools/pt_features.py` (portada real, audio, cámara, mapa, zonas, prisa, menú, comentarios, paneo), `tools/audio_check.py` (nivel de ambiente por escena), `tools/shots_rc07.py`. En las pruebas automáticas poner `LAB1248.E.rc07.autoDegrade=false` (sin GPU el navegador de pruebas va lento y rebajaría efectos).
 Plan de tramos (uno por ejecución):
 1. **Si llegan clips Flow** (lista en «Esperando a César»): integrarlos primero (viajero nuevo con reposo/andar/hablar/reacciones; Elvira y Nuño hablar; Durán y Alfonso en estilo Flow; vecinos de la villa sustituyendo marionetas). Mismo formato de hoja que `assets/characters/mingo/flow_rc01.webp` (200×288, 8 columnas, ancla [100,278]).
 2. **Hambre y lecho en la villa.** Plaza del Pan: Sancha vende pan pero Nuño ha subido el «portazgo del pan»; conseguir una hogaza (trueque con los higos de Mingo o un número de juglar). Lecho: el mesón cobra lo que no tienes → pajar del alfar de Yuçaf; escena de noche (fundido, ronquidos de Mingo, sueño corto con el móvil brillando). Objetivos «Comer de verdad» / «Encontrar dónde dormir» en D.hints.
@@ -56,7 +56,7 @@ Plan de tramos (uno por ejecución):
 - Material pedido (ver lista en la conversación): fondo limpio de la aceña sin HUD y por capas; clips de Alfonso de habla/escucha/reposo; fondo/capas del embarcadero; arte de la Puerta del Río. Nada bloquea: se avanza con arte provisional.
 - (8 nov) **Clips Flow para dar carisma** (fondo verde, cámara fija, cuerpo entero, de perfil, 2–3 s): viajero (reposo, andar, hablar + encogerse de hombros, rascarse la cabeza, agacharse a coger, sorpresa); Elvira hablar; Nuño hablar, frotarse las manos, contar monedas; Mingo reírse/burlarse, salir corriendo; Durán y Alfonso reposo/andar/hablar en estilo Flow; los 7 vecinos de la villa (2 Giles, Yuçaf, Sancha, Lope, pregonero, Benito, mayordomo) reposo + hablar. No bloquea.
 - (8 nov) Opcional: sonidos de ambiente grabados (río, pájaros, interior de molino, mercado, horno; bucles de 30–60 s). Hoy se sintetizan.
-- (8 nov) Raimundo lleva «RAI» escrito en la túnica (viene de su hoja Flow de RC06). Preguntado a César si es intencionado.
+- (8 nov) Raimundo lleva «RAI» escrito en la túnica (viene de su hoja Flow de RC06). Preguntado a César si es intencionado; si no, hace falta un clip nuevo de Raimundo (reposo, hablar, andar) sin letras y sin suelo pintado.
 - (nada más por ahora)
 
 ## G11 · Juego completo con arte provisional (RC01) — HECHO
@@ -189,3 +189,12 @@ Pedido de César sobre CHAMELO RC06: rim light, que sea precioso, ambiente que n
 - **Mapa**: nuevo dibujo (`art/portada/mapa_talavera_v2.*`: sin el «¡Tú estás aquí!» pintado, con Isla del Chamelo y Soto de los Sifones); chinchetas en orden de historia (1 ribera … 12 alfar); el viajero (y Mingo si va con él) aparece en el punto exacto según dónde está dentro del lugar, con banderín «TÚ»; la barra dice el sitio («Plaza del Pan · junto a la fuente»); la ruta sale de donde estás.
 - Verificado (Chromium sin GPU): partida completa de principio a fin con `pt_chamelo.py` (`ended True`, 0 errores), portada real con audio en marcha, zoom en llegada y diálogo y vuelta a 1, mapa con M/Escape, zonas, prisa, salida rápida (1,2 s con fundido), menú a dos columnas, comentarios, paneo, palomas, niveles de audio por escena. Rendimiento en ese navegador: plaza con 3 marionetas 9,5 ms de mundo con efectos (3,4 sin); en móvil con GPU debería ir sobrado y si no, se rebaja solo. **No probado en el Pixel.**
 - Capturas: `production/CHAMELO/capturas/`.
+
+## CHAMELO RC08 (8 nov, 2:00) — correcciones tras ver RC07 · `builds/1248_CHAMELO_RC08.html`
+César: tamaños mal proporcionados; mensajes de personajes que no están en plano (el ciego, el niño al entrar en los Sifones); la rama de la higuera desproporcionadamente larga; las franjas negras en cada diálogo distraen; «Rai» parece mal recortado y muy pequeño.
+- **Proporciones** (tabla SIZE en rc07.js): altura VISIBLE medida en cada hoja respecto al viajero (≈293): Elvira 0,93 (h 290), Mingo 0,72 (h 226), Raimundo adulto (h 392; el gorro sobresale), Nuño h 305, ciego h 300, Durán h 318. La zancada de andar se escala igual (sin patinar).
+- **Fuera de plano**: los comentarios sueltos (de rutina, de guion o espontáneos) de quien no se ve ya no salen; si una frase de guion la dice alguien fuera de plano, la cámara lo encuadra con el viajero. El paneo de presentación solo se hace si al entrar no habla nadie (en RC07 el del soto dejaba al viajero hablando fuera de plano).
+- **Higuera**: rama acortada en el fondo del soto (`tools/branch_edit.py`: agua del mismo nivel del río + remate redondo nuevo) y Mingo sentado más cerca del tronco (x 2228).
+- **Franjas negras**: fuera. Acercamiento más suave (×1,06 en diálogos, ×1,035 en escenas).
+- **Raimundo**: limpieza de su hoja (`tools/clean_rai.py`): fuera la mancha de suelo pintado bajo los pies en reposo y habla, sin comerse piernas ni zapatos; fuera motas sueltas.
+- Verificado: partida completa (`pt_chamelo.py`, ended True, 0 errores), `pt_offscreen.py` (0 bocadillos fuera de plano), `pt_features.py` (sin franjas, zoom 1,035/1,06 y vuelta a 1). Capturas en `production/CHAMELO/capturas/rc08_*`.

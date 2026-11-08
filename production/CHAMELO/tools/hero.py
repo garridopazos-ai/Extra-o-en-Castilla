@@ -13,8 +13,12 @@ P.pg.wait_for_timeout(1200)
 for i in range(40):
     P.pg.wait_for_timeout(500)
     b = ev("LAB1248.G.ui.bubbles.filter(b=>b.blocking&&!b.done).map(b=>b.actor.id+': '+b.text)")
-    if b and 'mingo' in b[0] and ev('LAB1248.E.rc07.cam.z') > 1.04:
+    if b and 'mingo' in b[0] and ev('LAB1248.E.rc07.cam.z') > 1.02:
         P.pg.wait_for_timeout(700); P.pg.screenshot(path=out + '/hero_chamelo.png'); print('captura', b); break
     ev('(()=>{const G=LAB1248.G;if(G.dialogue.active)G.dialogue.advance();else G.ui.advance();})()')
+for i in range(80):
+    if ev('LAB1248.idle()'): break
+    ev('(()=>{const G=LAB1248.G;if(G.dialogue.active)G.dialogue.advance();else G.ui.advance();})()'); P.pg.wait_for_timeout(300)
+P.pg.wait_for_timeout(2500); P.pg.screenshot(path=out + '/hero_chamelo_reparto.png')
 print([l for l in P.logs if 'rror' in l][:5])
 P.close()

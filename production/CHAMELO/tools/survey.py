@@ -3,7 +3,7 @@ import sys, json
 sys.path.insert(0, '/home/claude/extra-o-en-castilla/production/G10/tools')
 from pt_lib import Play
 html = sys.argv[1]; out = sys.argv[2]
-P = Play(html)
+P = Play(html); P.ev('LAB1248.E.rc07 && (LAB1248.E.rc07.autoDegrade=false)')
 info = P.ev('''(()=>{const D=LAB1248.E.DATA;const ch={};for(const [k,c] of Object.entries(D.characters)){ch[k]={rig:!!c.rig,src:c.sprite&&c.sprite.src,anims:c.sprite&&c.sprite.sheet?Object.keys(c.sprite.sheet.anims):null,height:c.height}}
 const sc={};for(const [k,s] of Object.entries(D.scenes)){sc[k]={w:s.width,cam:s.camera,amb:s.ambientSound,name:s.name,layers:s.layers.map(l=>l.id+':'+(l.src||l.placeholder)),npcs:Object.values(D.npcs).filter(n=>n.scene===k).map(n=>n.id)}}
 return {ch,sc,start:D.start}})()''')

@@ -1,4 +1,4 @@
-"""CHAMELO RC07 sobre la build CHAMELO RC06 (referencias/1248_CHAMELO_RC06.html, hecha en otra sesión).
+"""CHAMELO RC07+ (RC07, RC08...) sobre la build CHAMELO RC06 (referencias/1248_CHAMELO_RC06.html, hecha en otra sesión).
 Uso: python production/CHAMELO/patch_rc07.py referencias/1248_CHAMELO_RC06.html builds/1248_CHAMELO_RC07.html [RC07]
 Antes: python production/CHAMELO/tools/make_map_v2.py (mapa sin «¡TÚ ESTÁS AQUÍ!» pintado, con Isla del Chamelo y Soto de los Sifones)."""
 import sys, os, re, base64
@@ -93,6 +93,46 @@ sub("    return G;\n  }\n\n  E.createGame = createGame;", "    if (E.rc07) E.rc0
 i = s.index("window.E1248_ILLUS={map:'data:image/jpeg;base64,") + len("window.E1248_ILLUS={map:'data:image/jpeg;base64,")
 j = s.index("'", i)
 s = s[:i] + base64.b64encode(open(os.path.join(ROOT, 'art', 'portada', 'mapa_talavera_v2.jpg'), 'rb').read()).decode() + s[j:]
+
+# ---------- 10b) imágenes retocadas dentro de la build (RC08)
+import io, numpy as np, cv2
+from PIL import Image
+sys.path.insert(0, os.path.join(HERE, 'tools'))
+from branch_edit import shorten
+def embed_img(key):
+    m = re.search('"' + re.escape(key) + r'": ?"data:(image/[a-z]+);base64,([A-Za-z0-9+/=]+)"', s)
+    return m, Image.open(io.BytesIO(base64.b64decode(m.group(2))))
+def put_img(m, im, fmt, **kw):
+    global s
+    buf = io.BytesIO(); im.save(buf, fmt, **kw)
+    s = s[:m.start(1)] + 'image/' + fmt.lower() + ';base64,' + base64.b64encode(buf.getvalue()).decode() + s[m.end(2):]
+# la rama de la higuera del soto era desproporcionadamente larga: se corta con un remate nuevo
+m, im = embed_img('assets/scenes/orilla/soto_acuarela.webp')
+put_img(m, Image.fromarray(shorten(np.array(im.convert('RGB')))), 'WEBP', quality=88, method=5)
+# Raimundo: restos del suelo pintado bajo los pies (franja de arena) y motas sueltas en su hoja Flow
+def clean_sheet(key, fw, fh, feet_band):
+    m, im = embed_img(key)
+    a = np.array(im.convert('RGBA'))
+    H, W = a.shape[:2]
+    for r in range(H // fh):
+        for c in range(W // fw):
+            fr = a[r * fh:(r + 1) * fh, c * fw:(c + 1) * fw]
+            if fr[:, :, 3].max() == 0: continue
+            if feet_band:
+                y0 = fh - feet_band
+                hsv = cv2.cvtColor(np.ascontiguousarray(fr[y0:, :, :3]), cv2.COLOR_RGB2HSV)
+                sand = (hsv[:, :, 2] > 150) & (hsv[:, :, 1] < 110) & (hsv[:, :, 0] < 35)
+                fr[y0:, :, 3][sand] = 0
+            al = (fr[:, :, 3] > 30).astype(np.uint8)
+            n, lab, st, _ = cv2.connectedComponentsWithStats(al, 8)
+            if n > 2:
+                big = st[1:, cv2.CC_STAT_AREA].argmax() + 1
+                for i in range(1, n):
+                    if i != big and st[i, cv2.CC_STAT_AREA] < 400: fr[:, :, 3][lab == i] = 0
+    put_img(m, Image.fromarray(a), 'WEBP', quality=90, method=5)
+from clean_rai import clean_rai
+m, im = embed_img('assets/characters/raimundo/flow.webp')
+put_img(m, Image.fromarray(clean_rai(np.array(im.convert('RGBA')))), 'WEBP', quality=90, method=5)
 
 # ---------- 11) módulo RC07 antes de main.js
 marker = "<script>/* src/main.js */"
