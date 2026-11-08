@@ -182,6 +182,13 @@ sub(key, '"assets/characters/soldado/hoja.webp":"data:image/webp;base64,' + base
 sub("<script>/* src/main.js */", "<script>window.E1248_VIDEOS={rai_caldero:'data:video/webm;base64," + base64.b64encode(open(os.path.join(ROOT, 'art', 'videos', 'rai_caldero.webm'), 'rb').read()).decode() + "'};</script>\n<script>/* src/main.js */")
 sub("      E.log.warn('Acción desconocida: ' + JSON.stringify(a));", "      if (a.vineta !== undefined && E.rc07) return E.rc07.vignette(a.vineta[0], a.vineta[1]);\n      E.log.warn('Acción desconocida: ' + JSON.stringify(a));")
 
+# ---------- 10e) RC14: Corredera del Cristo (fondo provisional y poste indicador en la Puerta del Río) + acción {rc14:...}
+CO = os.path.join(ROOT, 'art', 'escenarios', 'corredera')
+key = '"assets/characters/player/sheet_g11.webp":"data:'
+sub(key, '"assets/scenes/corredera/bg.jpg":"data:image/jpeg;base64,' + base64.b64encode(open(os.path.join(CO, 'bg.jpg'), 'rb').read()).decode() + '",'
+    + '"assets/scenes/puerta_rio/poste_corredera.png":"data:image/png;base64,' + base64.b64encode(open(os.path.join(CO, 'poste_puerta.png'), 'rb').read()).decode() + '",' + key)
+sub("      E.log.warn('Acción desconocida: ' + JSON.stringify(a));", "      if (a.rc14 !== undefined && E.rc14) return E.rc14.act(a.rc14, G);\n      E.log.warn('Acción desconocida: ' + JSON.stringify(a));")
+
 # ---------- 11) módulo RC07 antes de main.js
 marker = "<script>/* src/main.js */"
 sub(marker, "<script>/* CHAMELO " + RC + ": luz, atmósfera, cámara, sonido, carisma y mapa */\n" + open(os.path.join(HERE, 'rc07.js'), encoding='utf-8').read() + "\n</script>\n" + marker)
