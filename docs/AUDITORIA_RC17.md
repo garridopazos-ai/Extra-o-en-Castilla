@@ -1,0 +1,77 @@
+# Auditoría correctiva de RC17 — informe para aprobación
+
+Fecha: 9 nov 2026. Objeto: `builds/1248_CHAMELO_RC17.html`, **sin modificar**. Su suma md5 se ha comprobado antes y después de la auditoría.
+Reglas de César para esta fase:
+- No regenerar imágenes ni sustituir escenarios aprobados.
+- No añadir puzles ni alargar conversaciones.
+- No borrar recursos sin comprobar dependencias.
+- Informe primero; correcciones solo tras aprobación.
+
+## Cómo se ha auditado
+
+1. **Volcado completo de `E.DATA` en el navegador** (1.021 cadenas con su ruta). Se ha calculado qué diálogos abre cada personaje o zona y en qué condiciones. Herramienta: `production/CHAMELO/tools/audit_alcance.py`.
+2. **Partida completa repetida** con toques reales, anotando en cada pausa la caja de cada personaje en pantalla: fuera de cuadro, tapado por la interfaz o superpuesto. Herramienta: `tools/audit_encuadre.py`; 64 pausas registradas.
+3. **Análisis de las hojas de personaje**, buscando píxeles opacos pegados al borde de la celda, que indican un dibujo recortado. Herramienta: `tools/audit_hojas.py`.
+4. **Reproducción en Chromium** de cada incidencia declarada accesible. Herramienta: `tools/audit_reproducir.py`; capturas en `production/CHAMELO/capturas/auditoria_rc17_*.png`.
+
+«Accesible» significa que un jugador lo encuentra jugando. «Inactivo» significa que el código sigue en el HTML pero nada del juego actual lo alcanza.
+
+## Resumen
+
+- 21 incidencias: 3 de gravedad alta, 8 media y 10 baja.
+- **Ninguna bloquea la partida**: la cadena principal se completa siempre.
+- Las tres altas son contradicciones de historia que el jugador ve: la Vista Pública antigua, el diálogo antiguo de Alonso y el ciego de las cerezas frente a la parra de uvas.
+
+## Incidencias
+
+| ID | Incidencia | ¿Accesible? | Causa | Gravedad | Corrección propuesta |
+|---|---|---|---|---|---|
+| **A1** | **La tarima de la Plaza Mayor abre el diálogo antiguo de la Vista Pública** («¿Qué maravilla vais a hacer?», «Sacar un dinero del bolsillo de un cobrador»…). | Sí, después de la destitución. Reproducido. | En `g11_juglar.js` la tarima tiene verbo por defecto «usar» y ese verbo abre `mayordomo`. RC17 ocultó al mayordomo, pero no la tarima. La Pieza del Rey no se puede conseguir (exige `vista_convocada`), pero el diálogo entero de la trama antigua se lee. | Alta | Dejar la tarima solo con «mirar» y un texto neutro de una frase. Sin diálogo. |
+| **A2** | **El diálogo de Alonso contradice el guion**: «Lope se llevó el badajo», «tres toques, todo el mundo a la Vista», «pídelo en Vista pública». Además se abre completo **mientras duerme** (puzle de la balanza) y en la iglesia, la noche del eclipse. | Sí. Reproducido con la señora secuestrada: ofrece las 8 opciones. | Es el árbol de `rc13`–`rc15`, que RC17 no revisó. | Alta | Quitar las opciones «¿No vigilabais la campana…?» y «¿Qué significan los toques…?» y la segunda frase de «¿Qué sabéis de Don Nuño?». «¿Y la punta de vuestra lanza?» solo antes de que Lope la arregle. Dormido: solo «Zzz… Las Navas… zzz». En la iglesia: una frase que ya existe. Recortar la entrada de 6 a 3 frases. Todo son recortes y condiciones: no hay texto nuevo. |
+| **A3** | **Nicolás habla de cerezas, pero el soto muestra una parra con racimos maduros y una higuera con higos.** Su hoja no lleva cesta y su comentario espontáneo dice «Huelo uvas». En cuanto se pisa el soto se oye «¡Cerezas de la Vera!». | Sí. Reproducido. | En RC17 cambié el gag a cerezas para cuadrar con junio y no lo contrasté con el arte aprobado. Lo mismo pasa con otros textos de estación escritos en RC17: «uvas verdes hasta septiembre», «Higos, todavía no: es junio». | Alta | Volver al racimo de la parra, que es el gag del Lazarillo y lo que se ve. Quitar «cesta de cerezas», «Cerezas de la Vera», «verdes… septiembre» y «Higos, todavía no». Los textos describen lo pintado sin nombrar la estación. **Decisión de César**: la parra y la higuera pintadas no son de junio; propongo aceptarlo como licencia del arte aprobado. |
+| M1 | **El rótulo del narrador sale arriba mientras el panel de diálogo de abajo sigue abierto y vacío.** | Sí: el gag del ciego (reproducido), «¿Y ahora qué hacemos?» de Mingo (su pista sale en bocadillo con el panel vacío) y la Vista de A1. | El motor ejecuta las acciones de un nodo de diálogo con el panel visible y sin texto. Los rótulos van arriba y las frases salen en bocadillo. Esos tres nodos meten frases o rótulos en acciones. | Media | Regla: ningún diálogo con frases o rótulos en sus acciones. El ciego pasa a una secuencia directa, sin panel. Mingo, al tocarle, dice la pista directamente; se quitan sus dos charlas de relleno («Háblame de Talavera», «¿Por qué robas?»), que no aportan. La Vista se resuelve con A1. |
+| M2 | **«▸ toca para continuar» se corta en el borde derecho.** | Sí, en todas las frases de todos los diálogos. Reproducido. | `hud.js`: el texto se coloca con ancla centrada (`'bc'`) en el borde derecho menos 36 px. La mitad derecha cae fuera del panel y de la pantalla. Viene de antes de RC17. | Media | Anclarlo por su borde derecho (una línea del motor, aplicada en `patch_rc17.py`). |
+| M3 | **Bocadillos de un personaje aparecen en la escena siguiente.** El «¡Cerezas de la Vera!» del ciego se vio dentro de la aceña. | Sí. Reproducido. | Al cambiar de escena no se borran los bocadillos no bloqueantes. Se siguen dibujando en las coordenadas del personaje con la cámara nueva. | Media | Al cambiar de escena, descartar los comentarios no bloqueantes y no dibujar bocadillos de personajes que no están en la escena. |
+| M4 | **Mingo queda medio fuera de cuadro al entrar en 7 escenas** (aceña 17 % visible; ribera, soto, embarcadero, plaza, alfar, iglesia 36–76 %). En la plaza, además, queda detrás del botón del zurrón. | Sí. Registrado en las pausas de la partida. | `companion.place` lo sitúa 130 px «detrás» del viajero. Si se entra por un borde, queda fuera del encuadre, y en escenas de cámara fija no se mueve hasta que el viajero se aleja más de 210 px. | Media | Al colocarlo, limitar su x al encuadre visible (200–1400 px de pantalla) y fuera del círculo del zurrón; si no cabe detrás, ponerlo delante. |
+| M5 | **El protagonista tiene la coronilla recortada en plano.** | Sí, en todas las escenas. El pelo toca el borde superior de la celda en reposo, andar y hablar (23, 14 y 22 muestras opacas). | La hoja (`build_player.py`, G11) se generó con poco margen superior. | Media | Rehacer la hoja **desde los mismos clips (216/222/223)** con 10–12 px más de margen arriba. No es arte nuevo: mismo vídeo, mismo recorte, misma escala. **Requiere tu aprobación** porque toca un recurso gráfico; si no, se queda como está. |
+| M6 | **Comentarios espontáneos de la trama antigua**: Fray Benito, «Sin badajo, la campana solo dice…»; Lope, «Martillo, yunque y misterio» y «Un herrero sin truco…» (aluden al truco de la herradura, que ya no existe). | Sí (comentarios al estar quieto). | Tabla `BARKS` de `rc07.js`, que no se revisó en RC17. | Media | Quitar esas tres frases de la tabla. Benito y Lope se quedan con las que no contradicen. |
+| M7 | **«Vista Pública» sigue en la Plaza Mayor**: título «Plaza Mayor · Vista Pública», alfiler del mapa «Vista Pública», sitio «ante la Vista Pública», la tarima («tres cojines…») y el público («cómo Don Nuño me quita lo que no tengo»). | Sí. | Restos de `g11_juglar.js` y de la tabla del mapa de `rc07`. | Media | Renombrar a «Plaza Mayor» y dejar textos neutros de una frase. |
+| M8 | **La sustitución global «Alfonso → Martín» es frágil y no llegó a todo.** | En parte. | RC17 reemplaza «Alfonso» en todas las cadenas de `E.DATA`. Comprobado en las fuentes: **todas** las apariciones eran el barquero; no tocó a ningún rey. Pero (1) no alcanza textos fuera de `E.DATA`: el mapa sigue diciendo «ante la choza de **Alfonso**»; (2) cualquier texto futuro con «Alfonso» cargado antes de rc17 (por ejemplo «Alfonso VIII» de la tradición de las torres albarranas) se convertiría en «Martín». | Media | Sustituir la regla global por cambios explícitos campo a campo (lista cerrada: unos diez textos y los nombres del barquero) y corregir la etiqueta del mapa. Las otras sustituciones son seguras: «Raimundo → Rai» (rc07) no colisiona con nada, y Elvira → Sancha no fue textual, sino un cambio de hoja de personaje. |
+| B1 | **Mingo subido a la higuera tiene los zapatos cortados** en el borde derecho de la celda (17 muestras). | Sí, en el Acto I. | La celda de 200 px es estrecha para la pose sentada. | Baja | Igual que M5: rehacer esa fila desde su clip con celda más ancha, con tu aprobación, o aceptarlo. |
+| B2 | **Encuadres mejorables**: el viajero se pone encima de Yuçaf al usar la cadena del tiro (72 % superpuestos); en la balanza, el cabecilla y la señora quedan a medias en el borde derecho cuando estás en la mesa; al entrar en la Puerta del Río apareces entre los dos Giles. | Sí. | Coordenadas de colocación de RC17 (alfar y taberna) y punto de entrada antiguo (puerta). | Baja | Solo coordenadas: Yuçaf a x 700; punto de acercamiento al tiro x 585; grupo de la balanza unos 150 px a la izquierda y más compacto; entrada de la puerta 80 px antes de los guardias. |
+| B3 | **Personajes duplicados tras la destitución**: Yuçaf está a la vez en su alfar y en la Plaza Mayor; el pregonero, a la vez en la Plaza del Pan y en la Mayor. | Sí. | Son entradas distintas de personaje con condiciones de presencia que no se excluyen. | Baja | Condiciones excluyentes: el de la Plaza Mayor solo hasta salir de ella. |
+| B4 | Durán saluda con «¿Eres juglar?». | Sí. | Resto de la trama del juglar. | Baja | Quitar la pregunta: «¡Eh, tú! ¿De dónde sales con esas ropas?». |
+| B5 | **Frases del viajero que se adelantan a la historia**: «¿Y si el portal se abre justo ahora…?», antes de que Rai hable del pórtico; «Nuño me cobra por estar parado», antes de conocer a Nuño. | Sí (frases al estar quieto). | `QUIPS` de `rc07`. | Baja | Mostrarlas solo después de la confesión y después de cruzar el río, respectivamente. |
+| B6 | «Mapa de Talavera» en el menú de pausa **no hace nada** antes de tener el mapa de Rai. | Sí. | RC17 bloquea la apertura del mapa, pero el botón del menú sigue ahí. | Baja | Ocultar esa entrada hasta `mapa_rai`. |
+| B7 | El nombre «Alonso» **no vuelve a «Viejo soldado» al cargar una partida anterior** a la escena de la lanza (solo al empezar una nueva). | Sí, al cargar. | La sincronización de RC17 solo pone el nombre, nunca lo quita. | Baja | Sincronizarlo en los dos sentidos según `alonso_nombre`. |
+| B8 | **Riesgo teórico en el eclipse**: si existiera una partida guardada entre «la Luna se oscurece» y «¡Ahora!», la campana diría «¡Aún no!» para siempre. | Muy improbable: el autoguardado no actúa mientras corre esa secuencia. | `luna_roja` solo se marca al final de la secuencia de entrada. | Baja | Marcar `luna_roja` también cuando la luna llega a rojo en el bucle de dibujo (blindaje sin cambio visible). |
+| B9 | **Dos rótulos explican controles** («Elígelo en el zurrón y toca algo…», «el botón está a la derecha, bajo el «?»»), cosa que el protocolo desaconseja. | Sí. | Textos de RC17 puestos por usabilidad. | Baja | Acortarlos a un aviso breve que desaparece solo («Mingo se une a ti», «Nuevo: mapa»). **Decisión de César**: quitarlos o dejarlos así. |
+| B10 | Objetos antiguos definidos pero imposibles de conseguir: cuenco, racimo, higos, cuerda, pértiga con lazo, moneda, saco, cuña de obra, viga, cántaro, sellos, badajo, cartel, Pieza del Rey. | **Inactivo** (comprobado: ninguna acción alcanzable los entrega, una vez corregida A1). | Siguen en los módulos antiguos. | Baja | **No borrar**: los iconos se cargan al arrancar y otros módulos los nombran. Se documentan como inactivos. |
+
+## Código antiguo inactivo: qué hay y por qué no se borra
+
+- **`G12` (Acto I antiguo)**: 34 menciones del cuenco y 17 del racimo. Incluye la zona `cuenco_h` (retirada de la escena), la capa `cuenco` (oculta), el árbol de diálogo `mingo_arbol` (ya no se abre), el trato del racimo (sustituido) y las pistas antiguas (sustituidas por la lista nueva). **No se puede quitar el módulo**, porque define cosas que siguen en uso: el soto de los Sifones, Mingo como compañero, el ciego y las marionetas. Se neutraliza desde rc17, como ahora.
+- **`g11_content.js` / `g11_juglar.js`**: Giles y reglamento, truco de Lope, badajo, toques, retrato de Nuño, Vista, carreta y horno final. Siguen definiendo escenas que se usan (Puerta del Río, plaza, iglesia, alfar, Plaza Mayor). Restos que aún se alcanzan: los de A1 y M7.
+- **`rc09` (hambre y pajar)**, **`rc10` (Elvira con motivo)**: sus personajes y zonas están ocultos o sustituidos. El fondo de noche de `rc09` se reutiliza.
+- **`rc13`–`rc15` (soldado, taberna)**: se usan; los restos que aún se alcanzan son los de A2.
+- **`rc16`** no está en la cadena de RC17.
+
+La pértiga **no es un resto**: es el objeto del puzle de la rueda. Sus textos actuales son coherentes; lo que desapareció es la cuerda y el lazo.
+
+## Lo que se ha comprobado y está bien
+
+- La cadena principal se completa en las dos partidas registradas (64 pausas), sin errores de consola.
+- Por análisis de condiciones (no probado en el navegador): no hay bloqueos al salir a mitad de un puzle; alfar, soto de noche y taberna se pueden abandonar y retomar.
+- Por análisis de condiciones: las pistas «?» no tienen huecos en ningún estado de la cadena.
+- Inventario: solo se consiguen el móvil, Mingo, la pértiga, la cuña y la hogaza, y cada uno se usa. Los otros objetos son inactivos (B10), una vez corregida A1.
+- Hojas de Durán, Martín, Nuño, Sancha (arte de Elvira), Rai, Alonso y el ciego: sin recortes en la celda.
+
+## Plan de corrección propuesto (RC18, tras tu aprobación)
+
+1. Un módulo de corrección `rc18_correcciones.js` encadenado tras `rc17.js`, más los ajustes de motor en `patch_rc17.py` (M2, M3, M4). **RC17 se conserva tal cual.**
+2. Todo serán recortes, condiciones, coordenadas o sustituciones de texto por otro igual o más corto. No hay puzles nuevos ni conversaciones más largas.
+3. Lo que necesita tu decisión:
+   - **A3**: confirmar el gag de las uvas como licencia del arte.
+   - **M5 y B1**: aprobar o no rehacer las dos hojas desde sus clips, sin arte nuevo.
+   - **B9**: quitar o dejar los rótulos de controles.
+4. Verificación: partida completa `pt_guion.py`, más `audit_reproducir.py` y `audit_encuadre.py`, que deben salir sin ninguna de estas incidencias.

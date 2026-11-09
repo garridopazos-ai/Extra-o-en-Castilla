@@ -31,6 +31,11 @@
 - 222: se coloca la chaqueta y queda de pie quieto → REPOSO. 223: gesto de habla (fondo verde claro). 224: igual que 223 pero fondo blanco con acuarela (no usar). 225: gestos de señalar/dar. 216: marcha de tres cuartos hacia la IZQUIERDA (el arte mira a la izquierda; corregido en RC04). 218: usa el móvil en plano cerrado (zoom, no sirve como sprite a escala).
 
 ## Siguiente paso concreto
+**⛔ PAUSA (9 nov, noche): auditoría correctiva de RC17 pendiente de aprobación** (`docs/AUDITORIA_RC17.md`: 21 incidencias con causa, gravedad y corrección). Orden de César: conservar RC17 intacta hasta aprobar las correcciones, sin regenerar imágenes, sin puzles nuevos y sin alargar conversaciones. Hasta que apruebe:
+- **No crear candidatas ni tocar `rc17.js`/`patch_rc17.py`.** Esto manda sobre el texto de la tarea programada y sobre el plan de tramos de abajo.
+- Las ejecuciones automáticas solo revisan `assets/inbox/` (mover y anotar, sin integrar). Si no hay nada, terminan sin notificar.
+- Con la aprobación: RC18 = RC17 + `rc18_correcciones.js` (plan al final del informe). Después, el plan de tramos G8+.
+
 **Revisión 2 APROBADA por César (9 nov, noche) e integrada en RC17.** Se acabó la pausa. Manda `docs/REVISION_2_PUZLES.md` (con el guion y el protocolo).
 
 **Construcción:** `bash production/CHAMELO/build_rc17.sh` = RC06 → patch_rc07 → rc09 → rc10 → rc13 → rc14 → rc15 → **patch_rc17.py + rc17.js** (sin rc16: el romance y el recibo de Elvira quedan fuera). `patch_rc17.py` añade la acción `{rc17:…}`, la clave de guardado nueva `1248_guion_rev2_save_v1`, las tarjetas de capítulo nuevas y la pantalla final. Cada tramo nuevo = un módulo `rcNN.js` añadido al final de la cadena (copiar `build_rc17.sh`); lo que estorbe de módulos viejos se neutraliza desde el nuevo.
@@ -297,3 +302,8 @@ César aprueba la revisión 2 y pide integrarla ya para una prueba real. Módulo
 - **Verificado en navegador** (Chromium, artefactos desactivados): `pt_guion.py … todo` partida completa con toques reales → TODO OK, 0 errores; `shots_guion.py` sin errores. Capturas `production/CHAMELO/shots/g3_*`, `g4_*`, `v2_*`.
 - **Provisional (marcado):** señora de Oropesa y los cuatro conspiradores son marionetas; el gato está dibujado por código; balanza, cuña, mapa del suelo, cadena del tiro, brazo «A TALAVERA», luna, pórtico y viñeta de la aldea son dibujos de código; el presente es la ribera desaturada. Alonso no tiene animación de andar (se desliza al cargar). El mapa de viaje aún muestra desde el principio los dibujos fantásticos (pendiente G12). Mingo no lleva el palo dibujado en la boca (solo en textos). Secundarias 11–16 sin hacer (salvo el ciego).
 - **No probado:** móvil real (Pixel); cargar una partida guardada a mitad del Acto II.
+
+## Auditoría correctiva de RC17 (9 nov, noche) — pendiente de aprobación
+- César detecta errores de integración en RC17 y pide una auditoría sin tocar el arte. Hecha: `docs/AUDITORIA_RC17.md`, con herramientas `tools/audit_alcance.py` (volcado y alcance de diálogos), `audit_encuadre.py` (encuadre en cada pausa de la partida), `audit_hojas.py` (recortes en hojas) y `audit_reproducir.py` (reproduce las incidencias). Capturas en `capturas/auditoria_rc17_*`.
+- Altas: la tarima de la Plaza Mayor abre la Vista antigua; el diálogo de Alonso contradice el guion (badajo robado, Vista) y se abre mientras duerme; el ciego de las cerezas frente a la parra de uvas (y otros textos de estación que contradicen el arte). Medias: rótulo arriba con panel vacío, «toca para continuar» cortado, bocadillos que pasan de escena, Mingo fuera de cuadro, coronilla del protagonista recortada en su hoja, comentarios de la trama antigua, «Vista Pública» en la Plaza Mayor, sustitución global Alfonso→Martín frágil.
+- RC17 intacta (md5 comprobado).
