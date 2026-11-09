@@ -154,3 +154,5 @@ Antes de corregir se reprodujeron en RC17 los hallazgos (navegador): A1, A2, A3,
 - en la iglesia, si espera a «¡Ahora!».
 
 Anotar dónde pierde el objetivo, qué diálogo se salta y qué le hace gracia.
+
+**Comprobación de cierre (jugada en RC18, md5 de la entrega comprobado):** el menú de Alonso en la taberna ya no tiene opciones de campana ni de toques. Antes de la lanza ofrece: aventura, «¿Quién sois?», la punta de la lanza, Don Nuño, el abuelo del porche y salir. Después de la lanza ofrece lo mismo sin la punta de la lanza. Los nodos `campana` y `toques` siguen en los datos, pero ya no se pueden alcanzar. Ojo: el volcado de opciones con «campana» y «toques» que aparece en esta auditoría es de **RC17**.
