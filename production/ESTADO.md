@@ -1,6 +1,6 @@
 # 1248 · Un extraño en Castilla — ESTADO DEL DESARROLLO (libreta de relevo)
 
-Última actualización: 2026-11-09 (noche) · Última candidata: `builds/1248_CHAMELO_RC17.html` (GUION DEFINITIVO, revisión 2) · **Leer primero `docs/GUION_DEFINITIVO.md`, `docs/PROTOCOLO_SENCILLEZ_Y_HUMOR.md`, `docs/REVISION_2_PUZLES.md` y `docs/AUDITORIA_PUZLES_RC16.md`**
+Última actualización: 2026-11-09 (noche, tarde) · Última candidata: `builds/1248_CHAMELO_RC18.html` (correcciones de la auditoría sobre RC17) · **Leer primero `docs/GUION_DEFINITIVO.md`, `docs/PROTOCOLO_SENCILLEZ_Y_HUMOR.md`, `docs/REVISION_2_PUZLES.md` y `docs/AUDITORIA_RC17.md`**
 
 ## Cómo trabajar (para cada ejecución, también las automáticas)
 1. `git pull`, leer este archivo entero y abrir la última candidata de `builds/`.
@@ -31,10 +31,8 @@
 - 222: se coloca la chaqueta y queda de pie quieto → REPOSO. 223: gesto de habla (fondo verde claro). 224: igual que 223 pero fondo blanco con acuarela (no usar). 225: gestos de señalar/dar. 216: marcha de tres cuartos hacia la IZQUIERDA (el arte mira a la izquierda; corregido en RC04). 218: usa el móvil en plano cerrado (zoom, no sirve como sprite a escala).
 
 ## Siguiente paso concreto
-**⛔ PAUSA (9 nov, noche): auditoría correctiva de RC17 pendiente de aprobación** (`docs/AUDITORIA_RC17.md`: 21 incidencias con causa, gravedad y corrección). Orden de César: conservar RC17 intacta hasta aprobar las correcciones, sin regenerar imágenes, sin puzles nuevos y sin alargar conversaciones. Hasta que apruebe:
-- **No crear candidatas ni tocar `rc17.js`/`patch_rc17.py`.** Esto manda sobre el texto de la tarea programada y sobre el plan de tramos de abajo.
-- Las ejecuciones automáticas solo revisan `assets/inbox/` (mover y anotar, sin integrar). Si no hay nada, terminan sin notificar.
-- Con la aprobación: RC18 = RC17 + `rc18_correcciones.js` (plan al final del informe). Después, el plan de tramos G8+.
+**RC18 (9 nov): correcciones de la auditoría hechas y verificadas** (estado de cada incidencia al final de `docs/AUDITORIA_RC17.md`). Construcción: `bash production/CHAMELO/build_rc18.sh` = RC17 intacta + `patch_rc18.py` + `rc18.js` (hoja del protagonista en `work/player_rc18`). **Desde aquí, cada tramo nuevo parte de RC18**: módulo nuevo encadenado tras `rc18.js` (copiar `build_rc18.sh`). Pruebas obligatorias en cada tramo: `pt_guion.py` (partida completa), `pt_rc18.py`, `pt_movil.py`, `saves_guion.py cargar` y `audit_encuadre.py`.
+Pendiente de las correcciones: B1 (zapatos de Mingo en la higuera: falta su clip) y la prueba con una persona que no conozca el guion (escenas a observar, en el informe).
 
 **Revisión 2 APROBADA por César (9 nov, noche) e integrada en RC17.** Se acabó la pausa. Manda `docs/REVISION_2_PUZLES.md` (con el guion y el protocolo).
 
@@ -62,6 +60,8 @@
 - `ref_02.jpg` (captura de la aceña con arte nuevo de rueda/tronco/barriles/muela) ya estaba en refs; trae HUD y texto, no vale como fondo limpio.
 
 ## Esperando a César
+- (9 nov) **Clip de Mingo** sentado en la rama (o el clip original de su hoja Flow) para rehacer la pose de la higuera sin los zapatos cortados.
+- (9 nov) **Prueba con alguien que no conozca el guion** en un móvil real: escenas a observar en `docs/AUDITORIA_RC17.md` (final).
 - (9 nov, noche) **RC17 lista para la prueba real.** Lo más útil ahora: jugarla entera y decir qué gag o puzle no funciona. Arte que haría lucir el guion: Rai-gato (animaciones), señora de Oropesa, los cuatro conspiradores, un clip de Sancha dando la hogaza.
 - (9 nov) **El guion definitivo llegó cortado** al final de la sección X («Todos los escenarios jugables deben respetar…»). Pedir el resto; no bloquea.
 - (9 nov) **Animaciones de Rai-gato**: el guion dice que existen (caminar, correr, esperar, asustarse, esconderse, tropezar, dormir, bostezar), pero no están en el repositorio ni en Drive. Subirlas a `assets/inbox/`. Hasta entonces, gato provisional.
@@ -307,3 +307,8 @@ César aprueba la revisión 2 y pide integrarla ya para una prueba real. Módulo
 - César detecta errores de integración en RC17 y pide una auditoría sin tocar el arte. Hecha: `docs/AUDITORIA_RC17.md`, con herramientas `tools/audit_alcance.py` (volcado y alcance de diálogos), `audit_encuadre.py` (encuadre en cada pausa de la partida), `audit_hojas.py` (recortes en hojas) y `audit_reproducir.py` (reproduce las incidencias). Capturas en `capturas/auditoria_rc17_*`.
 - Altas: la tarima de la Plaza Mayor abre la Vista antigua; el diálogo de Alonso contradice el guion (badajo robado, Vista) y se abre mientras duerme; el ciego de las cerezas frente a la parra de uvas (y otros textos de estación que contradicen el arte). Medias: rótulo arriba con panel vacío, «toca para continuar» cortado, bocadillos que pasan de escena, Mingo fuera de cuadro, coronilla del protagonista recortada en su hoja, comentarios de la trama antigua, «Vista Pública» en la Plaza Mayor, sustitución global Alfonso→Martín frágil.
 - RC17 intacta (md5 comprobado).
+
+## CHAMELO RC18 (9 nov, noche) — correcciones de la auditoría de RC17 · `builds/1248_CHAMELO_RC18.html`
+- Parte de RC17 (intacta). Corregido: tarima/Vista (A1), Alonso según la historia (A2), gag de las uvas sin cerezas ni estación (A3), panel vacío (M1), aviso de continuar (M2), bocadillos que pasaban de escena (M3), Mingo fuera de cuadro (M4), coronilla del protagonista con hoja rehecha desde los mismos clips (M5), comentarios antiguos (M6), «Plaza Mayor» (M7), sustitución de nombre acotada (M8), encuadres (B2), duplicados (B3), Durán (B4), frases adelantadas (B5), mapa en pausa (B6), nombre de Alonso al cargar (B7), eclipse al cargar (B8), indicaciones breves (B9); además, la balanza guardada a medias (N1, reproducido en RC17), las reparaciones de otras secuencias a medias (N2, solo por código) y la mayúscula de «Martín» en la pista de Mingo (N3).
+- Pendiente: B1 (falta el clip de Mingo); prueba con una persona que no conozca el guion.
+- Verificado (jugado en Chromium): partida completa con toques, 50 comprobaciones correctas, 0 errores; pruebas específicas (soto entrar/salir/volver, Alonso dormido e iglesia, abandonar/retomar balanza y alfar, tarima); móvil apaisado con toques táctiles; 4 guardados de RC17 cargados en RC18.

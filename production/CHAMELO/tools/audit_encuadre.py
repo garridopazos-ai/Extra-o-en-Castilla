@@ -2,7 +2,8 @@
 import sys, json, time
 src = open('/home/claude/extra-o-en-castilla/production/CHAMELO/tools/pt_guion.py').read()
 __file__ = '/home/claude/extra-o-en-castilla/production/CHAMELO/tools/pt_guion.py'
-sys.argv = [sys.argv[0], '/home/claude/extra-o-en-castilla/builds/1248_CHAMELO_RC17.html', 'fa', 'todo']
+HTML = sys.argv[1] if len(sys.argv) > 1 else '/home/claude/extra-o-en-castilla/builds/1248_CHAMELO_RC17.html'; OUTJ = sys.argv[2] if len(sys.argv) > 2 else '/tmp/frames.json'
+sys.argv = [sys.argv[0], HTML, 'fa', 'todo']
 SNAP = []
 JS = '''(()=>{const G=LAB1248.G,E=LAB1248.E;if(!G.S||G.transitioning)return null;const S=G.S,out=[];
  for(const a of G.actorsInScene()){ if(a.visible===false) continue; const sc=S.depthScale(a.y)*(a.def.scale||1); const hb=E.actor.hitBox(a,sc);
@@ -18,5 +19,5 @@ def settle(maxs=60):
     return r
 P.settle = settle
 exec("ev('LAB1248.E.rc07" + src.split("ev('LAB1248.E.rc07", 1)[1].replace('P.close()', ''))
-json.dump(SNAP, open('/tmp/claude-0/-home-claude-extra-o-en-castilla/79f9475d-2f84-589d-adcf-fe68a17a495d/scratchpad/frames.json', 'w'))
+json.dump(SNAP, open(OUTJ, 'w'))
 P.close()

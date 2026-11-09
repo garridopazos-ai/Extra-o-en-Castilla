@@ -75,3 +75,82 @@ La pértiga **no es un resto**: es el objeto del puzle de la rueda. Sus textos a
    - **M5 y B1**: aprobar o no rehacer las dos hojas desde sus clips, sin arte nuevo.
    - **B9**: quitar o dejar los rótulos de controles.
 4. Verificación: partida completa `pt_guion.py`, más `audit_reproducir.py` y `audit_encuadre.py`, que deben salir sin ninguna de estas incidencias.
+
+
+---
+
+## Estado tras RC18 (9 nov, noche) · `builds/1248_CHAMELO_RC18.html`
+
+Compilación de partida: **RC17** (`builds/1248_CHAMELO_RC17.html`, md5 `974f5974…`), conservada intacta. RC18 = RC17 + `patch_rc18.py` + `rc18.js` (`bash production/CHAMELO/build_rc18.sh`). Mismo guardado que RC17: sus partidas se cargan en RC18.
+
+Antes de corregir se reprodujeron en RC17 los hallazgos (navegador): A1, A2, A3, M1, M2 y M3 con `audit_reproducir.py`; M4 con `audit_encuadre.py`; M5 y B1 con `audit_hojas.py`. Con `saves_guion.py`, usando guardados hechos con el botón «Guardar partida» del menú de pausa, se reprodujeron también B7 y B8 y un fallo nuevo, N1.
+
+| ID | Estado | Qué se hizo / cómo se comprobó |
+|---|---|---|
+| A1 | **Corregida** | La tarima solo se mira («La tarima de la Plaza Mayor. Hoy, sin pleitos.»). El diálogo del mayordomo ya no se abre desde ningún sitio. **Jugado**: tocar la tarima → una frase y ningún panel. Nota: la señora de Oropesa tapa el centro de la tarima, así que tocar ahí habla con ella. |
+| A2 | **Corregida** | Alonso: fuera las opciones de campana y toques y la frase de la Vista; la lanza solo antes del arreglo; entrada de 2 frases. Dormido: «Zzz… Las Navas… zzz…». En la iglesia: «La cuerda es mía. Esta vez no se me escapa.» Ninguna pista necesaria estaba en lo quitado. **Jugado** (dormido, iglesia) y **guardado de RC17** con Alonso dormido. |
+| A3 | **Corregida** | Gag de las uvas como secuencia directa (sin panel), con el control devuelto al final. Fuera cerezas, cesta, «verdes hasta septiembre», «Higos, todavía no» y «hojas de otoño». La higuera vuelve a «cargada de higos morados». Se conserva la parra pintada. **Jugado**: entrar, gag, salir y volver; la segunda vez, «Se acabó el racimo. La gracia, no.». También con toques táctiles en móvil. |
+| M1 | **Corregida** | Motor: el panel no se dibuja mientras corren las acciones de un nodo, y un toque adelanta sus frases. El ciego y Mingo ya no usan el panel (Mingo da la pista directamente). **Jugado**. |
+| M2 | **Corregida** | El aviso se ancla por su borde derecho dentro del panel. Capturas en escritorio y móvil. |
+| M3 | **Corregida** | Al cambiar de escena se descartan los comentarios sueltos, y no se dibuja el bocadillo de quien no está en la escena. **Jugado**: salir del soto → 0 bocadillos ajenos. |
+| M4 | **Corregida** | Mingo se coloca dentro del cuadro (220 px de margen), fuera del zurrón y sin pisar a otro personaje. `audit_encuadre` en RC18: 0 casos de Mingo fuera de cuadro o bajo el zurrón (RC17: 9). Móvil: 100 % visible. |
+| M5 | **Corregida** | Los clips 216/222/223 **sí contienen la cabeza entera** (90–100 px de margen arriba en el vídeo); el corte era de la celda. Hoja rehecha con los mismos clips, misma escala y celda 240×372 (antes 348): 0 fotogramas tocan el borde (antes, todos). La altura en pantalla no cambia (`height` 321 con la celda más alta). Reposo, marcha y habla comprobados en la partida completa y en la comparación de celdas. |
+| M6 | **Corregida** | Fuera «Sin badajo…» (Benito) y el «truco» de Lope de los comentarios espontáneos. |
+| M7 | **Corregida** | La escena, los alfileres del mapa y los sitios se llaman «Plaza Mayor». Tarima y público, con textos neutros. |
+| M8 | **Corregida** | La sustitución ya solo afecta al barquero: respeta «Sancha Alfonso», «Alfonso IX», «rey Alfonso», «Alfonso VIII»… (probado en Node). El mapa dice «la choza de Martín». |
+| B1 | **Pendiente** | Zapatos de Mingo cortados en la higuera: no hay clip de Mingo en el repositorio para rehacer esa fila. Hace falta el clip original. |
+| B2 | **Corregida** | Yuçaf deja sitio a la cadena del tiro; la balanza y su grupo, 150 px a la izquierda; entrada a la Puerta del Río por delante de los guardias; el viajero ya no se para bajo el zurrón al entrar en el soto o la ribera ni en la cesta de carbón. `audit_encuadre` final (65 pausas). Quedan tres casos menores: (1) al entrar en la taberna durante la balanza, la cuadrilla se ve a medias en el borde, porque la cámara sigue al jugador (la de diálogo los encuadra cuando hablan); (2) en el soto y la taberna, el viajero roza el zurrón un instante justo al tocar la salida de la izquierda; (3) en el alfar, Mingo se pone delante del viajero cuando este va a la cesta de carbón, pegada a la pared. |
+| B3 | **Corregida** | Yuçaf y el pregonero de la Plaza Mayor desaparecen tras la destitución. **Jugado**. |
+| B4 | **Corregida** | Durán: «¡Eh, tú! ¿De dónde sales con esas ropas?». |
+| B5 | **Corregida** | Fuera las dos frases que se adelantaban (comprobado en el código; son frases de espera al azar). |
+| B6 | **Corregida** | Sin «Mapa de Talavera» en la pausa hasta tener el mapa de Rai. **Jugado**. |
+| B7 | **Corregida** | El nombre de Alonso se sincroniza en los dos sentidos, en el bucle de juego. **Guardado de RC17** antes de la lanza → «Viejo soldado». |
+| B8 | **Corregida** | **Reproducido en RC17** (guardar desde el menú a mitad del eclipse → la campana nunca responde). RC18 lo arregla al restaurar: el eclipse empieza de nuevo. El estado de la Luna pasa al bucle de juego, no al dibujo, con «¡Ahora!» de reserva. **Guardado de RC17** → llega al presente. |
+| B9 | **Corregida** | Indicaciones breves y en su momento: «Mingo se une a ti.» y «Nuevo: el mapa de Rai (botón de la derecha).». |
+| B10 | Sin cambios (inactivo) | Comprobados los dos identificadores de cuña: `cuna` («Cuña de obra», carreta antigua, inalcanzable) y `cuna17` («Cuña», la de la mesa). No colisionan; no se toca el inventario. |
+| **N1 (nuevo)** | **Corregida** | **Reproducido en RC17**: guardar a mitad del pesaje de la señora deja la cuña gastada y la balanza sin respuesta. RC18, al restaurar, devuelve la cuña al zurrón y recoloca a la cuadrilla. **Guardado de RC17** → rescate completado. |
+| N2 (nuevo) | Corregida, **solo por código** | Misma reparación al restaurar para otras secuencias guardadas a medias: lanza de Alonso, palada del horno, confesión de Rai, destitución y llegada a la iglesia. Además se relanza la entrada de la escena tras cargar. No se han jugado esos guardados. |
+| N3 (nuevo) | **Corregida** | La pista de Mingo ponía «martín» en minúscula. |
+
+### Pruebas ejecutadas sobre la compilación entregada (md5 comprobado)
+
+**Jugadas en Chromium**, con toques reales sobre zonas y personajes y las frases avanzadas como lo haría el jugador:
+- `pt_guion.py`: partida nueva completa de la ribera al FIN. 50 comprobaciones correctas, 0 fallos, 0 errores.
+- `pt_rc18.py`:
+  - gag del soto al entrar, salir y volver;
+  - Alonso dormido y en la iglesia;
+  - abandonar y retomar la balanza y el alfar;
+  - la tarima de la Plaza Mayor y los personajes duplicados.
+
+  Todo correcto.
+- `pt_rc18_extra.py`: Mingo da la pista sin panel; el menú de pausa no ofrece el mapa antes de tenerlo. Todo correcto.
+- `pt_movil.py`, en ventana de móvil apaisado (915×412, táctil, DPR 2,625) con **toques táctiles**:
+  - portada, robo del móvil, soto (Mingo y río) y gag del ciego;
+  - pértiga, rueda con el zurrón y Sancha;
+  - panel de diálogo, más el encuadre de Mingo al entrar en cada escena.
+
+  Todo correcto, 0 errores.
+- `saves_guion.py`, con 4 guardados hechos **en RC17** con el botón «Guardar partida» y cargados en RC18 con «Continuar»:
+  - antes de la lanza;
+  - Alonso dormido;
+  - balanza a medias;
+  - eclipse a medias.
+
+  Los cuatro continúan bien. En RC17, tres de ellos fallaban.
+
+**Comprobaciones de código o de datos (no jugadas)**:
+- `audit_alcance.py`: no queda ningún acceso a la Vista ni frases de cerezas o de estación que contradigan el arte.
+- `audit_hojas.py`: la hoja del protagonista ya no tiene recortes.
+- `audit_encuadre.py`: registro de encuadre en cada pausa.
+- Reparación de las otras secuencias guardadas a medias (N2).
+
+**Pendiente**: la prueba con una persona que no conozca el guion, en un móvil real. Conviene observar:
+- en el soto, si se le ocurre mirar el río cuando Mingo dice que no lo ve;
+- en el Chamelo, si entiende que hay que dar a Mingo a Rai desde el zurrón;
+- en el alfar, el orden tiro → carbón;
+- en el soto de noche, si llama al gato;
+- en la taberna, si relaciona la cuña de la mesa con la balanza;
+- en la Puerta del Río, si gira el poste;
+- en la iglesia, si espera a «¡Ahora!».
+
+Anotar dónde pierde el objetivo, qué diálogo se salta y qué le hace gracia.
