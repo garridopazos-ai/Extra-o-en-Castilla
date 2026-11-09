@@ -1,6 +1,6 @@
 # 1248 · Un extraño en Castilla — ESTADO DEL DESARROLLO (libreta de relevo)
 
-Última actualización: 2026-11-08 · Última candidata: `builds/1248_CHAMELO_RC15.html` (línea principal: CHAMELO)
+Última actualización: 2026-11-09 · Última candidata: `builds/1248_CHAMELO_RC16.html` (línea principal: CHAMELO)
 
 ## Cómo trabajar (para cada ejecución, también las automáticas)
 1. `git pull`, leer este archivo entero y abrir la última candidata de `builds/`.
@@ -31,13 +31,13 @@
 
 ## Siguiente paso concreto
 **Línea principal: CHAMELO.** Última candidata `builds/1248_CHAMELO_RC15.html`. Se construye SIEMPRE desde la referencia, en cadena (así los cambios de motor de `rc07.js`/`patch_rc07.py` y los tramos de historia conviven):
-`python production/CHAMELO/patch_rc07.py referencias/1248_CHAMELO_RC06.html /tmp/base.html RCnn && python production/CHAMELO/patch_rc09.py /tmp/base.html /tmp/mid.html RCnn rc09.js && python production/CHAMELO/patch_rc09.py /tmp/mid.html builds/1248_CHAMELO_RCnn.html RCnn rc10.js` (+ `patch_rc09.py ... RCnn rc13.js`, `... rc14.js`, `... rc15.js` y un paso más por cada módulo de tramo nuevo). Mejoras de motor/arte/animación → `rc07.js` + `patch_rc07.py`; historia → módulo de tramo nuevo. (`make_map_v2.py`, `make_props.py` generan el arte que embebe patch_rc07.)
+`python production/CHAMELO/patch_rc07.py referencias/1248_CHAMELO_RC06.html /tmp/base.html RCnn && python production/CHAMELO/patch_rc09.py /tmp/base.html /tmp/mid.html RCnn rc09.js && python production/CHAMELO/patch_rc09.py /tmp/mid.html builds/1248_CHAMELO_RCnn.html RCnn rc10.js` (+ `patch_rc09.py ... RCnn rc13.js`, `... rc14.js`, `... rc15.js`, `... rc16.js`; atajo: `bash production/CHAMELO/build_rc16.sh` y un paso más por cada módulo de tramo nuevo). Mejoras de motor/arte/animación → `rc07.js` + `patch_rc07.py`; historia → módulo de tramo nuevo. (`make_map_v2.py`, `make_props.py` generan el arte que embebe patch_rc07.)
 Pruebas: `tools/pt_rc09.py <html> <tag> higos|numero` (partida completa con la ruta de comida elegida; debe acabar `ended True`), `tools/pt_rc09_noche.py` (final rápido: sin comer no se duerme, dormir, horno), más las de RC07/RC08 (`pt_offscreen`, `pt_features`, `audio_check`). En pruebas automáticas: `LAB1248.E.rc07.autoDegrade=false`. No lanzar dos partidas completas a la vez (Chromium sin GPU: se ralentizan mucho).
 Plan de tramos (uno por ejecución):
 1. **Si llegan clips Flow** (lista en «Esperando a César»): integrarlos primero (viajero nuevo con reposo/andar/hablar/reacciones; Elvira y Nuño hablar; Durán y Alfonso en estilo Flow; vecinos de la villa sustituyendo marionetas). Mismo formato de hoja que `assets/characters/mingo/flow_rc01.webp` (200×288, 8 columnas, ancla [100,278]).
 2. ~~Hambre y lecho~~ **HECHO en RC09** (ver abajo).
-3. **Amor inesperado con Elvira** (la hija de Durán; en RC06 ya hay chispa: Mingo los hace pasar por sus padres). Dos o tres momentos cortos con diálogo con gracia, sin cursilería; ella aporta una prueba o un gesto decisivo en la Vista contra Nuño. Ojo: Elvira solo está en la aceña y el Chamelo; hace falta una razón para que aparezca en la villa (p. ej. trae el pan de Durán a la plaza) o un momento en la aceña antes de cruzar.
-4. Pulido de la Vista y del final con Nuño (más cómico; Mingo hace la trastada decisiva). Idea: la noche del alfar podría traer una pequeña despedida de Mingo/Yuçaf antes del horno.
+3. ~~Amor inesperado con Elvira~~ **HECHO en RC16** (ver abajo; original: (la hija de Durán; en RC06 ya hay chispa: Mingo los hace pasar por sus padres). Dos o tres momentos cortos con diálogo con gracia, sin cursilería; ella aporta una prueba o un gesto decisivo en la Vista contra Nuño. Ojo: Elvira solo está en la aceña y el Chamelo; hace falta una razón para que aparezca en la villa (p. ej. trae el pan de Durán a la plaza) o un momento en la aceña antes de cruzar).
+4. **SIGUIENTE TRAMO:** pulido de la Vista y del final con Nuño (más cómico; Mingo hace la trastada decisiva; Elvira ya aporta el recibo en RC16, falta que se la vea en la tribuna: ahora solo hay una nota). También: despedida de Mingo/Yuçaf en la noche del alfar y decidir con César el abuelo del porche. Idea: la noche del alfar podría traer una pequeña despedida de Mingo/Yuçaf antes del horno.
 ## Limitaciones conocidas
 - Arte de aceña y embarcadero provisional (placeholders). Alfonso con una sola pose.
 - RC09: el pajar del alfar es un dibujo procedural PROVISIONAL (montón de paja); Sancha, Per de la Voz y Mingo usan marionetas/sprites actuales; la noche es una capa de color + luz de horno (no hay fondo nocturno pintado); los ronquidos son sintetizados. No probado en el Pixel.
@@ -257,3 +257,11 @@ César creó el exterior (Corredera del Cristo: taberna con porche, letrero «La
 - Mapa: pines 13 (Corredera) y 14 (Taberna) y sitios exactos dentro de cada escena.
 - Pendiente de decidir con César: si el abuelo pintado del porche debe ser el propio soldado (entonces el soldado animado iría fuera y el porche se limpiaría) — hoy son dos personajes con gag de rivalidad. El interior está listo para aventuras nuevas (tabernero, cuartos de arriba, etc.).
 - Verificado: `tools/check_rc14.py` (Puerta del Río → Corredera → porche → interior; tertulia; tres aventuras distintas; diálogos; pines; vueltas), `pt_rc10.py` sin fallos, `pt_rc09.py ... higos` partida completa → ended True, 0 errores.
+
+## CHAMELO RC16 (9 nov, ejecución automática) — Amor inesperado con Elvira · `builds/1248_CHAMELO_RC16.html`
+Módulo `production/CHAMELO/rc16.js` (cadena completa: `bash production/CHAMELO/build_rc16.sh`). Sin material nuevo en `assets/inbox/` (solo el LEEME).
+- **Tres momentos en la Plaza del Pan** (nuevas opciones en el diálogo de Elvira, `L.elvira_plaza`, tras haber vuelto del Chamelo): (1) «Cuéntame algo de ti» — el pan en bolsa del siglo XXI, Mingo celoso de la hogaza (`amor1`); (2) con la Vista convocada, «¿Has oído algo de Nuño y la Vista?» — Elvira trae el **recibo de la tasa de la rueda** de su padre, sellado con el cántaro boca abajo; gesto de dejar la mano cerca (`amor2`, objeto `recibo_tasa`, icono provisional dibujado); (3) tras ganar a Nuño, «Ya está: Nuño ha pagado» — despedida sin explicaciones, hogaza envuelta (`amor3`, `hogaza_viaje`). Humor por encima de la cursilería.
+- **Gesto decisivo en la Vista**: opción nueva «Traigo el recibo de la rueda…» (mayordomo, tras el testigo): vía ALTERNATIVA a cartel+sello del alguacil; la vía anterior sigue intacta. Nota de Elvira alzando la mano en la tribuna (solo texto: no hay sprite de Elvira en la audiencia).
+- Guiño en el alfar si hubo despedida (Yuçaf/Mingo con el pan de aceña). Pistas «?» nuevas (hablar con Elvira antes de la Vista; Vista con el recibo).
+- Verificado en navegador (Chromium, artefactos desactivados): `tools/pt_rc16.py` (opciones ocultas/visibles según flags, recibo al zurrón, Vista ganada con recibo SIN sello del alguacil, despedida, guiño en alfar; 0 errores) y partida completa `pt_rc09.py ... higos` → ended True, 0 errores. Capturas `shots/rc16_*`.
+- No verificado: móvil real (Pixel); el arte del recibo y el texto son provisionales; Elvira no aparece físicamente en la Vista.
