@@ -1,9 +1,9 @@
-# Segunda revisión de puzles — PENDIENTE DE APROBACIÓN DE CÉSAR
+# Segunda revisión de puzles — APROBADA por César (9 nov, noche) · integrada en CHAMELO RC17
 
 Fecha: 9 nov 2026. Pedida por César con diez condiciones: sencillez radical, 1–3 acciones, humor inteligente, nada de burocracia, reutilizar escenarios y personajes, diálogo mínimo, puzles visuales, consecuencias divertidas, respetar lo aprobado y **no implementar todavía**.
 Base: `docs/GUION_DEFINITIVO.md`, `docs/PROTOCOLO_SENCILLEZ_Y_HUMOR.md`, `docs/AUDITORIA_PUZLES_RC16.md`.
 
-**Hasta que César apruebe este documento, no se toca la historia del juego.**
+**Aprobada. Implementada en `builds/1248_CHAMELO_RC17.html` (puzles 1–10 y 16; secundarias 11–15 pendientes).** Diferencia con lo escrito: el puzle 7 se juega en la sala de la Taberna del Miedo (la cuadrilla ha bajado a la señora junto a la balanza), no en los cuartos de arriba, para no crear un escenario nuevo.
 
 Criterios añadidos:
 - Lo normal son 1–2 acciones; 3 solo en el clímax.
