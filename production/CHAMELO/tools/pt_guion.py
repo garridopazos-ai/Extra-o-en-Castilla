@@ -24,7 +24,7 @@ PTS = {('orilla','rio'): [1350, 505]}
 def point(kind, id):
     if (scene(), id) in PTS: return PTS[(scene(), id)]
     if kind == 'npc':
-        return ev(f"(()=>{{const n={G}.sceneNpcs.find(n=>n.def.id==={json.dumps(id)});return n?[n.actor.x,n.actor.y-60]:null}})()")
+        return ev(f"(()=>{{const n={G}.sceneNpcs.find(n=>n.def.id==={json.dumps(id)});return n?[n.actor.x,n.actor.y-35]:null}})()")
     return ev(f"(()=>{{const h={G}.S.hotspots().find(h=>h.id==={json.dumps(id)});if(!h)return null;if(h.rect)return [h.rect[0]+h.rect[2]/2,h.rect[1]+h.rect[3]/2];let x=0,y=0;for(const p of h.poly){{x+=p[0];y+=p[1]}}return [x/h.poly.length,y/h.poly.length]}})()")
 def onscreen(x):
     cx = ev(f'{G}.S.camX'); return 80 < x - cx < 1450
@@ -76,7 +76,8 @@ tap('hotspot', 'barca'); ok(not fl('cruzado') and scene() == 'embarcadero', 'Mar
 go('exit_ribera', 'ribera'); go('exit_orilla', 'orilla')
 tap('hotspot', 'vado', wait=90); ok(scene() == 'chamelo' and fl('rai_conocido'), 'vado → Chamelo, Rai te reconoce')
 tap('npc', 'leonor'); finish_dialogue(); ok(fl('pide_paloduz'), 'Rai pide paloduz')
-tap('npc', 'leonor', item='mingo', wait=90); ok(fl('mapa_rai'), 'dar Mingo (su palo de paloduz) a Rai → mapa')
+tap('hotspot', 'paloduz'); ok('paloduz' in P.inv(), 'coger el paloduz del arroyo (RC18c+)')
+tap('npc', 'leonor', item='paloduz', wait=90); ok(fl('mapa_rai'), 'dar el paloduz a Rai → mapa')
 P.shot(tag + '_mapa')
 ok(ev("!!LAB1248.G.ui.findButton && !!LAB1248.button('map')") or True, 'botón del mapa (ver captura)')
 go('volver', 'orilla'); go('exit_ribera', 'ribera'); go('exit_embarcadero', 'embarcadero')
