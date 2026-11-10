@@ -93,7 +93,7 @@ if HASTA != 'acto1':
     tap('hotspot', 'carbon', wait=120); ok(fl('embargo_aplazado'), 'palada de carbón → horno ruge → embargo aplazado')
     P.pg.wait_for_timeout(800); P.shot(tag + '_alfar1')
     go('exit_plaza', 'plaza'); go('exit_puerta', 'puerta_rio'); go('exit_corredera', 'corredera')
-    go('porche', 'orilla', 150); ok(fl('lanza_vista') and fl('alonso_nombre') and fl('noche_soto'), 'taberna: lanza de Alonso, Rai da la alarma → soto de noche')
+    go('porche', 'soto_noche', 150); ok(fl('lanza_vista') and fl('alonso_nombre') and fl('noche_soto'), 'taberna: lanza de Alonso, Rai da la alarma → soto de noche')
     P.pg.wait_for_timeout(1500); P.shot(tag + '_requete')
     tap('npc', 'gato', wait=150); P.pg.wait_for_timeout(1500); settle(150)
     ok(fl('requete_1') and fl('confesion'), f'gato sobre el mapa → retirada → confesión de Rai (está en {scene()})')
