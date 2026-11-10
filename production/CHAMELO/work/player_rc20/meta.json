@@ -1,0 +1,1 @@
+{"rows": {"idle": 0, "walk": 1, "talk": 4, "give": 10, "pick": 12, "look": 15}, "counts": {"walk": 36, "give": 23, "pick": 26, "look": 26}, "cw": 240, "ch": 372, "cols": 12, "gy": 364, "stride_src_px": 684.0, "stride": 186}

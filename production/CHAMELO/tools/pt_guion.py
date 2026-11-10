@@ -107,7 +107,7 @@ if HASTA != 'acto1':
     P.shot(tag + '_poste')
     tap('hotspot', 'poste17', wait=60); P.pg.wait_for_timeout(1000)
     for _ in range(8):
-        if ev('!!LAB1248.E.rc17.card'): P.shot(tag + '_aldea'); ev(f'{G}.ui.advance()'); P.pg.wait_for_timeout(300)
+        if ev('!!(LAB1248.E.rc17.card || LAB1248.E.rc20.cap)'): P.shot(tag + '_aldea'); ev(f'{G}.ui.advance()'); P.pg.wait_for_timeout(300)
         P.pg.wait_for_timeout(800)
     settle(60); ok(fl('requete_fin'), 'girar el poste → la aldea de los que siempre llegan tarde')
 if HASTA == 'todo':
