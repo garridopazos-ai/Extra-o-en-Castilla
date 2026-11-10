@@ -8,22 +8,26 @@ Estilo: ilustración de cuento a **acuarela con línea de tinta fina**, colores 
 - **Escenarios:** sin personajes, horizontal, suelo caminable claro en el tercio inferior, panorama continuo. Formato final del juego: 1600×900 (escena fija) o 2700×900 / 4000×900 (con scroll).
 - **Objetos sueltos (props):** el objeto solo, sobre fondo verde liso, mismo punto de vista que el escenario.
 
-## Lo que ya está y NO hace falta pedir
-Protagonista (todas las animaciones), Elvira, Nuño, Alfonso, Durán, Mingo, el ciego, Rai (mago) y Rai-gato (andar, sentarse, guiñar), viejo soldado, y los bucles de Yuçaf, Lope, señora de Oropesa, pregonero y los dos Giles. Fondos: ribera, orilla, Chamelo, taberna (día y noche), soto de noche, plaza, puerta del Río, iglesia, alfar, corredera, embarcadero, travesía, audiencia.
+## Lo que ya está y NO hace falta pedir (comprobado contra el juego, RC21)
+- **Con arte propio ya integrado:** protagonista (todas las animaciones), Elvira (que en el juego hace de **Sancha**), Nuño, Alfonso/Alonso, Durán, Mingo, el ciego, Rai (mago), Rai-gato (andar, sentarse, guiñar), viejo soldado (andar, reposo, hablar).
+- **Con bucles dibujados de reposo/hablar:** Yuçaf, Lope, señora de Oropesa (4 gestos), pregonero, los dos Giles (los guardias de la puerta) y los **tres grupos de conspiradores** (en fila, en fila con antorchas y en corro).
+- Fondos con arte propio: ribera, orilla, Chamelo, taberna (día y noche), soto de noche, plaza, puerta del Río, iglesia, alfar, corredera, embarcadero, travesía, audiencia.
 
-## Prioridad 1 · lo que hoy se ve «provisional» en la partida
-1. **Los cuatro conspiradores (requeteconquistadores), uno por uno**: reposo, hablar/discutir y andar. Hoy son marionetas y desentonan con todo lo demás. Descripción: el cabecilla (turbante verde, barba), el del gorro rojo, el de capucha parda con barba blanca, el del turbante blanco y túnica naranja. *(Los tres grupos ya recibidos sirven para las cartelas, no para moverse por la escena.)*
-2. **Sancha** (panadera): reposo, hablar, andar, dar la hogaza.
-3. **Andar** (ciclo de marcha de perfil) de Yuçaf, Lope, señora de Oropesa, pregonero y Giles: ahora, al caminar, se cambia a marioneta.
-4. **Props con arte propio** (hoy dibujados por código): balanza de la taberna (en reposo y en equilibrio), cuña de la mesa coja, mapa del suelo entero y roto en cuatro, cuerda de la campana, regla de la Puerta del Río, ladrillos del paso, viga del suelo, banco de Lope, hilo, tablón, hogazas del puesto, pajar del alfar, amarre del embarcadero.
+## Lo único que realmente falta (hoy se ve como marioneta o dibujo por código)
+**Prioridad 1 · cuatro personajes sin ningún arte**: reposo, hablar y andar (de perfil, mirando a la izquierda).
+1. **Benito** (iglesia).
+2. **El mayordomo** (audiencia).
+3. **El arriero** (taberna).
+4. **La peregrina** (taberna).
 
-## Prioridad 2 · extras que dan vida
-5. Extras de la villa: guardia genérico, Benito, mayordomo, arriero, peregrina (reposo + hablar; andar si se puede).
-6. Rai-gato: bostezar, correr, asustarse, esconderse, tropezar, dormir.
-7. Mingo sentado en la rama de la higuera (para quitar los zapatos cortados) y reírse/burlarse.
-8. Alguacil, pastor y ovejas (si el guion los mantiene).
+**Prioridad 2 · props con arte propio** (hoy los dibuja el código; objeto solo sobre verde): balanza de la taberna (reposo y en equilibrio), cuña de la mesa coja, mapa del suelo entero y roto en cuatro, cuerda de la campana, regla de la Puerta del Río, ladrillos del paso, viga del suelo, banco de Lope, hilo, tablón, hogazas del puesto, pajar del alfar, amarre del embarcadero.
 
-## Prioridad 3 · pulido
+**Prioridad 3 · opcional, solo si se quiere más vida** (nada bloquea):
+- Ciclo de **andar** de perfil de Yuçaf, Lope, señora de Oropesa, pregonero y Giles: hoy, al caminar, se cambia a marioneta (al estar quietos ya se ven con su arte).
+- Los cuatro **conspiradores por separado** (reposo, discutir, andar): en escena siguen siendo marionetas; los grupos ya recibidos se usan en las cartelas.
+- Rai-gato: bostezar, correr, asustarse, esconderse, tropezar, dormir. Mingo sentado en la rama de la higuera (quitar los zapatos cortados).
+
+## Pulido (aceña y sonido)
 9. Aceña: la versión alternativa de Durán es muy superior al fondo actual; para usarla hacen falta, por separado y sobre verde: **la rueda sola** (para girarla), **el tronco atascado** contra la rueda, y la **rueda liberada con el agua cayendo**.
 10. Cartelas del narrador (las ya hechas bastan; si se quiere, una ilustración de la Puerta del Río y de la plaza al amanecer).
 11. Sonido real (opcional): río, pájaros, molino, mercado, horno, grillos nocturnos; bucles de 30–60 s.
